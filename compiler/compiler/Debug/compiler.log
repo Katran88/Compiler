@@ -1,0 +1,21 @@
+﻿  division.cpp
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.h(16,17): warning C4305:  инициализация: усечение из "int" в "char"
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.h(16,13): warning C4309:  инициализация: усечение константного значения
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.cpp(301,20): warning C4305:  =: усечение из "int" в "char"
+  Error.cpp
+  FST.cpp
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.cpp(301,16): warning C4309:  =: усечение константного значения
+  In.cpp
+  IT.cpp
+  Log.cpp
+  LT.cpp
+  main.cpp
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\FST.cpp(67,36): warning C4267:  инициализация: преобразование из "size_t" в "short"; возможна потеря данных
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.h(16,17): warning C4305:  инициализация: усечение из "int" в "char"
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.h(16,13): warning C4309:  инициализация: усечение константного значения
+  Parm.cpp
+  Создание кода...
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\main.cpp(5,1): warning C4326:  возвращаемый тип "wmain" должен быть "int", а не "void"
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\LT.cpp(38): warning C4715:  LT::LexTable::GetEntry: значение возвращается не при всех путях выполнения
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\IT.cpp(68): warning C4715:  IT::IdTable::GetEntry: значение возвращается не при всех путях выполнения
+  compiler.vcxproj -> G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\Debug\compiler.exe
