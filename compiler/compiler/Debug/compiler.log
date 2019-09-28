@@ -1,1 +1,9 @@
-﻿  compiler.vcxproj -> G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\Debug\compiler.exe
+﻿  IT.cpp
+  division.cpp
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.h(16,17): warning C4305:  инициализация: усечение из "int" в "char"
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.h(16,13): warning C4309:  инициализация: усечение константного значения
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.cpp(301,20): warning C4305:  =: усечение из "int" в "char"
+  Создание кода...
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.cpp(301,16): warning C4309:  =: усечение константного значения
+G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\IT.cpp(69): warning C4715:  IT::IdTable::GetEntry: значение возвращается не при всех путях выполнения
+  compiler.vcxproj -> G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\Debug\compiler.exe
