@@ -4,8 +4,8 @@ namespace Error
 {
 // ñåğèè îøèáîê: 0-99 - ñèñòåìíûå îøèáêè
 //				 100-109 - îøèáêè ïàğàìåòğîâ
-//				 110-119 - îøèáêè îòêğûòèÿ è ÷òåíèÿ ôàéëîâ
-//				 120-129 - ëåêñè÷åñêèå îøèáêè
+//				 110-115 - îøèáêè îòêğûòèÿ è ÷òåíèÿ ôàéëîâ
+//				 116-129 - ëåêñè÷åñêèå îøèáêè
 	ERROR errors[ERROR_MAX_ENTRY] =
 	{
 		ERROR_ENTRY(0, "Íåäîïóñòèìûé êîä îøèáêè"),
@@ -33,8 +33,9 @@ namespace Error
 		ERROR_ENTRY(113, "Ôàéë, ïåğåäàííûé êàê -in:, ïóñò"),
 		ERROR_ENTRY_NODEF(114),		ERROR_ENTRY_NODEF(115),
 		ERROR_ENTRY_NODEF(116),		ERROR_ENTRY_NODEF(117),
-		ERROR_ENTRY_NODEF(118),		ERROR_ENTRY_NODEF(119),
+		ERROR_ENTRY_NODEF(118),
 
+		ERROR_ENTRY(119, "Òî÷êà âõîäà â ïğîãğàììó äîëæíà áûòü çàäàíî åäèíîîáğàçíî"),
 		ERROR_ENTRY(120, "Òàáëèöà ëåêñåì ïåğåïîëíåíà."),
 		ERROR_ENTRY(121, "Íåîğàñïîçíàííàÿ ëåêñåìà"),
 		ERROR_ENTRY(122, "Òàáëèöà èäåíòèôèêàòîğîâ ïåğåïîëíåíà."),
@@ -69,7 +70,7 @@ namespace Error
 		if (id > 0 && id < ERROR_MAX_ENTRY)
 		{
 			errors[id].errorPosition.col = col;
-			errors[id].errorPosition.line = line;
+			errors[id].errorPosition.line = line + 1;
 			return errors[id];
 		}
 		else

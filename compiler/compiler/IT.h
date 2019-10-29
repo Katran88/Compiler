@@ -12,7 +12,7 @@
 namespace IT	// таблица идентификатов
 {
 	enum IDDATATYPE {DEF = 0, INT = 1, STR = 2 };		// типы данных идентификатов: integer, string
-	enum IDTYPE {D = 0, V = 1, F = 2, P = 3, L = 4};			// типы идентификаторов: переменная, функция, параметр, лексема
+	enum IDTYPE {D = 0, V = 1, F = 2, C = 3, P = 4, L = 5};			// типы идентификаторов: переменная, функция, блок if, параметр, лексема
 
 
 	struct Entry						// эл-т таблицы идентификаторов
@@ -44,9 +44,9 @@ namespace IT	// таблица идентификатов
 		IdTable();
 		void Add(Entry entry);
 		Entry GetEntry(int n);
-		int IsId(const char id[ID_MAXSIZE]);
-		int IsId(const char id[ID_MAXSIZE], const char parentFunc[ID_MAXSIZE]);
-		int IsLit(const char lit[ID_MAXSIZE]);
+		int IsId(const char* id);
+		int IsId(const char* id, const char* parentFunc);
+		int IsLit(const char* lit);
 		void PrintIdTable(const wchar_t* in);
 		void Delete();
 	};

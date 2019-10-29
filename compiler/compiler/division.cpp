@@ -2,22 +2,51 @@
 
 bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable, IT::IdTable& idTable, const KeyTokens* keyTokens) 
 {
-	static bool paramFlag = false;	//для параметров
-	static TypeFlag typeFlag;		//для определения типа данных
-	static ParrentBlock tempBlock;	//для пуша в стек блоков 
+	static bool paramFlag = false;					//для параметров
+	static TypeFlag typeFlag;						//для определения типа данных
+	static ParrentBlock* tempBlock;
 	static std::stack<ParrentBlock> blocksStack;	//стек блоков программы
+
+	static int IFcounter; //счетчик блоков if
+	
+	if (blocksStack.size() == 0)
+	{
+		tempBlock = new ParrentBlock;
+		blocksStack.push(*tempBlock);
+	}
 	
 	for (int i = 0; i < keyTokens_size; i++)
 		if (strcmp(keyTokens[i].keyToken, token) == 0)
 		{
-			lexTable.Add({ keyTokens[i].lex, strNumber, LT_TI_NULLXDX });
-			typeFlag = TypeFlag::def;
-
 			if (i == 0)
 				typeFlag = TypeFlag::integer;
 
 			if (i == 1)
 				typeFlag = TypeFlag::string;
+
+			if (keyTokens[i].lex == LEX_MAIN)
+			{
+				if (idTable.IsId(token) == -1)
+				{
+					tempBlock = new ParrentBlock(token);
+					blocksStack.push(*tempBlock);
+				}
+				else
+					throw ERROR_THROW_IN(119, strNumber, -1);
+			}
+
+			if (keyTokens[i].lex == LEX_IF)
+			{				
+				char temp[2]{};
+				itoa(++IFcounter, temp, 10);
+				tempBlock = new ParrentBlock(keyTokens[i].keyToken);
+				strcat(tempBlock->name, temp);
+				blocksStack.push(*tempBlock);
+
+				idTable.Add({ blocksStack.top().name, tempBlock->name, IT::IDDATATYPE::DEF, IT::IDTYPE::C });
+				lexTable.Add({ keyTokens[i].lex, strNumber, idTable.current_size - 1 });
+				return true;
+			}
 
 			//начало записи параметров
 			if (keyTokens[i].lex == LEX_LEFTHESIS && idTable.table[lexTable.table[lexTable.current_size - 1].idxTI].idtype == IT::IDTYPE::F)
@@ -31,6 +60,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 			if (keyTokens[i].lex == LEX_RIGHTBRACE) 
 				blocksStack.pop();
 
+			lexTable.Add({ keyTokens[i].lex, strNumber, LT_TI_NULLXDX });
 			return true;
 		}
 
@@ -44,20 +74,19 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 			if (idTable.IsId(token) == -1)
 			{
 				if (typeFlag == TypeFlag::integer)
-					idTable.Add({ '\0', token, IT::IDDATATYPE::INT, IT::IDTYPE::F });
+					idTable.Add({ blocksStack._Get_container()[0].name, token, IT::IDDATATYPE::INT, IT::IDTYPE::F });
 
 				if (typeFlag == TypeFlag::string)
-					idTable.Add({ '\0', token, IT::IDDATATYPE::STR, IT::IDTYPE::F });
+					idTable.Add({ blocksStack._Get_container()[0].name, token, IT::IDDATATYPE::STR, IT::IDTYPE::F });
 
 				lexTable.Add({ LEX_ID, strNumber, idTable.current_size - 1 });
 				alreadyChecked = true;
 
 				typeFlag = TypeFlag::def;
 
-				strcpy_s(tempBlock.name, sizeof(tempBlock.name), token);
-				tempBlock.parrentBlockFlag = ParrentBlockFlag::function;
+				tempBlock = new ParrentBlock(token);
 
-				blocksStack.push(tempBlock);
+				blocksStack.push(*tempBlock);
 			}					
 			else
 				throw ERROR_THROW_IN(123, strNumber, -1);
@@ -71,17 +100,17 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 				if (idTable.IsId(token) == -1)
 				{
 					if (typeFlag == TypeFlag::integer)
-						idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::INT, IT::IDTYPE::V });
+						idTable.Add({ blocksStack._Get_container()[blocksStack.size() - 1].name, token, IT::IDDATATYPE::INT, IT::IDTYPE::V });
 
 					if (typeFlag == TypeFlag::string)
-						idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::STR, IT::IDTYPE::V });
+						idTable.Add({ blocksStack._Get_container()[blocksStack.size() - 1].name, token, IT::IDDATATYPE::STR, IT::IDTYPE::V });
 				}
 				else
 					throw ERROR_THROW_IN(123, strNumber, -1);
 			}
 			else
 			{
-				if (idTable.IsId(token, blocksStack.top().name) == -1)
+				if (searchingForIDinStack(idTable, blocksStack, token) == -1)
 				{
 					if (paramFlag)
 					{
@@ -197,10 +226,11 @@ void divisionIntoTokens(const In::IN& source, LT::LexTable& lexTable, IT::IdTabl
 		{"int",			LEX_TYPE},
 		{"str",			LEX_TYPE},
 		{"global",		LEX_GLOBAL},
+		{"if",			LEX_IF},
 		{"main",		LEX_MAIN},
 		{"func",		LEX_FUNCTION},
 		{"return",		LEX_RETURN},
-		{"сprint",		LEX_PRINT},
+		{"cprint",		LEX_PRINT},
 		{";",			LEX_SEMICOLON},
 		{",",			LEX_COMMA},
 		{"{",			LEX_LEFTBRACE},
@@ -211,7 +241,11 @@ void divisionIntoTokens(const In::IN& source, LT::LexTable& lexTable, IT::IdTabl
 		{"-",			LEX_MINUS},
 		{"*",			LEX_STAR},
 		{"/",			LEX_DIRSLASH},
-		{"=",			LEX_EQUAL_SIGN}
+		{"=",			LEX_EQUAL_SIGN},
+		{"<",			LEX_LESS_SIGN},
+		{">",			LEX_MORE_SIGN},
+		{"==",			LEX_SAME_SIGN},
+		{"!=",			LEX_LESS_SIGN}
 	};
 
 	char* temp = new char[50]{};
@@ -300,4 +334,13 @@ void divisionIntoTokens(const In::IN& source, LT::LexTable& lexTable, IT::IdTabl
 	}
 
 	delete[] temp;
+}
+
+int searchingForIDinStack(IT::IdTable& idTable, std::stack<ParrentBlock>& stack,const char* token)
+{
+	int result = -1;
+	for (int i = stack.size() - 1; i >= 0 && result == -1; i--)
+		result = idTable.IsId(token, stack._Get_container()[i].name);
+
+	return result;
 }

@@ -68,7 +68,7 @@ IT::Entry IT::IdTable::GetEntry(int n)
 		return this->table[n];
 }
 
-int IT::IdTable::IsId(const char id[ID_MAXSIZE])
+int IT::IdTable::IsId(const char* id)
 {
 	for (int i = 0; i < this->current_size; i++)
 	{
@@ -78,7 +78,7 @@ int IT::IdTable::IsId(const char id[ID_MAXSIZE])
 	return TI_NULLIDX;
 }
 
-int IT::IdTable::IsId(const char id[ID_MAXSIZE], const char parentFunc[ID_MAXSIZE])
+int IT::IdTable::IsId(const char* id, const char* parentFunc)
 {
 	for (int i = 0; i < this->current_size; i++)
 	{
@@ -89,7 +89,7 @@ int IT::IdTable::IsId(const char id[ID_MAXSIZE], const char parentFunc[ID_MAXSIZ
 	return TI_NULLIDX;
 }
 
-int IT::IdTable::IsLit(const char lit[TI_STR_MAXSIZE])
+int IT::IdTable::IsLit(const char* lit)
 {
 	char* temp = new char[TI_STR_MAXSIZE];
 	int j = 0;

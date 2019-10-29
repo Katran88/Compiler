@@ -9,12 +9,13 @@
 #include "LT.h"
 #include "IT.h"
 
+#pragma warning(disable: 4996)
 
-#define keyTokens_size 18
+#define keyTokens_size 23
 
 struct KeyTokens
 {
-	char keyToken[keyTokens_size]{};
+	char keyToken[10]{};
 	char lex = '/0';
 };
 
@@ -25,20 +26,26 @@ enum TypeFlag
 
 enum ParrentBlockFlag
 {
-	global, function
+	global, function,
 };
 
 struct ParrentBlock
 {
 	char* name;
-	ParrentBlockFlag parrentBlockFlag;
 
 	ParrentBlock()
 	{
-		this->name = new char[ID_MAXSIZE+2]{};
-		this->parrentBlockFlag = ParrentBlockFlag::global;
+		this->name = new char[ID_MAXSIZE+3]{}; //+ 1 для \0 и 2 для нумерации блоков
+		strcpy(this->name, "global");
+	}
+
+	ParrentBlock(const char* inputName)
+	{
+		this->name = new char[ID_MAXSIZE + 3]{}; //+ 1 для \0 и 2 для нумерации блоков
+		strcpy(this->name, inputName);
 	}
 };
 
+int searchingForIDinStack(IT::IdTable& idTable, std::stack<ParrentBlock>& stack, const char* token);
 void divisionIntoTokens(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTable);
 bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable, IT::IdTable& idTable, const KeyTokens* keyTokens);
