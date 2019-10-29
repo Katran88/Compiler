@@ -2,12 +2,12 @@
 
 #define	LT_MAXSIZE		1024		// максимальное количество строк в таблице лексем	
 #define	LT_TI_NULLXDX	-1			// нет элемента таблицы идентификаторов				
-#define	LEX_INTEGER		'n'			// лексема для integer
-#define	LEX_STRING		's'			// лексема для string
+#define	LEX_TYPE		't'			// лексема для тип данных
 #define	LEX_ID			'i'			// лексема для идентификатора
+#define	LEX_MAIN		'm'			// лексема для главной функции
+#define	LEX_GLOBAL		'g'			// лексема для определения глобальной переменной
 #define	LEX_LITERAL		'l'			// лексема для литерала
 #define	LEX_FUNCTION	'f'			// лексема для function
-#define	LEX_DECLARE		'd'			// лексема для declare
 #define	LEX_RETURN		'r'			// лексема для return
 #define	LEX_PRINT		'p'			// лексема для print
 #define	LEX_SEMICOLON	';'			// лексема для ;
