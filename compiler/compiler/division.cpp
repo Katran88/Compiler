@@ -1,10 +1,36 @@
 #include "division.h"
 
-bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable, IT::IdTable& idTable, const KeyTokens* keyTokens) {
+bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable, IT::IdTable& idTable, const KeyTokens* keyTokens) 
+{
+	static bool paramFlag = false;	//для параметров
+	static TypeFlag typeFlag;		//для определения типа данных
+	static ParrentBlock tempBlock;	//для пуша в стек блоков 
+	static std::stack<ParrentBlock> blocksStack;	//стек блоков программы
+	
 	for (int i = 0; i < keyTokens_size; i++)
 		if (strcmp(keyTokens[i].keyToken, token) == 0)
 		{
 			lexTable.Add({ keyTokens[i].lex, strNumber, LT_TI_NULLXDX });
+			typeFlag = TypeFlag::def;
+
+			if (i == 0)
+				typeFlag = TypeFlag::integer;
+
+			if (i == 1)
+				typeFlag = TypeFlag::string;
+
+			//начало записи параметров
+			if (keyTokens[i].lex == LEX_LEFTHESIS && idTable.table[lexTable.table[lexTable.current_size - 1].idxTI].idtype == IT::IDTYPE::F)
+				paramFlag = true;
+
+			//конец записи параметров
+			if (keyTokens[i].lex == LEX_RIGHTHESIS) 
+				paramFlag = false;
+
+			// конец области видимости последнего блока в стеке
+			if (keyTokens[i].lex == LEX_RIGHTBRACE) 
+				blocksStack.pop();
+
 			return true;
 		}
 
@@ -13,125 +39,85 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 	{
 		bool alreadyChecked = false;
 		//для функций
-		if (strcmp(token, "main") == 0 ||
-			(lexTable.GetEntry(lexTable.current_size - 1).lexema == LEX_FUNCTION &&
-			 (lexTable.GetEntry(lexTable.current_size - 2).lexema == LEX_INTEGER || lexTable.GetEntry(lexTable.current_size - 2).lexema == LEX_STRING)))
+		if (lexTable.table[lexTable.current_size - 1].lexema == LEX_FUNCTION)
 		{
 			if (idTable.IsId(token) == -1)
 			{
-				if (lexTable.GetEntry(lexTable.current_size - 2).lexema == LEX_INTEGER)
+				if (typeFlag == TypeFlag::integer)
 					idTable.Add({ '\0', token, IT::IDDATATYPE::INT, IT::IDTYPE::F });
 
-				if (lexTable.GetEntry(lexTable.current_size - 2).lexema == LEX_STRING)
+				if (typeFlag == TypeFlag::string)
 					idTable.Add({ '\0', token, IT::IDDATATYPE::STR, IT::IDTYPE::F });
 
-				if (strcmp(token, "main") == 0)
-					idTable.Add({ '\0', token, IT::IDDATATYPE::INT, IT::IDTYPE::F });
+				lexTable.Add({ LEX_ID, strNumber, idTable.current_size - 1 });
+				alreadyChecked = true;
 
-					lexTable.Add({ LEX_ID, strNumber, idTable.current_size - 1 });
-					alreadyChecked = true;
+				typeFlag = TypeFlag::def;
+
+				strcpy_s(tempBlock.name, sizeof(tempBlock.name), token);
+				tempBlock.parrentBlockFlag = ParrentBlockFlag::function;
+
+				blocksStack.push(tempBlock);
 			}					
 			else
 				throw ERROR_THROW_IN(123, strNumber, -1);
 		}
 
-		//для переменной(с проверкой переопределения)
-			if (!alreadyChecked &&
-				((lexTable.GetEntry(lexTable.current_size - 1).lexema == LEX_INTEGER || lexTable.GetEntry(lexTable.current_size - 1).lexema == LEX_STRING)
-				  && lexTable.GetEntry(lexTable.current_size - 2).lexema == LEX_DECLARE))
-			{
-				bool isLeftBraceWas = false;
-				for (int i = lexTable.current_size - 1; i > 0; i--)
-				{
-					if (lexTable.GetEntry(i).lexema == LEX_LEFTBRACE)
-						isLeftBraceWas = true;
-
-					if (isLeftBraceWas &&
-						lexTable.GetEntry(i).lexema == LEX_ID &&
-						idTable.GetEntry(lexTable.GetEntry(i).idxTI).idtype == IT::IDTYPE::F)
-					{
-						if (idTable.IsId(token, idTable.GetEntry(lexTable.GetEntry(i).idxTI).id) == -1)
-						{
-							if (lexTable.GetEntry(lexTable.current_size - 1).lexema == LEX_INTEGER)
-								idTable.Add({ idTable.GetEntry(lexTable.GetEntry(i).idxTI).id, token, IT::IDDATATYPE::INT, IT::IDTYPE::V });
-
-							if (lexTable.GetEntry(lexTable.current_size - 1).lexema == LEX_STRING)
-								idTable.Add({ idTable.GetEntry(lexTable.GetEntry(i).idxTI).id, token, IT::IDDATATYPE::STR, IT::IDTYPE::V });
-						
-							lexTable.Add({ LEX_ID, strNumber, idTable.current_size - 1 });
-							alreadyChecked = true;
-							break;
-						}
-						else
-							throw ERROR_THROW_IN(123, strNumber, -1);
-							
-					}
-				}
-			}
-			
-		//для параметра функции
-		if (!alreadyChecked && (lexTable.GetEntry(lexTable.current_size - 1).lexema == LEX_INTEGER || lexTable.GetEntry(lexTable.current_size - 1).lexema == LEX_STRING))
-			for (int i = lexTable.current_size - 1; i > 0; i--)
-			{
-						if (lexTable.GetEntry(i).lexema == LEX_ID &&
-							idTable.GetEntry(lexTable.GetEntry(i).idxTI).idtype == IT::IDTYPE::F)
-						{
-							if (lexTable.GetEntry(i - 1).lexema == LEX_FUNCTION &&
-								(lexTable.GetEntry(i - 2).lexema == LEX_INTEGER ||
-								 lexTable.GetEntry(i - 2).lexema == LEX_STRING))
-							{
-								if (idTable.IsId(token, idTable.GetEntry(lexTable.GetEntry(i).idxTI).id) == -1)
-								{
-									if(lexTable.GetEntry(lexTable.current_size - 1).lexema == LEX_INTEGER)
-										idTable.Add({ idTable.GetEntry(lexTable.GetEntry(i).idxTI).id, token, IT::IDDATATYPE::INT, IT::IDTYPE::P });
-									
-									if (lexTable.GetEntry(lexTable.current_size - 1).lexema == LEX_STRING)
-										idTable.Add({ idTable.GetEntry(lexTable.GetEntry(i).idxTI).id, token, IT::IDDATATYPE::STR, IT::IDTYPE::P });
-
-									lexTable.Add({ LEX_ID, strNumber, idTable.current_size - 1 });
-									alreadyChecked = true;
-									break;
-								}
-								else
-									throw ERROR_THROW_IN(123, strNumber, -1);
-							}
-						}
-			}
-		
-		//добавление идентификаторов с учетом области видимости
-		if (!alreadyChecked)
+		//для переменной/параметра(с проверкой переопределения)
+		if (!alreadyChecked && lexTable.table[lexTable.current_size - 1].lexema == LEX_TYPE)
 		{
-			bool isLeftBraceWas = false;
-			for (int i = lexTable.current_size - 1; i > 0; i--)
+			if (lexTable.table[lexTable.current_size - 2].lexema == LEX_GLOBAL)
 			{
-				if (lexTable.GetEntry(i).lexema == LEX_LEFTBRACE)
-					isLeftBraceWas = true;
-
-				if (isLeftBraceWas &&
-					lexTable.GetEntry(i).lexema == LEX_ID &&
-					idTable.GetEntry(lexTable.GetEntry(i).idxTI).idtype == IT::IDTYPE::F)
+				if (idTable.IsId(token) == -1)
 				{
-					int tempIndex = idTable.IsId(token, idTable.GetEntry(lexTable.GetEntry(i).idxTI).id);
-					if (tempIndex != -1)
+					if (typeFlag == TypeFlag::integer)
+						idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::INT, IT::IDTYPE::V });
+
+					if (typeFlag == TypeFlag::string)
+						idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::STR, IT::IDTYPE::V });
+				}
+				else
+					throw ERROR_THROW_IN(123, strNumber, -1);
+			}
+			else
+			{
+				if (idTable.IsId(token, blocksStack.top().name) == -1)
+				{
+					if (paramFlag)
 					{
-						lexTable.Add({ LEX_ID, strNumber, tempIndex });
-						break;
+						if (typeFlag == TypeFlag::integer)
+							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::INT, IT::IDTYPE::P });
+
+						if (typeFlag == TypeFlag::string)
+							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::STR, IT::IDTYPE::P });
 					}
 					else
 					{
-						tempIndex = idTable.IsId(token);
-						if (tempIndex != -1 &&
-							idTable.GetEntry(tempIndex).idtype == IT::IDTYPE::F)
-						{
-							lexTable.Add({ LEX_ID, strNumber, tempIndex });
-							break;
-						}
-						else
-							throw ERROR_THROW_IN(129, strNumber, -1);
+						if (typeFlag == TypeFlag::integer)
+							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::INT, IT::IDTYPE::V });
+
+						if (typeFlag == TypeFlag::string)
+							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::STR, IT::IDTYPE::V });
 					}
-						
 				}
+				else
+					throw ERROR_THROW_IN(123, strNumber, -1);
 			}
+			
+			lexTable.Add({ LEX_ID, strNumber, idTable.current_size - 1 });
+			typeFlag = TypeFlag::def;
+			alreadyChecked = true;
+		}
+		
+		//добавление идентификаторов
+		if (!alreadyChecked)
+		{
+			int tempIndex = idTable.IsId(token);
+			if (tempIndex != -1)
+				lexTable.Add({ LEX_ID, strNumber, tempIndex });
+			else
+				throw ERROR_THROW_IN(129, strNumber, -1);
+					
 		}
 			
 		delete identificator;
@@ -208,12 +194,13 @@ void divisionIntoTokens(const In::IN& source, LT::LexTable& lexTable, IT::IdTabl
 {
 	const KeyTokens keyTokens[keyTokens_size]
 	{
-		{"integer",		LEX_INTEGER},
-		{"string",		LEX_STRING},
-		{"function",	LEX_FUNCTION},
-		{"declare",		LEX_DECLARE},
+		{"int",			LEX_TYPE},
+		{"str",			LEX_TYPE},
+		{"global",		LEX_GLOBAL},
+		{"main",		LEX_MAIN},
+		{"func",		LEX_FUNCTION},
 		{"return",		LEX_RETURN},
-		{"print",		LEX_PRINT},
+		{"сprint",		LEX_PRINT},
 		{";",			LEX_SEMICOLON},
 		{",",			LEX_COMMA},
 		{"{",			LEX_LEFTBRACE},
