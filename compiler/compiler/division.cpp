@@ -219,7 +219,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 	return false;
 }
 
-void divisionIntoTokens(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTable)
+void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTable)
 {
 	const KeyTokens keyTokens[keyTokens_size]
 	{

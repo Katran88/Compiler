@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <ctime>
 #include <chrono>
+#include <iomanip>
 
 void wmain(int argc, wchar_t* argv[])
 {
@@ -20,16 +21,34 @@ void wmain(int argc, wchar_t* argv[])
 		LT::LexTable lexTable;
 		IT::IdTable	idTable;
 
+#pragma region lexAnaliz
 		std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-		divisionIntoTokens(in, lexTable, idTable);
+		lexAnaliz(in, lexTable, idTable);
 		std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
 
 		std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
-
-		std::cout << time_span.count() << " seconds.";
+		std::cout << "Lex analiz: " << time_span.count() << " seconds." << std::endl << std::endl;
 
 		lexTable.PrintLexTable(param.in);
 		idTable.PrintIdTable(param.in);
+#pragma endregion
+
+#pragma region sintaxAnaliz
+		MFST_TRACE_START
+			MFST::MFST* sintaxAnaliz = new MFST::MFST(lexTable, GRB::getGreibach());
+
+		t1 = std::chrono::high_resolution_clock::now();
+		sintaxAnaliz->start();
+		t2 = std::chrono::high_resolution_clock::now();
+
+		time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
+		std::cout << "Sintax analiz: " << time_span.count() << " seconds." << std::endl << std::endl;
+
+		sintaxAnaliz->saveoutputTree();
+		sintaxAnaliz->printRules();
+
+		delete sintaxAnaliz;
+#pragma endregion
 
 		lexTable.Delete();
 		idTable.Delete();

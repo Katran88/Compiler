@@ -7,5 +7,7 @@
 #include "division.h"
 #include "LT.h"
 #include "IT.h"
+#include "GRB.h"
+#include "MFST.h"
 
 using namespace std;

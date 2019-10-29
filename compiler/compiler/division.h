@@ -47,5 +47,5 @@ struct ParrentBlock
 };
 
 int searchingForIDinStack(IT::IdTable& idTable, std::stack<ParrentBlock>& stack, const char* token);
-void divisionIntoTokens(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTable);
+void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTable);
 bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable, IT::IdTable& idTable, const KeyTokens* keyTokens);
