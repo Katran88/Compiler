@@ -1,19 +1,2 @@
-﻿  division.cpp
-G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.h(19,17): warning C4305:  инициализация: усечение из "int" в "char"
-G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.h(19,13): warning C4309:  инициализация: усечение константного значения
-G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.cpp(322,20): warning C4305:  =: усечение из "int" в "char"
-  GRB.cpp
-  main.cpp
-G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.cpp(322,16): warning C4309:  =: усечение константного значения
-G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.h(19,17): warning C4305:  инициализация: усечение из "int" в "char"
-G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\division.h(19,13): warning C4309:  инициализация: усечение константного значения
-  MFST.cpp
-G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\main.cpp(7,1): warning C4326:  возвращаемый тип "wmain" должен быть "int", а не "void"
-G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\MFST.cpp(145,34): warning C4804:  >: небезопасное использование типа "bool" в операции
-  PolishNotation.cpp
-  Создание кода...
-G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\MFST.cpp(277,77): warning C4267:  =: преобразование из "size_t" в "short"; возможна потеря данных
-G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\PolishNotation.cpp(29): warning C4715:  PN::Stack::push: значение возвращается не при всех путях выполнения
-G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\PolishNotation.cpp(17): warning C4715:  PN::Stack::push: значение возвращается не при всех путях выполнения
-G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\compiler\PolishNotation.cpp(41): warning C4172:  возвращение адреса локальной или временной переменной
+﻿  GRB.cpp
   compiler.vcxproj -> G:\OneDrive\учёба\3-й_семестр\compiler-course-project-\compiler\Debug\compiler.exe

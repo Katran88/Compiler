@@ -245,7 +245,12 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		{"<",			LEX_LESS_SIGN},
 		{">",			LEX_MORE_SIGN},
 		{"==",			LEX_SAME_SIGN},
-		{"!=",			LEX_LESS_SIGN}
+		{"!=",			LEX_DIFFERENT_SIGN},
+		{"<=",			LEX_LESS_SAME_SIGN},
+		{">=",			LEX_MORE_SAME_SIGN},
+		{"or",			LEX_OR_SIGN},
+		{"and",			LEX_AND_SIGN}
+
 	};
 
 	char* temp = new char[50]{};
@@ -313,7 +318,16 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 						continue;
 					}
 
-					temp[0] = source.text[i]; temp[1] = '\0';
+					temp[0] = source.text[i];
+					
+					if (source.text[i + 1] == '=')
+					{
+						temp[1] = source.text[i++];
+						temp[2] = '/0';
+					}
+					else
+						temp[1] = '\0';
+
 					if (tokenAnaliz(temp, strNum, lexTable, idTable, keyTokens))
 						posInStr++;
 					else

@@ -11,7 +11,7 @@
 
 #pragma warning(disable: 4996)
 
-#define keyTokens_size 23
+#define keyTokens_size 27
 
 struct KeyTokens
 {
@@ -22,11 +22,6 @@ struct KeyTokens
 enum TypeFlag
 {
 	def, integer, string
-};
-
-enum ParrentBlockFlag
-{
-	global, function,
 };
 
 struct ParrentBlock

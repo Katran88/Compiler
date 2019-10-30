@@ -25,7 +25,11 @@
 #define	LEX_LESS_SIGN		'<'			// лексема для <
 #define	LEX_MORE_SIGN		'>'			// лексема для >
 #define	LEX_SAME_SIGN		's'			// лексема для ==
-#define	LEX_DIFFERENT_SIGN	'e'			// лексема для !=
+#define	LEX_DIFFERENT_SIGN	'd'			// лексема для !=
+#define	LEX_MORE_SAME_SIGN	'b'			// лексема для >=
+#define	LEX_LESS_SAME_SIGN	'w'			// лексема для <=
+#define	LEX_OR_SIGN			'|'			// лексема для or
+#define	LEX_AND_SIGN		'&'			// лексема для and
 
 
 #define PARM_LEX_DEFAULT_EXT L".lex.txt" //для файла с итогом лексического анализa
