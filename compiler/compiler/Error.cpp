@@ -2,18 +2,19 @@
 
 namespace Error
 {
-// серии ошибок: 0-99 - системные ошибки
-//				 100-109 - ошибки параметров
-//				 110-119 - ошибки открытия и чтения файлов
-//				 120-129 - лексические ошибки
+	// серии ошибок: 0-99 - системные ошибки
+	//				 100-109 - ошибки параметров командной строки
+	//				 110-119 - ошибки открытия и чтения файлов
+	//				 120-129 - лексические ошибки
+	//				 130-139 - синтаксические ошибки
 	ERROR errors[ERROR_MAX_ENTRY] =
 	{
 		ERROR_ENTRY(0, "Недопустимый код ошибки"),
 		ERROR_ENTRY(1, "Системный сбой"),
 
-		ERROR_ENTRY_NODEF(2),		ERROR_ENTRY_NODEF(3),		ERROR_ENTRY_NODEF(4),		
+		ERROR_ENTRY_NODEF(2),		ERROR_ENTRY_NODEF(3),		ERROR_ENTRY_NODEF(4),
 		ERROR_ENTRY_NODEF(5),		ERROR_ENTRY_NODEF(6),		ERROR_ENTRY_NODEF(7),
-		ERROR_ENTRY_NODEF(8),		ERROR_ENTRY_NODEF(9),		ERROR_ENTRY_NODEF10(10),	
+		ERROR_ENTRY_NODEF(8),		ERROR_ENTRY_NODEF(9),		ERROR_ENTRY_NODEF10(10),
 		ERROR_ENTRY_NODEF10(20),	ERROR_ENTRY_NODEF10(30),	ERROR_ENTRY_NODEF10(40),
 		ERROR_ENTRY_NODEF10(50),	ERROR_ENTRY_NODEF10(60),	ERROR_ENTRY_NODEF10(70),
 		ERROR_ENTRY_NODEF10(80),	ERROR_ENTRY_NODEF10(90),
@@ -38,7 +39,7 @@ namespace Error
 		ERROR_ENTRY(120, "Таблица лексем переполнена."),
 		ERROR_ENTRY(121, "Неораспознанная лексема"),
 		ERROR_ENTRY(122, "Таблица идентификаторов переполнена."),
-		ERROR_ENTRY(123, "Переопределение идентификатора"),
+		ERROR_ENTRY(123, "Перезапись идентификатора"),
 		ERROR_ENTRY(124, "Лексическая ошибка"),
 		ERROR_ENTRY(125, "Не удалось создать файл с лексемами(или идентификаторами)"),
 		ERROR_ENTRY(126, "Слишком длинный литерал"),
@@ -46,11 +47,21 @@ namespace Error
 		ERROR_ENTRY(128, "Слишком большое имя переменной"),
 		ERROR_ENTRY(129, "Неизвестная переменная"),
 
-		ERROR_ENTRY_NODEF10(130),	ERROR_ENTRY_NODEF10(140),
+		ERROR_ENTRY(130, "Неверная структура программы"),
+		ERROR_ENTRY(131, "Ошибочный операнд в выражении"),
+		ERROR_ENTRY(132, "Ошибка в выражении"),
+		ERROR_ENTRY(133, "Ошибка в параметрах функции"),
+		ERROR_ENTRY(134, "Ошибка в параметрах вызыываемой функции"),
+		ERROR_ENTRY(135, "Ошибочный оператор в выражении"),
+		ERROR_ENTRY(136, "Ошибка в условии входа в блок"),
+		ERROR_ENTRY(137, "Ошибочный оператор в условии входа в блок"),
+		ERROR_ENTRY(138, "Неверный логический оператор"),
+		ERROR_ENTRY_NODEF(139),
+		ERROR_ENTRY_NODEF10(140),
 		ERROR_ENTRY_NODEF10(150),	ERROR_ENTRY_NODEF10(160),
 		ERROR_ENTRY_NODEF10(170),	ERROR_ENTRY_NODEF10(180),
 		ERROR_ENTRY_NODEF10(190),	ERROR_ENTRY_NODEF100(200),
-		ERROR_ENTRY_NODEF100(300),	ERROR_ENTRY_NODEF100(400), 
+		ERROR_ENTRY_NODEF100(300),	ERROR_ENTRY_NODEF100(400),
 		ERROR_ENTRY_NODEF100(500),	ERROR_ENTRY_NODEF100(600),
 		ERROR_ENTRY_NODEF100(700),	ERROR_ENTRY_NODEF100(800),
 		ERROR_ENTRY_NODEF100(900)

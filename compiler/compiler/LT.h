@@ -1,26 +1,36 @@
 #pragma once
 
-#define	LT_MAXSIZE		1024		// максимальное количество строк в таблице лексем	
-#define	LT_TI_NULLXDX	-1			// нет элемента таблицы идентификаторов				
-#define	LEX_TYPE		't'			// лексема для тип данных
-#define	LEX_ID			'i'			// лексема для идентификатора
-#define	LEX_MAIN		'm'			// лексема для главной функции
-#define	LEX_GLOBAL		'g'			// лексема для определения глобальной переменной
-#define	LEX_LITERAL		'l'			// лексема для литерала
-#define	LEX_FUNCTION	'f'			// лексема для function
-#define	LEX_RETURN		'r'			// лексема для return
-#define	LEX_PRINT		'p'			// лексема для print
-#define	LEX_SEMICOLON	';'			// лексема для ;
-#define	LEX_COMMA		','			// лексема для ,
-#define	LEX_LEFTBRACE	'{'			// лексема для {
-#define	LEX_RIGHTBRACE	'}'			// лексема для }
-#define	LEX_LEFTHESIS	'('			// лексема для (
-#define	LEX_RIGHTHESIS	')'			// лексема для )
-#define	LEX_PLUS		'+'			// лексема для +
-#define	LEX_MINUS		'-'			// лексема для -
-#define	LEX_STAR		'*'			// лексема для *
-#define	LEX_DIRSLASH	'/'			// лексема для /
-#define	LEX_EQUAL_SIGN	'='			// лексема для =
+#define	LT_MAXSIZE			1024		// максимальное количество строк в таблице лексем	
+#define	LT_TI_NULLXDX		-1			// нет элемента таблицы идентификаторов				
+#define	LEX_TYPE			't'			// лексема для тип данных
+#define	LEX_ID				'i'			// лексема для идентификатора
+#define	LEX_MAIN			'm'			// лексема для главной функции
+#define LEX_IF				'c'			// лексема для блока if
+#define	LEX_GLOBAL			'g'			// лексема для определения глобальной переменной
+#define	LEX_LITERAL			'l'			// лексема для литерала
+#define	LEX_FUNCTION		'f'			// лексема для function
+#define	LEX_RETURN			'r'			// лексема для return
+#define	LEX_PRINT			'p'			// лексема для print
+#define	LEX_SEMICOLON		';'			// лексема для ;
+#define	LEX_COMMA			','			// лексема для ,
+#define	LEX_LEFTBRACE		'{'			// лексема для {
+#define	LEX_RIGHTBRACE		'}'			// лексема для }
+#define	LEX_LEFTHESIS		'('			// лексема для (
+#define	LEX_RIGHTHESIS		')'			// лексема для )
+#define	LEX_PLUS			'+'			// лексема для +
+#define	LEX_MINUS			'-'			// лексема для -
+#define	LEX_STAR			'*'			// лексема для *
+#define	LEX_DIRSLASH		'/'			// лексема для /
+#define	LEX_EQUAL_SIGN		'='			// лексема для =
+#define	LEX_LESS_SIGN		'<'			// лексема для <
+#define	LEX_MORE_SIGN		'>'			// лексема для >
+#define	LEX_SAME_SIGN		's'			// лексема для ==
+#define	LEX_DIFFERENT_SIGN	'd'			// лексема для !=
+#define	LEX_MORE_SAME_SIGN	'b'			// лексема для >=
+#define	LEX_LESS_SAME_SIGN	'w'			// лексема для <=
+#define	LEX_OR_SIGN			'|'			// лексема для or
+#define	LEX_AND_SIGN		'&'			// лексема для and
+
 
 #define PARM_LEX_DEFAULT_EXT L".lex.txt" //для файла с итогом лексического анализa
 // таблица лексем

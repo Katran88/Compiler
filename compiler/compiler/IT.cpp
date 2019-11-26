@@ -56,6 +56,12 @@ void IT::IdTable::Add(Entry entry)
 			this->table[current_size].value.vstr.len = 0;
 		}
 
+		if (entry.iddatatype == IT::IDDATATYPE::UBYTE)
+			this->table[current_size].value.vint = TI_UBYTE_DEFAULT;
+
+		if (entry.iddatatype == IT::IDDATATYPE::LOGIC)
+			this->table[current_size].value.vlogic = TI_LOGIC_DEFAULT;
+
 		this->current_size++;
 	}
 	else
@@ -68,7 +74,7 @@ IT::Entry IT::IdTable::GetEntry(int n)
 		return this->table[n];
 }
 
-int IT::IdTable::IsId(const char id[ID_MAXSIZE])
+int IT::IdTable::IsId(const char* id)
 {
 	for (int i = 0; i < this->current_size; i++)
 	{
@@ -78,7 +84,7 @@ int IT::IdTable::IsId(const char id[ID_MAXSIZE])
 	return TI_NULLIDX;
 }
 
-int IT::IdTable::IsId(const char id[ID_MAXSIZE], const char parentFunc[ID_MAXSIZE])
+int IT::IdTable::IsId(const char* id, const char* parentFunc)
 {
 	for (int i = 0; i < this->current_size; i++)
 	{
@@ -89,7 +95,7 @@ int IT::IdTable::IsId(const char id[ID_MAXSIZE], const char parentFunc[ID_MAXSIZ
 	return TI_NULLIDX;
 }
 
-int IT::IdTable::IsLit(const char lit[TI_STR_MAXSIZE])
+int IT::IdTable::IsLit(const char* lit)
 {
 	char* temp = new char[TI_STR_MAXSIZE];
 	int j = 0;
@@ -158,14 +164,24 @@ void IT::IdTable::PrintIdTable(const wchar_t* in)
 
 				switch (this->table[i].iddatatype)
 				{
-					case 1:
+					case IT::IDDATATYPE::INT:
 					{
 						*(idStream) << '|' << std::setw(15) << "INT  " << '|' << std::setw(50) << this->table[i].value.vint << '|' << std::setw(15) << "-" << '|' << std::endl;
 						break;
 					}
-					case 2:
+					case IT::IDDATATYPE::STR:
 					{
 						*(idStream) << '|' << std::setw(15) << "STR  " << '|' << std::setw(50) << this->table[i].value.vstr.str << '|' << std::setw(15) << (int)this->table[i].value.vstr.len << '|' << std::endl;
+						break;
+					}
+					case IT::IDDATATYPE::UBYTE:
+					{
+						*(idStream) << '|' << std::setw(15) << "UBYTE  " << '|' << std::setw(50) << this->table[i].value.vint << '|' << std::setw(15) << "-" << '|' << std::endl;
+						break;
+					}
+					case IT::IDDATATYPE::LOGIC:
+					{
+						*(idStream) << '|' << std::setw(15) << "LOGIC  " << '|' << std::setw(50) << this->table[i].value.vlogic << '|' << std::setw(15) << "-" << '|' << std::endl;
 						break;
 					}
 				}
@@ -198,14 +214,24 @@ void IT::IdTable::PrintIdTable(const wchar_t* in)
 
 				switch (this->table[i].iddatatype)
 				{
-					case 1:
+					case IT::IDDATATYPE::INT:
 					{
 						*(idStream) << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(25) << "INT " << '|' << std::endl;
 						break;
 					}
-					case 2:
+					case IT::IDDATATYPE::STR:
 					{
 						*(idStream) << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(25) << "STR " << '|' << std::endl;
+						break;
+					}
+					case IT::IDDATATYPE::UBYTE:
+					{
+						*(idStream) << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(25) << "UBYTE " << '|' << std::endl;
+						break;
+					}
+					case IT::IDDATATYPE::LOGIC:
+					{
+						*(idStream) << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(25) << "LOGIC " << '|' << std::endl;
 						break;
 					}
 				}
@@ -239,16 +265,26 @@ void IT::IdTable::PrintIdTable(const wchar_t* in)
 
 				switch (this->table[i].iddatatype)
 				{
-				case 1:
-				{
-					*(idStream) << '|' << std::setw(30) << this->table[i].parrentFunc << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(15) << "INT " << '|' << std::setw(25) << "V  " << '|' << std::setw(50) << this->table[i].value.vint << '|' << std::setw(15) << "- " << '|' << std::endl;
-					break;
-				}
-				case 2:
-				{
-					*(idStream) << '|' << std::setw(30) << this->table[i].parrentFunc << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(15) << "STR " << '|' << std::setw(25) << "V  " << '|' << std::setw(50) << this->table[i].value.vstr.str << '|' << std::setw(15) << (int)this->table[i].value.vstr.len << '|' << std::endl;
-					break;
-				}
+					case IT::IDDATATYPE::INT:
+					{
+						*(idStream) << '|' << std::setw(30) << this->table[i].parrentFunc << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(15) << "INT " << '|' << std::setw(25) << "V  " << '|' << std::setw(50) << this->table[i].value.vint << '|' << std::setw(15) << "- " << '|' << std::endl;
+						break;
+					}
+					case IT::IDDATATYPE::STR:
+					{
+						*(idStream) << '|' << std::setw(30) << this->table[i].parrentFunc << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(15) << "STR " << '|' << std::setw(25) << "V  " << '|' << std::setw(50) << this->table[i].value.vstr.str << '|' << std::setw(15) << (int)this->table[i].value.vstr.len << '|' << std::endl;
+						break;
+					}
+					case IT::IDDATATYPE::UBYTE:
+					{
+						*(idStream) << '|' << std::setw(30) << this->table[i].parrentFunc << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(15) << "UBYTE " << '|' << std::setw(25) << "V  " << '|' << std::setw(50) << this->table[i].value.vint << '|' << std::setw(15) << "- " << '|' << std::endl;
+						break;
+					}
+					case IT::IDDATATYPE::LOGIC:
+					{
+						*(idStream) << '|' << std::setw(30) << this->table[i].parrentFunc << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(15) << "LOGIC " << '|' << std::setw(25) << "V  " << '|' << std::setw(50) << this->table[i].value.vlogic << '|' << std::setw(15) << "- " << '|' << std::endl;
+						break;
+					}
 				}
 
 				flagForFirst = true;
@@ -261,16 +297,26 @@ void IT::IdTable::PrintIdTable(const wchar_t* in)
 
 				switch (this->table[i].iddatatype)
 				{
-				case 1:
-				{
-					*(idStream) << '|' << std::setw(30) << this->table[i].parrentFunc << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(15) << "INT " << '|' << std::setw(25) << "P  " << '|' << std::setw(50) << this->table[i].value.vint << '|' << std::setw(15) << "- " << '|' << std::endl;
-					break;
-				}
-				case 2:
-				{
-					*(idStream) << '|' << std::setw(30) << this->table[i].parrentFunc << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(15) << "STR " << '|' << std::setw(25) << "P  " << '|' << std::setw(50) << this->table[i].value.vstr.str << '|' << std::setw(15) << (int)this->table[i].value.vstr.len << '|' << std::endl;
-					break;
-				}
+					case IT::IDDATATYPE::INT:
+					{
+						*(idStream) << '|' << std::setw(30) << this->table[i].parrentFunc << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(15) << "INT " << '|' << std::setw(25) << "V  " << '|' << std::setw(50) << this->table[i].value.vint << '|' << std::setw(15) << "- " << '|' << std::endl;
+						break;
+					}
+					case IT::IDDATATYPE::STR:
+					{
+						*(idStream) << '|' << std::setw(30) << this->table[i].parrentFunc << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(15) << "STR " << '|' << std::setw(25) << "V  " << '|' << std::setw(50) << this->table[i].value.vstr.str << '|' << std::setw(15) << (int)this->table[i].value.vstr.len << '|' << std::endl;
+						break;
+					}
+					case IT::IDDATATYPE::UBYTE:
+					{
+						*(idStream) << '|' << std::setw(30) << this->table[i].parrentFunc << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(15) << "UBYTE " << '|' << std::setw(25) << "V  " << '|' << std::setw(50) << this->table[i].value.vint << '|' << std::setw(15) << "- " << '|' << std::endl;
+						break;
+					}
+					case IT::IDDATATYPE::LOGIC:
+					{
+						*(idStream) << '|' << std::setw(30) << this->table[i].parrentFunc << '|' << std::setw(20) << this->table[i].id << '|' << std::setw(15) << "LOGIC " << '|' << std::setw(25) << "V  " << '|' << std::setw(50) << this->table[i].value.vlogic << '|' << std::setw(15) << "- " << '|' << std::endl;
+						break;
+					}
 				}
 
 				flagForFirst = true;

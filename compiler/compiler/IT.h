@@ -1,18 +1,20 @@
 #pragma once
 
-#define ID_MAXSIZE		25				//максимальное количество сиволов в идентификаторе
-#define TI_MAXSIZE		1024			// максимальное количество эл-ов в таблице идентификаторов 
-#define TI_INT_DEFAULT	0x00000000		// значение по умолчанию для типа integer 
-#define TI_STR_DEFAULT	0x00			// значение по умолчанию для типа string 
-#define TI_NULLIDX		-1				// нет элемента таблицы идентификаторов
-#define TI_STR_MAXSIZE	255
+#define ID_MAXSIZE			25				//максимальное количество сиволов в идентификаторе
+#define TI_MAXSIZE			1024			// максимальное количество эл-ов в таблице идентификаторов 
+#define TI_INT_DEFAULT		0				// значение по умолчанию для типа integer
+#define TI_UBYTE_DEFAULT	0				// значение по умолчанию для типа ubyte
+#define TI_LOGIC_DEFAULT	0				// значение по умолчанию для типа logic
+#define TI_STR_DEFAULT		0				// значение по умолчанию для типа string 
+#define TI_NULLIDX			-1				// нет элемента таблицы идентификаторов
+#define TI_STR_MAXSIZE		255
 
 #define PARM_ID_DEFAULT_EXT L".id.txt" //для файла с итогом лексического анализa(идентификаторы и литералы)
 
 namespace IT	// таблица идентификатов
 {
-	enum IDDATATYPE {DEF = 0, INT = 1, STR = 2 };		// типы данных идентификатов: integer, string
-	enum IDTYPE {D = 0, V = 1, F = 2, P = 3, L = 4};			// типы идентификаторов: переменная, функция, параметр, лексема
+	enum IDDATATYPE {DEF, INT, STR, UBYTE, LOGIC };		// типы данных идентификатов
+	enum IDTYPE {D = 0, V = 1, F = 2, C = 3, P = 4, L = 5};			// типы идентификаторов: переменная, функция, блок if, параметр, лексема
 
 
 	struct Entry						// эл-т таблицы идентификаторов
@@ -24,6 +26,7 @@ namespace IT	// таблица идентификатов
 		union VALUE
 		{
 			int vint;					// значение integer
+			bool vlogic;				// значение logic
 			struct
 			{
 				unsigned char len;				// количесво символов в string
@@ -44,9 +47,9 @@ namespace IT	// таблица идентификатов
 		IdTable();
 		void Add(Entry entry);
 		Entry GetEntry(int n);
-		int IsId(const char id[ID_MAXSIZE]);
-		int IsId(const char id[ID_MAXSIZE], const char parentFunc[ID_MAXSIZE]);
-		int IsLit(const char lit[ID_MAXSIZE]);
+		int IsId(const char* id);
+		int IsId(const char* id, const char* parentFunc);
+		int IsLit(const char* lit);
 		void PrintIdTable(const wchar_t* in);
 		void Delete();
 	};
