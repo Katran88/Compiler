@@ -1,5 +1,8 @@
 global int indexator = 0;
 
+global ubyte asd = 10;
+global logic asdasfg = 1;
+
 str func concat(str a, str b)
 {
  return a + b;
