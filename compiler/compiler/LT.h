@@ -12,6 +12,7 @@
 #define	LEX_RETURN			'r'			// лексема для return
 #define	LEX_PRINT			'p'			// лексема для cprint
 #define	LEX_INCLUDE			'd'			// лексема для _include
+#define	LEX_LIBRARY			'b'			// лексема для libName
 #define	LEX_SEMICOLON		';'			// лексема для ;
 #define	LEX_COMMA			','			// лексема для ,
 #define	LEX_LEFTBRACE		'{'			// лексема для {

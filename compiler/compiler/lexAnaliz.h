@@ -11,8 +11,8 @@
 
 #pragma warning(disable: 4996)
 
-#define keyTokens_size 30
-
+#define keyTokens_size 32
+#define libName "DateTime"
 struct KeyTokens
 {
 	char keyToken[10]{};
