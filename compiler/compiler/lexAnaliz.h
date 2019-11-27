@@ -11,7 +11,7 @@
 
 #pragma warning(disable: 4996)
 
-#define keyTokens_size 29
+#define keyTokens_size 30
 
 struct KeyTokens
 {

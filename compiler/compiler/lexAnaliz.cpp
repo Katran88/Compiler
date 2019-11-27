@@ -41,6 +41,8 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 					throw ERROR_THROW_IN(119, strNumber, -1);
 			}
 
+
+
 			if (keyTokens[i].lex == LEX_IF)
 			{				
 				char temp[2]{};
@@ -263,6 +265,8 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		{"func",		LEX_FUNCTION},
 		{"return",		LEX_RETURN},
 		{"cprint",		LEX_PRINT},
+		{"_include",	LEX_PRINT},
+		{libName,		LEX_LIBRARY},
 		{";",			LEX_SEMICOLON},
 		{",",			LEX_COMMA},
 		{"{",			LEX_LEFTBRACE},
@@ -281,8 +285,8 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		{"<=",			LEX_LESS_SAME_SIGN},
 		{">=",			LEX_MORE_SAME_SIGN},
 		{"or",			LEX_OR_SIGN},
-		{"and",			LEX_AND_SIGN}
-
+		{"and",			LEX_AND_SIGN},
+		{"not",			LEX_NOT_SIGN}
 	};
 
 	char* temp = new char[50]{};

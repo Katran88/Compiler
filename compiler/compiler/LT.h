@@ -8,9 +8,10 @@
 #define LEX_IF				'c'			// лексема для блока if
 #define	LEX_GLOBAL			'g'			// лексема для определения глобальной переменной
 #define	LEX_LITERAL			'l'			// лексема для литерала
-#define	LEX_FUNCTION		'f'			// лексема для function
+#define	LEX_FUNCTION		'f'			// лексема для func
 #define	LEX_RETURN			'r'			// лексема для return
-#define	LEX_PRINT			'p'			// лексема для print
+#define	LEX_PRINT			'p'			// лексема для cprint
+#define	LEX_INCLUDE			'd'			// лексема для _include
 #define	LEX_SEMICOLON		';'			// лексема для ;
 #define	LEX_COMMA			','			// лексема для ,
 #define	LEX_LEFTBRACE		'{'			// лексема для {
@@ -30,6 +31,7 @@
 #define	LEX_LESS_SAME_SIGN	'w'			// лексема для <=
 #define	LEX_OR_SIGN			'|'			// лексема для or
 #define	LEX_AND_SIGN		'&'			// лексема для and
+#define	LEX_NOT_SIGN		'!'			// лексема для !
 
 
 #define PARM_LEX_DEFAULT_EXT L".lex.txt" //для файла с итогом лексического анализa
