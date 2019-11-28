@@ -9,5 +9,6 @@
 #include "IT.h"
 #include "GRB.h"
 #include "MFST.h"
+#include "SemantikAnaliz.h"
 
 using namespace std;

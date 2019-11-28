@@ -94,7 +94,7 @@ namespace GRB
 
 
 #pragma region GRB_rules
-	Greibach greibach(NS('S'), TS('$'), 8,
+	Greibach greibach(NS('S'), TS('$'), 9,
 		Rule(NS('S'), GRB_ERROR_SERIES + 0, 5,	//Неверная структура программы
 			Rule::Chain(7, TS('g'), TS('t'), TS('i'), TS('='), NS('E'), TS(';'), NS('S')),
 			Rule::Chain(3, TS('d'), TS('b'), NS('S')),

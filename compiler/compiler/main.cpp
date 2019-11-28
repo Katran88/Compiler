@@ -47,9 +47,12 @@ void wmain(int argc, wchar_t* argv[])
 		sintaxAnaliz->saveoutputTree();
 		sintaxAnaliz->printRules();
 
-		delete sintaxAnaliz;
+		
 #pragma endregion
 
+		SemantikAnaliz(sintaxAnaliz->storestate, idTable);
+
+		delete sintaxAnaliz;
 		lexTable.Delete();
 		idTable.Delete();
 		Log::Close(log);
