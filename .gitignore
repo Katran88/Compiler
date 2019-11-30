@@ -329,6 +329,7 @@ ASALocalRun/
 
 *.docx
 in.txt.*.txt
+*.jpg
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/

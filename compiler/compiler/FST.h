@@ -160,17 +160,28 @@ namespace FST
 
 #pragma region INTEGER_LITERAL
 
-#define INTEGER_LITERAL(string) string, 1,	\
-	FST::NODE(10,	FST::RELATION('0', 0),	\
-					FST::RELATION('1', 0),	\
-					FST::RELATION('2', 0),	\
-					FST::RELATION('3', 0),	\
-					FST::RELATION('4', 0),	\
-					FST::RELATION('5', 0),	\
-					FST::RELATION('6', 0),	\
-					FST::RELATION('7', 0),	\
-					FST::RELATION('8', 0),	\
-					FST::RELATION('9', 0)),	\
+#define INTEGER_LITERAL(string) string, 2,	\
+	FST::NODE(11,	FST::RELATION('0', 2),	\
+					FST::RELATION('-', 1),	\
+					FST::RELATION('1', 1),	\
+					FST::RELATION('2', 1),	\
+					FST::RELATION('3', 1),	\
+					FST::RELATION('4', 1),	\
+					FST::RELATION('5', 1),	\
+					FST::RELATION('6', 1),	\
+					FST::RELATION('7', 1),	\
+					FST::RELATION('8', 1),	\
+					FST::RELATION('9', 1)),	\
+	FST::NODE(10,	FST::RELATION('0', 1),	\
+					FST::RELATION('1', 1),	\
+					FST::RELATION('2', 1),	\
+					FST::RELATION('3', 1),	\
+					FST::RELATION('4', 1),	\
+					FST::RELATION('5', 1),	\
+					FST::RELATION('6', 1),	\
+					FST::RELATION('7', 1),	\
+					FST::RELATION('8', 1),	\
+					FST::RELATION('9', 1)),	\
 	FST::NODE()
 
 #pragma endregion

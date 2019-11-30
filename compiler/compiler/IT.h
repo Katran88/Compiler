@@ -25,7 +25,7 @@ namespace IT	// таблица идентификатов
 		IDTYPE	idtype;					// тип идентикатора
 		union VALUE
 		{
-			int vint;					// значение integer
+			int vint;					// значение integer/ubyte
 			bool vlogic;				// значение logic
 			struct
 			{

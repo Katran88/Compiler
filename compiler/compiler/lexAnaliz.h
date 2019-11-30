@@ -11,7 +11,7 @@
 
 #pragma warning(disable: 4996)
 
-#define keyTokens_size 32
+#define keyTokens_size 34
 #define libName "DateTime"
 struct KeyTokens
 {
@@ -19,23 +19,21 @@ struct KeyTokens
 	char lex = '/0';
 };
 
-enum TypeFlag
-{
-	def, integer, string, ubyte, logic
-};
-
 struct ParrentBlock
 {
+	IT::IDDATATYPE returnType;
 	char* name;
 
 	ParrentBlock()
 	{
+		this->returnType = IT::IDDATATYPE::DEF;
 		this->name = new char[ID_MAXSIZE+3]{}; //+ 1 для \0 и 2 для нумерации блоков
 		strcpy(this->name, "global");
 	}
 
-	ParrentBlock(const char* inputName)
+	ParrentBlock(const char* inputName, IT::IDDATATYPE returnType)
 	{
+		this->returnType = returnType;
 		this->name = new char[ID_MAXSIZE + 3]{}; //+ 1 для \0 и 2 для нумерации блоков
 		strcpy(this->name, inputName);
 	}

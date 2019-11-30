@@ -50,7 +50,7 @@ void wmain(int argc, wchar_t* argv[])
 		
 #pragma endregion
 
-		SemantikAnaliz(sintaxAnaliz->storestate, idTable);
+		SemantikAnaliz(sintaxAnaliz->storestate, sintaxAnaliz->grebach, lexTable, idTable);
 
 		delete sintaxAnaliz;
 		lexTable.Delete();

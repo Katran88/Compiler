@@ -1,9 +1,10 @@
 #include "lexAnaliz.h"
+static bool flagForMain = false;
 
 bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable, IT::IdTable& idTable, const KeyTokens* keyTokens) 
 {
 	static bool paramFlag = false;					//для параметров
-	static TypeFlag typeFlag;						//для определения типа данных
+	static IT::IDDATATYPE typeFlag;						//для определения типа данных
 	static ParrentBlock* tempBlock;
 	static std::stack<ParrentBlock> blocksStack;	//стек блоков программы
 
@@ -19,35 +20,60 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 		if (strcmp(keyTokens[i].keyToken, token) == 0)
 		{
 			if (i == 0)
-				typeFlag = TypeFlag::integer;
+				typeFlag = IT::IDDATATYPE::INT;
 
 			if (i == 1)
-				typeFlag = TypeFlag::string;
+				typeFlag = IT::IDDATATYPE::STR;
 
 			if (i == 2)
-				typeFlag = TypeFlag::ubyte;
+				typeFlag = IT::IDDATATYPE::UBYTE;
 
 			if (i == 3)
-				typeFlag = TypeFlag::logic;
+				typeFlag = IT::IDDATATYPE::LOGIC;
+
+			if (i == 11)
+			{
+				idTable.Add({ '\0', '\0', IT::IDDATATYPE::LOGIC, IT::IDTYPE::L });
+				idTable.table[idTable.current_size - 1].value.vlogic = true;
+				lexTable.Add({ keyTokens[i].lex, strNumber, idTable.current_size - 1 });
+				return true;
+			}
+
+			if (i == 12)
+			{
+				idTable.Add({ '\0', '\0', IT::IDDATATYPE::LOGIC, IT::IDTYPE::L });
+				idTable.table[idTable.current_size - 1].value.vlogic = false;
+				lexTable.Add({ keyTokens[i].lex, strNumber, idTable.current_size - 1 });
+				return true;
+			}
 
 			if (keyTokens[i].lex == LEX_MAIN)
 			{
 				if (idTable.IsId(token) == -1)
 				{
-					tempBlock = new ParrentBlock(token);
+					tempBlock = new ParrentBlock(token, IT::IDDATATYPE::INT);
 					blocksStack.push(*tempBlock);
+					flagForMain = true;
 				}
 				else
 					throw ERROR_THROW_IN(119, strNumber, -1);
 			}
 
-
+			if (keyTokens[i].lex == LEX_RETURN) //не сделал у блоков типы возвращаемого значения
+			{
+				for (int i = blocksStack.size()-1; i >= 0; i--)
+					if (blocksStack._Get_container()[i].returnType != IT::IDDATATYPE::DEF)
+					{
+						idTable.Add({ blocksStack._Get_container()[i].name, "r", blocksStack._Get_container()[i].returnType, IT::IDTYPE::C });
+						break;
+					}
+			}
 
 			if (keyTokens[i].lex == LEX_IF)
 			{				
 				char temp[2]{};
 				itoa(++IFcounter, temp, 10);
-				tempBlock = new ParrentBlock(keyTokens[i].keyToken);
+				tempBlock = new ParrentBlock(keyTokens[i].keyToken, IT::IDDATATYPE::DEF);
 				strcat(tempBlock->name, temp);
 				blocksStack.push(*tempBlock);
 
@@ -81,25 +107,21 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 		{
 			if (idTable.IsId(token) == -1)
 			{
-				if (typeFlag == TypeFlag::integer)
+				if (typeFlag == IT::IDDATATYPE::INT)
 					idTable.Add({ blocksStack._Get_container()[0].name, token, IT::IDDATATYPE::INT, IT::IDTYPE::F });
 
-				if (typeFlag == TypeFlag::string)
+				if (typeFlag == IT::IDDATATYPE::STR)
 					idTable.Add({ blocksStack._Get_container()[0].name, token, IT::IDDATATYPE::STR, IT::IDTYPE::F });
 
-				if (typeFlag == TypeFlag::ubyte)
+				if (typeFlag == IT::IDDATATYPE::UBYTE)
 					idTable.Add({ blocksStack._Get_container()[0].name, token, IT::IDDATATYPE::UBYTE, IT::IDTYPE::F });
 
-				if (typeFlag == TypeFlag::logic)
+				if (typeFlag == IT::IDDATATYPE::LOGIC)
 					idTable.Add({ blocksStack._Get_container()[0].name, token, IT::IDDATATYPE::LOGIC, IT::IDTYPE::F });
 
 				lexTable.Add({ LEX_ID, strNumber, idTable.current_size - 1 });
 				alreadyChecked = true;
-
-				typeFlag = TypeFlag::def;
-
-				tempBlock = new ParrentBlock(token);
-
+				tempBlock = new ParrentBlock(token, typeFlag);
 				blocksStack.push(*tempBlock);
 			}					
 			else
@@ -113,17 +135,17 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 			{
 				if (idTable.IsId(token) == -1)
 				{
-					if (typeFlag == TypeFlag::integer)
-						idTable.Add({ blocksStack._Get_container()[blocksStack.size() - 1].name, token, IT::IDDATATYPE::INT, IT::IDTYPE::V });
+					if (typeFlag == IT::IDDATATYPE::INT)
+						idTable.Add({ blocksStack._Get_container()[0].name, token, IT::IDDATATYPE::INT, IT::IDTYPE::V });
 
-					if (typeFlag == TypeFlag::string)
-						idTable.Add({ blocksStack._Get_container()[blocksStack.size() - 1].name, token, IT::IDDATATYPE::STR, IT::IDTYPE::V });
+					if (typeFlag == IT::IDDATATYPE::STR)
+						idTable.Add({ blocksStack._Get_container()[0].name, token, IT::IDDATATYPE::STR, IT::IDTYPE::V });
 				
-					if (typeFlag == TypeFlag::ubyte)
-						idTable.Add({ blocksStack._Get_container()[blocksStack.size() - 1].name, token, IT::IDDATATYPE::UBYTE, IT::IDTYPE::V });
+					if (typeFlag == IT::IDDATATYPE::UBYTE)
+						idTable.Add({ blocksStack._Get_container()[0].name, token, IT::IDDATATYPE::UBYTE, IT::IDTYPE::V });
 
-					if (typeFlag == TypeFlag::logic)
-						idTable.Add({ blocksStack._Get_container()[blocksStack.size() - 1].name, token, IT::IDDATATYPE::LOGIC, IT::IDTYPE::V });
+					if (typeFlag == IT::IDDATATYPE::LOGIC)
+						idTable.Add({ blocksStack._Get_container()[0].name, token, IT::IDDATATYPE::LOGIC, IT::IDTYPE::V });
 				}
 				else
 					throw ERROR_THROW_IN(123, strNumber, -1);
@@ -134,30 +156,30 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 				{
 					if (paramFlag)
 					{
-						if (typeFlag == TypeFlag::integer)
+						if (typeFlag == IT::IDDATATYPE::INT)
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::INT, IT::IDTYPE::P });
 
-						if (typeFlag == TypeFlag::string)
+						if (typeFlag == IT::IDDATATYPE::STR)
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::STR, IT::IDTYPE::P });
 
-						if (typeFlag == TypeFlag::ubyte)
+						if (typeFlag == IT::IDDATATYPE::UBYTE)
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::UBYTE, IT::IDTYPE::P });
 
-						if (typeFlag == TypeFlag::logic)
+						if (typeFlag == IT::IDDATATYPE::LOGIC)
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::LOGIC, IT::IDTYPE::P });
 					}
 					else
 					{
-						if (typeFlag == TypeFlag::integer)
+						if (typeFlag == IT::IDDATATYPE::INT)
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::INT, IT::IDTYPE::V });
 
-						if (typeFlag == TypeFlag::string)
+						if (typeFlag == IT::IDDATATYPE::STR)
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::STR, IT::IDTYPE::V });
 
-						if (typeFlag == TypeFlag::ubyte)
+						if (typeFlag == IT::IDDATATYPE::UBYTE)
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::UBYTE, IT::IDTYPE::V });
 
-						if (typeFlag == TypeFlag::logic)
+						if (typeFlag == IT::IDDATATYPE::LOGIC)
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::LOGIC, IT::IDTYPE::V });
 					}
 				}
@@ -166,10 +188,12 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 			}
 			
 			lexTable.Add({ LEX_ID, strNumber, idTable.current_size - 1 });
-			typeFlag = TypeFlag::def;
+			//typeFlag = IT::IDDATATYPE::DEF;
 			alreadyChecked = true;
 		}
 		
+		typeFlag = IT::IDDATATYPE::DEF;
+
 		//добавление идентификаторов
 		if (!alreadyChecked)
 		{
@@ -265,7 +289,9 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		{"func",		LEX_FUNCTION},
 		{"return",		LEX_RETURN},
 		{"cprint",		LEX_PRINT},
-		{"_include",	LEX_PRINT},
+		{"_include",	LEX_INCLUDE},
+		{"true",		LEX_LITERAL},
+		{"false",		LEX_LITERAL},
 		{libName,		LEX_LIBRARY},
 		{";",			LEX_SEMICOLON},
 		{",",			LEX_COMMA},
@@ -297,7 +323,8 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 	{
 		if ((source.text[i] >= 'A' && source.text[i] <= 'Z') ||
 			(source.text[i] >= 'a' && source.text[i] <= 'z') ||
-			(source.text[i] >= '0' && source.text[i] <= '9'))
+			(source.text[i] >= '0' && source.text[i] <= '9') ||
+			(source.text[i] == '-' && lexTable.table[lexTable.current_size-1].idxTI == -1 && j == 0))
 		{
 			temp[j++] = source.text[i];
 			posInStr++;
@@ -319,6 +346,7 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 			}
 			else
 			{
+				//для строковых литералов
 				if (source.text[i] == '\"')
 				{
 					temp[j++] = source.text[i++];
@@ -359,7 +387,7 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 					if (source.text[i + 1] == '=')
 					{
 						temp[1] = source.text[i++];
-						temp[2] = '/0';
+						temp[2] = '\0';
 					}
 					else
 						temp[1] = '\0';
@@ -382,8 +410,10 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 
 		
 	}
-
 	delete[] temp;
+
+	if (!flagForMain)
+		throw ERROR_THROW(401);
 }
 
 int searchingForIDinStack(IT::IdTable& idTable, std::stack<ParrentBlock>& stack,const char* token)

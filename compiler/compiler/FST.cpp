@@ -73,6 +73,9 @@ bool FST::execute(FST& fst)
 		rc = step(fst, rstates);
 	}
 
+	if (lstring == 1 && rc)
+		return rc;
+
 	(fst.rstates[fst.statesCounter - 1]) == (lstring) ? rc = true : rc = false;
 
 	return rc;
