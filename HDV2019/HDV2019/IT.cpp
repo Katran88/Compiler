@@ -1,4 +1,5 @@
 #include "IT.h"
+#include "lexAnaliz.h"
 int IT::Entry::FuncParams::currentCount = 0;
 
 IT::Entry::Entry()
@@ -94,17 +95,14 @@ int IT::IdTable::IsId(const char* id, const char* parentFunc)
 
 int IT::IdTable::IsLit(const char* lit)
 {
+	//для строк
 	char* temp = new char[TI_STR_MAXSIZE];
 	int j = 0;
-	for (int i = 0; lit[i] != '\0'; i++)
-	{
-		if (lit[i] != '\"')
-		{
-			temp[j] = lit[i];
-			j++;
-		}
-	}
-	temp[j] = '\0';
+	for (int i = 1; lit[i] != '\0'; i++, j++)
+		temp[j] = lit[i];
+
+	if(j>0) temp[j-1] = '\0';
+	//
 
 	for (int i = 0; i < this->current_size; i++)
 	{
@@ -123,6 +121,28 @@ int IT::IdTable::IsLit(const char* lit)
 			}
 		}
 	}
+
+	//для чисел в отличной от 10ой сс
+	int tempLit = 0;
+	switch (lit[0])
+	{
+		case 'b': tempLit = fromBaseTo10(lit, 2);  break;
+		case 'e': tempLit = fromBaseTo10(lit, 8);  break;
+		case 'h': tempLit = fromBaseTo10(lit, 16); break;
+		default:
+		{
+			delete[] temp;
+			return TI_NULLIDX;
+		}
+	}
+
+	for (int i = 0; i < this->current_size; i++)
+		if (this->table[i].idtype == IT::IDTYPE::L)
+			if (this->table[i].value.vint == tempLit)
+			{
+				delete[] temp;
+				return i;
+			}
 
 	delete[] temp;
 	return TI_NULLIDX;

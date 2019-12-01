@@ -39,6 +39,8 @@ struct ParrentBlock
 	}
 };
 
+int fromBaseTo10(const char* str, int base);
+
 int searchingForIDinStack(IT::IdTable& idTable, std::stack<ParrentBlock>& stack, const char* token);
 void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTable);
 bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable, IT::IdTable& idTable, const KeyTokens* keyTokens);

@@ -3,27 +3,8 @@
 #include <chrono>
 #include <iomanip>
 
-int fromBaseTo10(const char* str, int base)
-{
-	int n = 0;
-	for (; *s != '\0'; s++) {
-		int k;
-		if (*s <= '9' && *s >= '0') k = *s - '0';
-		else if (*s >= 'a' && *s <= 'z') k = *s - 'a' + 10;
-		else if (*s >= 'A' && *s <= 'Z') k = *s - 'A' + 10;
-		else continue;
-		n = rad * n + k;
-	}
-	return n;
-}
-
 void wmain(int argc, wchar_t* argv[])
 {
-
-	int eight = fromBaseTo10("-12", 8);
-	int hex = fromBaseTo10("-A", 16);
-	int bin = fromBaseTo10("111", 2);
-
 	setlocale(LC_ALL, "Russian");
 
 	Log::LOG log;

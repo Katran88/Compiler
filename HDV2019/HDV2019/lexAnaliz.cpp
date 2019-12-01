@@ -103,7 +103,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 			lexTable.Add({ keyTokens[i].lex, strNumber, LT_TI_NULLXDX });
 			return true;
 		}
-
+	//идентификатор
 	FST::FST *identificator = new FST::FST(A_IDENTIFICATOR(token));
 	if (FST::execute(*identificator))
 	{
@@ -229,7 +229,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 	{	
 		delete identificator;
 		identificator = NULL;
-
+		//целочисленный литерал
 		FST::FST* integer_literal = new FST::FST(INTEGER_LITERAL(token));
 		if (FST::execute(*integer_literal))
 		{
@@ -252,6 +252,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 			delete integer_literal;
 			integer_literal = NULL;
 
+			//стринговый литерал
 			FST::FST* string_literal = new FST::FST(STRING_LITERAL(token));
 			if (FST::execute(*string_literal))
 			{
@@ -281,9 +282,86 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 				string_literal = NULL;
 				return true;
 			}
+			else
+			{
+				delete string_literal;
+				string_literal = NULL;
 
-			delete string_literal;
-			string_literal = NULL;
+				int tempLit;
+				//двоичная сс
+				FST::FST* binary_literal = new FST::FST(BINARY_LITERAL(token));
+				if (FST::execute(*binary_literal))
+				{
+					int i = idTable.IsLit(token);
+					if (i != LT_TI_NULLXDX)
+						lexTable.Add({ LEX_LITERAL, strNumber, i });
+					else
+					{
+						idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
+						idTable.table[idTable.current_size - 1].value.vint = fromBaseTo10(token, 2);
+						lexTable.Add({ LEX_LITERAL, strNumber, idTable.current_size - 1 });
+					}
+
+					delete binary_literal;
+					binary_literal = NULL;
+					return true;
+				}
+				else
+				{
+					delete binary_literal;
+					binary_literal = NULL;
+
+					//восьмиричная сс
+					FST::FST* eight_literal = new FST::FST(EIGHT_LITERAL(token));
+					if (FST::execute(*eight_literal))
+					{
+						int i = idTable.IsLit(token);
+						if (i != LT_TI_NULLXDX)
+							lexTable.Add({ LEX_LITERAL, strNumber, i });
+						else
+						{
+							idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
+							idTable.table[idTable.current_size - 1].value.vint = fromBaseTo10(token, 8);
+							lexTable.Add({ LEX_LITERAL, strNumber, idTable.current_size - 1 });
+						}
+
+						delete eight_literal;
+						eight_literal = NULL;
+						return true;
+					}
+					else
+					{
+						delete eight_literal;
+						eight_literal = NULL;
+
+						//шестнадтацеричная сс
+						FST::FST* hex_literal = new FST::FST(HEX_LITERAL(token));
+						if (FST::execute(*hex_literal))
+						{
+							int i = idTable.IsLit(token);
+							if (i != LT_TI_NULLXDX)
+								lexTable.Add({ LEX_LITERAL, strNumber, i });
+							else
+							{
+								idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
+								idTable.table[idTable.current_size - 1].value.vint = fromBaseTo10(token, 16);
+								lexTable.Add({ LEX_LITERAL, strNumber, idTable.current_size - 1 });
+							}
+
+							delete hex_literal;
+							hex_literal = NULL;
+							return true;
+						}
+						else
+						{
+							delete hex_literal;
+							hex_literal = NULL;
+						}
+					}
+
+				}
+			}
+			
 		}
 	}
 
@@ -339,7 +417,8 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		if ((source.text[i] >= 'A' && source.text[i] <= 'Z') ||
 			(source.text[i] >= 'a' && source.text[i] <= 'z') ||
 			(source.text[i] >= '0' && source.text[i] <= '9') ||
-			(source.text[i] == '-' && lexTable.table[lexTable.current_size-1].idxTI == -1 && j == 0))
+			(source.text[i] == '-' && lexTable.table[lexTable.current_size-1].idxTI == -1 && j == 0) ||
+			 source.text[i] == '_')
 		{
 			temp[j++] = source.text[i];
 			posInStr++;
@@ -399,10 +478,10 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 
 					temp[0] = source.text[i];
 					
-					//==
+					//== >= <= !=
 					if (source.text[i + 1] == '=')
 					{
-						temp[1] = source.text[i++];
+						temp[1] = source.text[(i++)+1];
 						temp[2] = '\0';
 					}
 					else
@@ -439,4 +518,20 @@ int searchingForIDinStack(IT::IdTable& idTable, std::stack<ParrentBlock>& stack,
 		result = idTable.IsId(token, stack._Get_container()[i].name);
 
 	return result;
+}
+
+int fromBaseTo10(const char* str, int base)
+{
+	int n = 0;
+	int k;
+	str += 1;
+	for (; *str != '\0'; str++)
+	{
+		if (*str <= '9' && *str >= '0') k = *str - '0';
+		else if (*str >= 'A' && *str <= 'Z') k = *str - 'A' + 10;
+		else continue;
+		n = base * n + k;
+	}
+
+	return n;
 }

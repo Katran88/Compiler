@@ -185,5 +185,55 @@ namespace FST
 	FST::NODE()
 
 #pragma endregion
-	
+
+#pragma region BINARY_LITERAL
+
+#define BINARY_LITERAL(string) string,	2,			\
+	FST::NODE(1,	FST::RELATION('b', 1)),			\
+	FST::NODE(2,	FST::RELATION('0', 1),			\
+					FST::RELATION('1', 1)),			\
+	FST::NODE()
+
+#pragma endregion
+
+#pragma region EIGHT_LITERAL
+
+#define EIGHT_LITERAL(string) string,	2,			\
+	FST::NODE(1,	FST::RELATION('e', 1)),			\
+	FST::NODE(8,	FST::RELATION('0', 1),			\
+					FST::RELATION('1', 1),			\
+					FST::RELATION('2', 1),			\
+					FST::RELATION('3', 1),			\
+					FST::RELATION('4', 1),			\
+					FST::RELATION('5', 1),			\
+					FST::RELATION('6', 1),			\
+					FST::RELATION('7', 1)),			\
+	FST::NODE()
+
+#pragma endregion
+
+#pragma region HEX_LITERAL
+
+#define HEX_LITERAL(string) string,	2,				\
+	FST::NODE(1,	FST::RELATION('h', 1)),			\
+	FST::NODE(16,	FST::RELATION('0', 1),			\
+					FST::RELATION('1', 1),			\
+					FST::RELATION('2', 1),			\
+					FST::RELATION('3', 1),			\
+					FST::RELATION('4', 1),			\
+					FST::RELATION('5', 1),			\
+					FST::RELATION('6', 1),			\
+					FST::RELATION('7', 1),			\
+					FST::RELATION('8', 1),			\
+					FST::RELATION('9', 1),			\
+					FST::RELATION('A', 1),			\
+					FST::RELATION('B', 1),			\
+					FST::RELATION('C', 1),			\
+					FST::RELATION('D', 1),			\
+					FST::RELATION('E', 1),			\
+					FST::RELATION('F', 1)),			\
+	FST::NODE()
+
+#pragma endregion
+
 #pragma endregion
