@@ -1,9 +1,9 @@
-global int indexator = 0;
+global int indexator = -3452;
 
-global ubyte asd = 10;
-global logic asdasfg = 1;
+global ubyte asd = 200*(-1);
+global logic asdasfg = true;
 
-str func concat(str a, str b)
+str func concat(str a, str b, int g, int f)
 {
  return a + b;
 }
@@ -29,6 +29,7 @@ main
 if(x<y)
 {
  int p;
+ p=p+1;
 }
 
  sa = "1234567890";
@@ -38,4 +39,4 @@ if(x<y)
  cprint "контрольный пример";
  cprint z;
  cprint sc;
-};
+}
