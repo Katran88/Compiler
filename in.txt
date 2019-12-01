@@ -3,7 +3,7 @@ global int indexator = -3452;
 global ubyte asd = 200*(-1);
 global logic asdasfg = true;
 
-str func concat(str a, str b)
+str func concat(str a, str b, int g, int f)
 {
  return a + b;
 }
