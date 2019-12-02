@@ -11,8 +11,10 @@
 #define	LEX_FUNCTION		'f'			// лексема для func
 #define	LEX_RETURN			'r'			// лексема для return
 #define	LEX_PRINT			'p'			// лексема для cprint
-#define	LEX_INCLUDE			'd'			// лексема для _include
-#define	LEX_LIBRARY			'b'			// лексема для libName
+#define	LEX_INCLUDE			'e'			// лексема для _connect
+#define	LEX_LIBRARY			'y'			// лексема для libName
+#define	LEX_LOOP			'z'			// лексема для loop
+#define	LEX_TILDA			'~'			// лексема для ~ (помежуток значений итератора цикла)
 #define	LEX_SEMICOLON		';'			// лексема для ;
 #define	LEX_COMMA			','			// лексема для ,
 #define	LEX_LEFTBRACE		'{'			// лексема для {
@@ -34,6 +36,7 @@
 #define	LEX_AND_SIGN		'&'			// лексема для and
 #define	LEX_NOT_SIGN		'!'			// лексема для !
 
+#define libName "DateTime"
 
 #define PARM_LEX_DEFAULT_EXT L".lex.txt" //для файла с итогом лексического анализa
 // таблица лексем

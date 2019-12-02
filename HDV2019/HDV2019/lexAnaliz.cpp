@@ -9,6 +9,8 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 	static std::stack<ParrentBlock> blocksStack;	//стек блоков программы
 
 	static int IFcounter; //счетчик блоков if
+	static int LOOPcounter; //счетчик блоков loop
+	static bool flagForLoopIterator = false; //флаг для определения итератора цикла
 	
 	if (blocksStack.size() == 0)
 	{
@@ -86,6 +88,20 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 				return true;
 			}
 
+			if (keyTokens[i].lex == LEX_LOOP)
+			{
+				char temp[2]{};
+				itoa(++LOOPcounter, temp, 10);
+				tempBlock = new ParrentBlock(keyTokens[i].keyToken, IT::IDDATATYPE::DEF);
+				strcat(tempBlock->name, temp);
+				blocksStack.push(*tempBlock);
+
+				idTable.Add({ blocksStack.top().name, tempBlock->name, IT::IDDATATYPE::DEF, IT::IDTYPE::S });
+				lexTable.Add({ keyTokens[i].lex, strNumber, idTable.current_size - 1 });
+				flagForLoopIterator = true;
+				return true;
+			}
+
 			//начало записи параметров
 			if (keyTokens[i].lex == LEX_LEFTHESIS && idTable.table[lexTable.table[lexTable.current_size - 1].idxTI].idtype == IT::IDTYPE::F)
 			{
@@ -154,7 +170,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 						idTable.Add({ blocksStack._Get_container()[0].name, token, IT::IDDATATYPE::LOGIC, IT::IDTYPE::V });
 				}
 				else
-					throw ERROR_THROW_IN(123, strNumber, -1);
+					throw ERROR_THROW_IN(123, strNumber+1, -1);
 			}
 			else
 			{
@@ -200,27 +216,49 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 					}
 				}
 				else
-					throw ERROR_THROW_IN(123, strNumber, -1);
+					throw ERROR_THROW_IN(123, strNumber+1, -1);
 			}
 			
 			lexTable.Add({ LEX_ID, strNumber, idTable.current_size - 1 });
-			//typeFlag = IT::IDDATATYPE::DEF;
 			alreadyChecked = true;
 		}
 		
 		typeFlag = IT::IDDATATYPE::DEF;
 
+		//для итератора цикла
+		if (!alreadyChecked && flagForLoopIterator)
+		{
+			int tempIndex = searchingForIDinStack(idTable, blocksStack, token);
+			if (tempIndex == -1)
+			{
+				idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::INT, IT::IDTYPE::V });
+				lexTable.Add({ LEX_ID, strNumber, idTable.current_size-1 });
+				flagForLoopIterator = false;
+				alreadyChecked = true;
+			}
+			else
+				throw ERROR_THROW_IN(129, strNumber+1, -1);
+		}
+
 		//добавление идентификаторов
 		if (!alreadyChecked)
 		{
-			int tempIndex = searchingForIDinStack(idTable, blocksStack, token);
-			if (tempIndex != -1)
+
+			int tempIndex = idTable.IsId(token);
+
+			if (tempIndex != -1 && idTable.table[tempIndex].idtype == IT::IDTYPE::F)
 				lexTable.Add({ LEX_ID, strNumber, tempIndex });
 			else
-				throw ERROR_THROW_IN(129, strNumber, -1);
+			{
+				tempIndex = searchingForIDinStack(idTable, blocksStack, token);
+				if (tempIndex != -1)
+					lexTable.Add({ LEX_ID, strNumber, tempIndex });
+				else
+					throw ERROR_THROW_IN(129, strNumber+1, -1);
+			}
 					
 		}
-			
+
 		delete identificator;
 		identificator = NULL;
 		return true;			
@@ -382,10 +420,12 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		{"func",		LEX_FUNCTION},
 		{"return",		LEX_RETURN},
 		{"cprint",		LEX_PRINT},
-		{"_include",	LEX_INCLUDE},
+		{"_connect",	LEX_INCLUDE},
 		{"true",		LEX_LITERAL},
 		{"false",		LEX_LITERAL},
 		{libName,		LEX_LIBRARY},
+		{"loop",		LEX_LOOP},
+		{"~",			LEX_TILDA},
 		{";",			LEX_SEMICOLON},
 		{",",			LEX_COMMA},
 		{"{",			LEX_LEFTBRACE},
@@ -456,6 +496,7 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 					if (source.text[i] == '\"')
 					{
 						temp[j] = source.text[i];
+						temp[j + 1] = '\0';
 						if (tokenAnaliz(temp, strNum, lexTable, idTable, keyTokens))
 						{
 							temp[0] = '\0'; j = 0;
@@ -477,7 +518,7 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 					}
 
 					temp[0] = source.text[i];
-					
+
 					//== >= <= !=
 					if (source.text[i + 1] == '=')
 					{

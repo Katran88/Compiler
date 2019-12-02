@@ -114,7 +114,7 @@ int IT::IdTable::IsLit(const char* lit)
 				return i;
 			}
 			
-			if (strcmp(this->table[i].value.vstr.str, temp) == 0)
+			if (lit[0] == '\"' && strcmp(this->table[i].value.vstr.str, temp) == 0)
 			{
 				delete[] temp;
 				return i;

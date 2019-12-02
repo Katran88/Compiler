@@ -152,6 +152,7 @@ namespace FST
 					FST::RELATION('{', 1),	\
 					FST::RELATION('}', 1),	\
 					FST::RELATION(';', 1),	\
+					FST::RELATION('!', 1),	\
 					FST::RELATION(',', 1),	\
 					FST::RELATION('\"', 2)),\
 	FST::NODE()
