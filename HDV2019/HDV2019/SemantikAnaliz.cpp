@@ -1,4 +1,5 @@
 #include "SemantikAnaliz.h"
+#include "PolishNotation.h"
 #define ASSIGMENT_NTERM 'E'
 #define FUNC_CALL_NTERM 'W'
 #define EXPRESSION_NTERM 'N'
@@ -8,6 +9,7 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 	GRB::Rule rule;
 	IT::IDDATATYPE tempType;
 	int alreadyCheckedPos = -1; //for correct checking of assigment
+	bool flagForFuncParams = false; // for correct checking of assigment with calling of function
 		for (const auto& state : storestate._Get_container())
 		{
 			rule = grebach.getRule(state.nRule);
@@ -15,7 +17,7 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 			
 
 			//checking for 'E' and equals of checking string
-			if (ASSIGMENT_NTERM == -rule.nTerm) //return and assigment
+			if (ASSIGMENT_NTERM == -rule.nTerm)
 			{
 				//for assigment
 				if (state.posInLent > alreadyCheckedPos)
@@ -27,30 +29,108 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 						if (tempType == IT::IDDATATYPE::STR)
 						{
 							for (int i = state.posInLent; LexTable.table[i].lexema != LEX_SEMICOLON; alreadyCheckedPos = i++)
-								if (LexTable.table[i].idxTI != -1 &&
-									idTable.table[LexTable.table[i].idxTI].iddatatype != IT::IDDATATYPE::STR)
-									throw ERROR_THROW_IN(400, LexTable.table[i].sn+1, -1);
-							continue;
+							{
+								if (LexTable.table[i].idxTI != -1)
+								{
+									if (idTable.table[LexTable.table[i].idxTI].iddatatype == IT::IDDATATYPE::STR)
+									{
+										if (idTable.table[LexTable.table[i].idxTI].idtype == IT::IDTYPE::F)
+											flagForFuncParams = true;
+									}
+									else
+									{
+
+										if (LexTable.table[i].lexema != LEX_PLUS &&
+											LexTable.table[i].lexema != LEX_LEFTHESIS &&
+											LexTable.table[i].lexema != LEX_RIGHTHESIS &&
+											LexTable.table[i].lexema != LEX_COMMA)
+											throw ERROR_THROW_IN(408, LexTable.table[i].sn + 1, -1);
+										if(!flagForFuncParams)
+											throw ERROR_THROW_IN(400, LexTable.table[i].sn + 1, -1);
+									}
+								}
+								else
+								{
+									if (LexTable.table[i].lexema == LEX_LEFTHESIS &&
+										LexTable.table[i-1].idxTI != -1  &&
+										idTable.table[LexTable.table[i - 1].idxTI].idtype != IT::IDTYPE::F)
+										throw ERROR_THROW_IN(407, LexTable.table[i].sn + 1, -1);
+									if (LexTable.table[i].lexema == LEX_RIGHTHESIS && flagForFuncParams)
+										flagForFuncParams = false;
+								}
+							}
 						}
 
 						if (tempType == IT::IDDATATYPE::INT || tempType == IT::IDDATATYPE::UBYTE)
 						{
 							for (int i = state.posInLent; LexTable.table[i].lexema != LEX_SEMICOLON; alreadyCheckedPos = i++)
-								if (LexTable.table[i].idxTI != -1 &&
-									idTable.table[LexTable.table[i].idxTI].iddatatype != IT::IDDATATYPE::INT &&
-									idTable.table[LexTable.table[i].idxTI].iddatatype != IT::IDDATATYPE::UBYTE)
-									throw ERROR_THROW_IN(400, LexTable.table[i].sn+1, -1);
-							continue;
+							{
+								if (LexTable.table[i].idxTI != -1)
+								{
+									if (idTable.table[LexTable.table[i].idxTI].iddatatype == IT::IDDATATYPE::UBYTE ||
+										idTable.table[LexTable.table[i].idxTI].iddatatype == IT::IDDATATYPE::INT)
+									{
+										if (idTable.table[LexTable.table[i].idxTI].idtype == IT::IDTYPE::F)
+											flagForFuncParams = true;
+									}
+									else
+									{
+										if (!flagForFuncParams)
+											throw ERROR_THROW_IN(400, LexTable.table[i].sn + 1, -1);
+									}
+								}
+								else
+								{
+									if (LexTable.table[i].lexema == LEX_LEFTHESIS &&
+										LexTable.table[i - 1].idxTI != -1 &&
+										idTable.table[LexTable.table[i - 1].idxTI].idtype != IT::IDTYPE::F)
+										throw ERROR_THROW_IN(407, LexTable.table[i].sn + 1, -1);
+									if (LexTable.table[i].lexema == LEX_RIGHTHESIS && flagForFuncParams)
+										flagForFuncParams = false;
+								}
+							}
 						}
 
 						if (tempType == IT::IDDATATYPE::LOGIC)
 						{
 							for (int i = state.posInLent; LexTable.table[i].lexema != LEX_SEMICOLON; alreadyCheckedPos = i++)
-								if (LexTable.table[i].idxTI != -1 &&
-									idTable.table[LexTable.table[i].idxTI].iddatatype != IT::IDDATATYPE::LOGIC)
-									throw ERROR_THROW_IN(400, LexTable.table[i].sn+1, -1)
-							continue;
+							{
+								if (LexTable.table[i].idxTI != -1)
+								{
+									if (idTable.table[LexTable.table[i].idxTI].iddatatype == IT::IDDATATYPE::LOGIC)
+									{
+										if (idTable.table[LexTable.table[i].idxTI].idtype == IT::IDTYPE::F)
+											flagForFuncParams = true;
+									}
+									else
+									{
+										if (LexTable.table[i].lexema != LEX_AND_SIGN &&
+											LexTable.table[i].lexema != LEX_OR_SIGN &&
+											LexTable.table[i].lexema != LEX_NOT_SIGN &&
+											LexTable.table[i].lexema != LEX_LEFTHESIS &&
+											LexTable.table[i].lexema != LEX_RIGHTHESIS &&
+											LexTable.table[i].lexema != LEX_COMMA)
+											throw ERROR_THROW_IN(408, LexTable.table[i].sn + 1, -1);
+
+										if (!flagForFuncParams)
+											throw ERROR_THROW_IN(400, LexTable.table[i].sn + 1, -1);
+									}
+								}
+								else
+								{
+									if (LexTable.table[i].lexema == LEX_LEFTHESIS &&
+										LexTable.table[i - 1].idxTI != -1 &&
+										idTable.table[LexTable.table[i - 1].idxTI].idtype != IT::IDTYPE::F)
+										throw ERROR_THROW_IN(407, LexTable.table[i].sn + 1, -1);
+									if (LexTable.table[i].lexema == LEX_RIGHTHESIS && flagForFuncParams)
+										flagForFuncParams = false;
+								}
+							}
 						}
+
+						if (!PN::polishNotation(state.posInLent, LexTable, idTable))
+							throw ERROR_THROW_IN(406, LexTable.table[state.posInLent].sn + 1, -1);
+						continue;
 					}
 				}
 			}
@@ -105,4 +185,6 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 			
 		}
 }
+
+
 

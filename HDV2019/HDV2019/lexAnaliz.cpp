@@ -443,9 +443,9 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		{"!=",			LEX_DIFFERENT_SIGN},
 		{"<=",			LEX_LESS_SAME_SIGN},
 		{">=",			LEX_MORE_SAME_SIGN},
-		{"or",			LEX_OR_SIGN},
-		{"and",			LEX_AND_SIGN},
-		{"not",			LEX_NOT_SIGN}
+		{"&",			LEX_OR_SIGN},
+		{"|",			LEX_AND_SIGN},
+		{"!",			LEX_NOT_SIGN}
 	};
 
 	char* temp = new char[50]{};

@@ -94,58 +94,64 @@ namespace GRB
 
 
 #pragma region GRB_rules
-	Greibach greibach(NS('S'), TS('$'), 9,
+	Greibach greibach(NS('S'), TS('$'), 10,
 		Rule(NS('S'), GRB_ERROR_SERIES + 0, 5,	//Неверная структура программы
+			//объявление глобальной переменной
 			Rule::Chain(7, TS('g'), TS('t'), TS('i'), TS('='), NS('E'), TS(';'), NS('S')),
+			//подключение библиотеки
 			Rule::Chain(3, TS('e'), TS('y'), NS('S')),
+			// main
 			Rule::Chain(4, TS('m'), TS('{'), NS('N'), TS('}')),
-
+			// объявление функции с параметрами и без
 			Rule::Chain(10, TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('}'), NS('S')),
 			Rule::Chain(9, TS('t'), TS('f'), TS('i'), TS('('), TS(')'), TS('{'), NS('N'), TS('}'), NS('S'))
 		),
 		Rule(NS('N'), GRB_ERROR_SERIES + 2, 20,	//ошибка в выражении
+			//определение переменной
 			Rule::Chain(4, TS('t'), TS('i'), TS(';'), NS('N')),
 			Rule::Chain(3, TS('t'), TS('i'), TS(';')),
-
+			///////
+			// объявление и инициализация
 			Rule::Chain(6, TS('t'), TS('i'), TS('='), NS('E'), TS(';'), NS('N')),
-			Rule::Chain(6, TS('t'), TS('i'), TS('='), NS('E'), TS(';')),
-
+			Rule::Chain(5, TS('t'), TS('i'), TS('='), NS('E'), TS(';')),
+			///////
+			// инициализация
 			Rule::Chain(5, TS('i'), TS('='), NS('E'), TS(';'), NS('N')),
 			Rule::Chain(4, TS('i'), TS('='), NS('E'), TS(';')),
-
-			Rule::Chain(4, TS('r'), TS('i'), TS(';'), NS('N')),
-			Rule::Chain(3, TS('r'), TS('i'), TS(';')),
-
-			Rule::Chain(4, TS('r'), TS('l'), TS(';'), NS('N')),
-			Rule::Chain(3, TS('r'), TS('l'), TS(';')),
-
+			///////
+			// return
+			Rule::Chain(4, TS('r'), NS('B'), TS(';'), NS('N')),
+			Rule::Chain(3, TS('r'), NS('B'), TS(';')),
+			///////
+			//вызов функции без присвоения возвращаемого значения
 			Rule::Chain(5, TS('i'), TS('('), NS('W'), TS(')'), NS('N')),
 			Rule::Chain(4, TS('i'), TS('('), NS('W'), TS(')')),
 
 			Rule::Chain(4, TS('i'), TS('('), TS(')'), NS('N')),
 			Rule::Chain(3, TS('i'), TS('('), TS(')')),
-
+			///////
+			// вывод в консоль
 			Rule::Chain(4, TS('p'), NS('E'), TS(';'), NS('N')),
 			Rule::Chain(3, TS('p'), NS('E'), TS(';')),
-
+			///////
+			// цикл
 			Rule::Chain(12, TS('z'), TS('('), TS('i'), TS(','), TS('l'), TS('~'), TS('l'), TS(')'), TS('{'), NS('N'), TS('}'), NS('N')),
 			Rule::Chain(11, TS('z'), TS('('), TS('i'), TS(','), TS('l'), TS('~'), TS('l'), TS(')'), TS('{'), NS('N'), TS('}')),
-
+			///////
+			// условный оператор
 			Rule::Chain(8, TS('c'), TS('('), NS('C'), TS(')'), TS('{'), NS('N'), TS('}'), NS('N')),
-			Rule::Chain(9, TS('!'), TS('c'), TS('('), NS('C'), TS(')'), TS('{'), NS('N'), TS('}'), NS('N'))
+			Rule::Chain(7, TS('c'), TS('('), NS('C'), TS(')'), TS('{'), NS('N'), TS('}')),
+			Rule::Chain(9, TS('c'), TS('!'), TS('('), NS('C'), TS(')'), TS('{'), NS('N'), TS('}'), NS('N')),
+			Rule::Chain(8, TS('c'), TS('!'), TS('('), NS('C'), TS(')'), TS('{'), NS('N'), TS('}'))
+			///////
 		),
-		Rule(NS('C'), GRB_ERROR_SERIES + 6, 8,	//условие входа в блок
-			Rule::Chain(3, TS('i'), NS('O'), TS('i')),
-			Rule::Chain(3, TS('i'), NS('O'), TS('l')),
-
-			Rule::Chain(3, TS('l'), NS('O'), TS('i')),
-			Rule::Chain(3, TS('l'), NS('O'), TS('l')),
-
-			Rule::Chain(4, TS('i'), NS('O'), TS('i'), NS('L')),
-			Rule::Chain(4, TS('i'), NS('O'), TS('l'), NS('L')),
-
-			Rule::Chain(4, TS('l'), NS('O'), TS('i'), NS('L')),
-			Rule::Chain(4, TS('l'), NS('O'), TS('l'), NS('L'))
+		Rule(NS('C'), GRB_ERROR_SERIES + 6, 4,	//условие входа в блок
+			//одно условие
+			Rule::Chain(3, TS('i'), NS('O'), NS('B')),
+			Rule::Chain(3, TS('i'), NS('O'), NS('B')),
+			//несколько с операторами И ИЛИ
+			Rule::Chain(4, TS('i'), NS('O'), NS('B'), NS('L')),
+			Rule::Chain(4, TS('i'), NS('O'), NS('B'), NS('L'))
 		),
 		Rule(NS('L'), GRB_ERROR_SERIES + 8, 2,	//оператор в условии входа в блок
 			Rule::Chain(2, TS('|'), NS('C')),
@@ -159,26 +165,35 @@ namespace GRB
 			Rule::Chain(1, TS('b')),
 			Rule::Chain(1, TS('w'))
 		),
-		Rule(NS('E'), GRB_ERROR_SERIES + 1, 10,	//операнд в выражении
+		Rule(NS('B'), GRB_ERROR_SERIES + 1, 2,	//операнд в выражении
+			Rule::Chain(1, TS('i')),
+			Rule::Chain(1, TS('l'))
+		),
+		Rule(NS('E'), GRB_ERROR_SERIES + 1, 12,	//операнд в выражении
 			Rule::Chain(1, TS('i')),
 			Rule::Chain(1, TS('l')),
+			Rule::Chain(2, TS('!'), NS('B')),
 
 			Rule::Chain(3, TS('('), NS('E'), TS(')')),
 			Rule::Chain(4, TS('('), NS('E'), TS(')'), NS('M')),
 
 			Rule::Chain(2, TS('i'), NS('M')),
 			Rule::Chain(2, TS('l'), NS('M')),
+			Rule::Chain(3, TS('!'), NS('B'), NS('M')),
 
 			Rule::Chain(4, TS('i'), TS('('), NS('W'), TS(')')),
 			Rule::Chain(5, TS('i'), TS('('), NS('W'), TS(')'), NS('M')),
 			Rule::Chain(3, TS('i'), TS('('), TS(')')),
 			Rule::Chain(4, TS('i'), TS('('), TS(')'), NS('M'))
 		),
-		Rule(NS('M'), GRB_ERROR_SERIES + 5, 4,	//оператор в выражении
+		Rule(NS('M'), GRB_ERROR_SERIES + 5, 6,	//оператор в выражении
 			Rule::Chain(2, TS('+'), NS('E')),
 			Rule::Chain(2, TS('-'), NS('E')),
 			Rule::Chain(2, TS('*'), NS('E')),
-			Rule::Chain(2, TS('/'), NS('E'))
+			Rule::Chain(2, TS('/'), NS('E')),
+
+			Rule::Chain(2, TS('&'), NS('E')),
+			Rule::Chain(2, TS('|'), NS('E'))
 		),
 		Rule(NS('F'), GRB_ERROR_SERIES + 3, 2,	// параметры функции при определении
 			Rule::Chain(2, TS('t'), TS('i')),

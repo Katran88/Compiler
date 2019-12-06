@@ -56,6 +56,8 @@ void wmain(int argc, wchar_t* argv[])
 		SemantikAnaliz(sintaxAnaliz->storestate, sintaxAnaliz->grebach, lexTable, idTable);
 		t2 = std::chrono::high_resolution_clock::now();
 
+		lexTable.PrintLexTable(param.in);
+
 		time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
 		std::cout << "\n>>>>>>>>>>>Semantik analiz: " << time_span.count() << " seconds." << std::endl << std::endl;
 
