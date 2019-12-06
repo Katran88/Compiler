@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{E4874743-BF37-4397-9F39-AA03D4799B92}</ProjectGuid>
-    <RootNamespace>HDV2019</RootNamespace>
+    <ProjectGuid>{99C8B195-152E-4A86-B3B3-2DD80D714402}</ProjectGuid>
+    <RootNamespace>HDV2019asm</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -53,6 +53,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -80,6 +81,9 @@
     <Link>
       <SubSystem>Console</SubSystem>
     </Link>
+    <MASM>
+      <AssembledCodeListingFile>$(IntDir)</AssembledCodeListingFile>
+    </MASM>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -123,38 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Error.cpp" />
-    <ClCompile Include="FST.cpp" />
-    <ClCompile Include="Generation.cpp" />
-    <ClCompile Include="GRB.cpp" />
-    <ClCompile Include="In.cpp" />
-    <ClCompile Include="IT.cpp" />
-    <ClCompile Include="lexAnaliz.cpp" />
-    <ClCompile Include="Log.cpp" />
-    <ClCompile Include="LT.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MFST.cpp" />
-    <ClCompile Include="Parm.cpp" />
-    <ClCompile Include="PolishNotation.cpp" />
-    <ClCompile Include="SemantikAnaliz.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Error.h" />
-    <ClInclude Include="FST.h" />
-    <ClInclude Include="Generation.h" />
-    <ClInclude Include="GRB.h" />
-    <ClInclude Include="In.h" />
-    <ClInclude Include="IT.h" />
-    <ClInclude Include="lexAnaliz.h" />
-    <ClInclude Include="Log.h" />
-    <ClInclude Include="LT.h" />
-    <ClInclude Include="MFST.h" />
-    <ClInclude Include="Parm.h" />
-    <ClInclude Include="PolishNotation.h" />
-    <ClInclude Include="SemantikAnaliz.h" />
-    <ClInclude Include="stdafx.h" />
+    <MASM Include="HDV2019.asm">
+      <FileType>Document</FileType>
+    </MASM>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>

@@ -102,6 +102,9 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 				return true;
 			}
 
+			if (keyTokens[i].lex == LEX_LIBRARY)
+				IT::IdTable::isLibraryIncluded = true;
+
 			//начало записи параметров
 			if (keyTokens[i].lex == LEX_LEFTHESIS && idTable.table[lexTable.table[lexTable.current_size - 1].idxTI].idtype == IT::IDTYPE::F)
 			{
@@ -119,6 +122,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 			lexTable.Add({ keyTokens[i].lex, strNumber, LT_TI_NULLXDX });
 			return true;
 		}
+
 	//идентификатор
 	FST::FST *identificator = new FST::FST(A_IDENTIFICATOR(token));
 	if (FST::execute(*identificator))
@@ -276,8 +280,16 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 				lexTable.Add({ LEX_LITERAL, strNumber, i });
 			else
 			{
-				idTable.Add({ '\0', '\0', IT::IDDATATYPE::INT,  IT::IDTYPE::L });
-				idTable.table[idTable.current_size - 1].value.vint = atoi(token);
+				int tempValue = atoi(token);
+				if (tempValue > TI_INT_MAX_VALUE && tempValue < TI_INT_MIN_VALUE)
+					throw ERROR_THROW_IN(409, strNumber + 1, -1);
+
+				if(tempValue >= TI_UBYTE_MIN_VALUE && tempValue <= TI_UBYTE_MAX_VALUE)
+					idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
+				else
+					idTable.Add({ '\0', '\0', IT::IDDATATYPE::INT,  IT::IDTYPE::L });
+
+				idTable.table[idTable.current_size - 1].value.vint = tempValue;
 				lexTable.Add({ LEX_LITERAL, strNumber, idTable.current_size - 1 });
 			}
 
@@ -299,6 +311,9 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 					lexTable.Add({ LEX_LITERAL, strNumber, i });
 				else
 				{
+					if(strlen(token)-2 > TI_STR_MAXSIZE)
+						throw ERROR_THROW_IN(410, strNumber + 1, -1);
+
 					idTable.Add({ '\0', '\0', IT::IDDATATYPE::STR,  IT::IDTYPE::L });
 
 					idTable.table[idTable.current_size - 1].value.vstr.len = 0;
@@ -335,8 +350,16 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 						lexTable.Add({ LEX_LITERAL, strNumber, i });
 					else
 					{
-						idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
-						idTable.table[idTable.current_size - 1].value.vint = fromBaseTo10(token, 2);
+						int tempValue = fromBaseTo10(token, 2);
+						if (tempValue < TI_INT_MIN_VALUE && tempValue > TI_INT_MAX_VALUE)
+							throw ERROR_THROW_IN(409, strNumber + 1, -1);
+
+						if (tempValue >= TI_UBYTE_MIN_VALUE && tempValue <= TI_UBYTE_MAX_VALUE)
+							idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
+						else
+							idTable.Add({ '\0', '\0', IT::IDDATATYPE::INT,  IT::IDTYPE::L });
+
+						idTable.table[idTable.current_size - 1].value.vint = tempValue;
 						lexTable.Add({ LEX_LITERAL, strNumber, idTable.current_size - 1 });
 					}
 
@@ -358,8 +381,16 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 							lexTable.Add({ LEX_LITERAL, strNumber, i });
 						else
 						{
-							idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
-							idTable.table[idTable.current_size - 1].value.vint = fromBaseTo10(token, 8);
+							int tempValue = fromBaseTo10(token, 8);
+							if (tempValue < TI_INT_MIN_VALUE && tempValue > TI_INT_MAX_VALUE)
+								throw ERROR_THROW_IN(409, strNumber + 1, -1);
+
+							if (tempValue >= TI_UBYTE_MIN_VALUE && tempValue <= TI_UBYTE_MAX_VALUE)
+								idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
+							else
+								idTable.Add({ '\0', '\0', IT::IDDATATYPE::INT,  IT::IDTYPE::L });
+
+							idTable.table[idTable.current_size - 1].value.vint = tempValue;
 							lexTable.Add({ LEX_LITERAL, strNumber, idTable.current_size - 1 });
 						}
 
@@ -381,8 +412,16 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 								lexTable.Add({ LEX_LITERAL, strNumber, i });
 							else
 							{
-								idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
-								idTable.table[idTable.current_size - 1].value.vint = fromBaseTo10(token, 16);
+								int tempValue = fromBaseTo10(token, 16);
+								if (tempValue < TI_INT_MIN_VALUE && tempValue > TI_INT_MAX_VALUE)
+									throw ERROR_THROW_IN(409, strNumber + 1, -1);
+
+								if (tempValue >= TI_UBYTE_MIN_VALUE && tempValue <= TI_UBYTE_MAX_VALUE)
+									idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
+								else
+									idTable.Add({ '\0', '\0', IT::IDDATATYPE::INT,  IT::IDTYPE::L });
+
+								idTable.table[idTable.current_size - 1].value.vint = tempValue;
 								lexTable.Add({ LEX_LITERAL, strNumber, idTable.current_size - 1 });
 							}
 
@@ -443,9 +482,9 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		{"!=",			LEX_DIFFERENT_SIGN},
 		{"<=",			LEX_LESS_SAME_SIGN},
 		{">=",			LEX_MORE_SAME_SIGN},
-		{"or",			LEX_OR_SIGN},
-		{"and",			LEX_AND_SIGN},
-		{"not",			LEX_NOT_SIGN}
+		{"&",			LEX_OR_SIGN},
+		{"|",			LEX_AND_SIGN},
+		{"!",			LEX_NOT_SIGN}
 	};
 
 	char* temp = new char[50]{};

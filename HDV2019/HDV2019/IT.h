@@ -14,7 +14,12 @@
 #define TI_LOGIC_DEFAULT	0				// значение по умолчанию для типа logic
 #define TI_STR_DEFAULT		0				// значение по умолчанию для типа string 
 #define TI_NULLIDX			-1				// нет элемента таблицы идентификаторов
-#define TI_STR_MAXSIZE		255
+
+#define TI_STR_MAXSIZE		100				//максимальная длина строки
+#define TI_INT_MAX_VALUE	pow(2,16)-1		//максимальное значение для int
+#define TI_INT_MIN_VALUE	-pow(2,16)		//минимальное значение для int
+#define TI_UBYTE_MAX_VALUE	pow(2,8)-1		//максимальное значение для ubyte
+#define TI_UBYTE_MIN_VALUE	0				//минимальное значение для ubyte
 
 #define PARM_ID_DEFAULT_EXT L".id.txt" //для файла с итогом лексического анализa(идентификаторы и литералы)
 
@@ -69,7 +74,9 @@ namespace IT	// таблица идентификатов
 		int maxsize;				// емкость таблицы идентификаторов < TI_MAXSIZE
 		int current_size;			// текущий размер таблицы идентификаторов < maxsize
 		Entry* table;				// массив строк таблицы идентификаторов
-	
+
+		static bool isLibraryIncluded; //флаг для подключения библиотеки в asm file 
+
 		IdTable();
 		void Add(Entry entry);
 		Entry GetEntry(int n);

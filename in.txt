@@ -16,7 +16,7 @@ int func fi(int x, int y)
 {
  str k = hello_world();
  int z;
- z = x * (x + y);
+ z = x * (x + y) + !z | y & !x;
  return z;
 }
 
