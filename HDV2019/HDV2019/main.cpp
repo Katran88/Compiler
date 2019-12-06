@@ -2,6 +2,7 @@
 #include <ctime>
 #include <chrono>
 #include <iomanip>
+#include "Generation.h"
 
 void wmain(int argc, wchar_t* argv[])
 {
@@ -22,6 +23,7 @@ void wmain(int argc, wchar_t* argv[])
 		IT::IdTable	idTable;
 
 #pragma region lexAnaliz
+
 		std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 		lexAnaliz(in, lexTable, idTable);
 		std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
@@ -31,9 +33,11 @@ void wmain(int argc, wchar_t* argv[])
 
 		lexTable.PrintLexTable(param.in);
 		idTable.PrintIdTable(param.in);
+
 #pragma endregion
 
 #pragma region sintaxAnaliz
+
 		MFST_TRACE_START
 			MFST::MFST* sintaxAnaliz = new MFST::MFST(lexTable, GRB::getGreibach());
 
@@ -61,6 +65,15 @@ void wmain(int argc, wchar_t* argv[])
 		time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
 		std::cout << "\n>>>>>>>>>>>Semantik analiz: " << time_span.count() << " seconds." << std::endl << std::endl;
 
+#pragma endregion
+
+#pragma region code_generation
+		t1 = std::chrono::high_resolution_clock::now();
+		generation(lexTable, idTable);
+		t2 = std::chrono::high_resolution_clock::now();
+
+		time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
+		std::cout << "\n>>>>>>>>>>>Code generation: " << time_span.count() << " seconds." << std::endl << std::endl;
 #pragma endregion
 
 		delete sintaxAnaliz;

@@ -1,6 +1,7 @@
 #include "IT.h"
 #include "lexAnaliz.h"
 int IT::Entry::FuncParams::currentCount = 0;
+bool IT::IdTable::isLibraryIncluded = false;
 
 IT::Entry::Entry()
 {

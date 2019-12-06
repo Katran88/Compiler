@@ -3,7 +3,7 @@
 namespace Error
 {
 	// серии ошибок: 0-99 - системные ошибки
-	//				 100-109 - ошибки параметров командной строки
+	//				 100-109 - ошибки с файлами ввода/вывода
 	//				 110-119 - ошибки открытия и чтения файлов
 	//				 120-129 - лексические ошибки
 	//				 130-139 - синтаксические ошибки
@@ -20,8 +20,8 @@ namespace Error
 		ERROR_ENTRY_NODEF10(80),	ERROR_ENTRY_NODEF10(90),
 
 		ERROR_ENTRY(100, "Параметр -in должен быть задан"),
-
-		ERROR_ENTRY_NODEF(101),		ERROR_ENTRY_NODEF(102),		ERROR_ENTRY_NODEF(103),
+		ERROR_ENTRY(101, "Не удалось открыть файл для генерации кода"),
+		ERROR_ENTRY_NODEF(102),		ERROR_ENTRY_NODEF(103),
 
 		ERROR_ENTRY(104, "Превышена длина входного параметра"),
 
@@ -70,8 +70,14 @@ namespace Error
 		ERROR_ENTRY(406, "Ошибка в структуре выражения"),
 		ERROR_ENTRY(407, "Вызов неизвестной функции"),
 		ERROR_ENTRY(408, "Ипользован запрещенный оператор с данными операндами"),
-		ERROR_ENTRY_NODEF(409),
-		ERROR_ENTRY_NODEF10(410),
+		ERROR_ENTRY(409, "Выход за диапазон допустимых целочисленных значений"),
+		ERROR_ENTRY(410, "Выход за диапазон допустимого размера для STR"),
+		ERROR_ENTRY_NODEF(411),
+		ERROR_ENTRY_NODEF(412),
+		ERROR_ENTRY_NODEF(413),		ERROR_ENTRY_NODEF(414),
+		ERROR_ENTRY_NODEF(415),		ERROR_ENTRY_NODEF(416),
+		ERROR_ENTRY_NODEF(417),		ERROR_ENTRY_NODEF(418),
+		ERROR_ENTRY_NODEF(419),
 		ERROR_ENTRY_NODEF10(420),	ERROR_ENTRY_NODEF10(430),
 		ERROR_ENTRY_NODEF10(440),	ERROR_ENTRY_NODEF10(450),
 		ERROR_ENTRY_NODEF10(460),	ERROR_ENTRY_NODEF10(470),
