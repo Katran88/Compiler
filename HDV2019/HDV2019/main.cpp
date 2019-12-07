@@ -1,5 +1,17 @@
 #include "stdafx.h"
 
+//char* concat(int count, char* begin, ...)
+//{
+//	char* retArr = new char[TI_STR_MAXSIZE] {};
+//	char** iterator = &begin;
+//
+//	for (int i = 0, k = 0; i < count; i++)
+//		for (int j = 0; iterator[i][j] != '\0'; j++)
+//			retArr[k++] = iterator[i][j];
+//
+//	return retArr;
+//}
+
 void wmain(int argc, wchar_t* argv[])
 {
 	setlocale(LC_ALL, "Russian");
@@ -65,7 +77,7 @@ void wmain(int argc, wchar_t* argv[])
 
 #pragma region code_generation
 		t1 = std::chrono::high_resolution_clock::now();
-		generation(lexTable, idTable, sintaxAnaliz->storestate);
+		//generation(lexTable, idTable, sintaxAnaliz->storestate);
 		t2 = std::chrono::high_resolution_clock::now();
 
 		time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);

@@ -24,6 +24,10 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 				{
 					if (LexTable.table[state.posInLent - 1].lexema == LEX_EQUAL_SIGN)
 					{
+						//чтобы нельзя было присваивать функции какое-либо значение
+						if(idTable.table[LexTable.table[state.posInLent - 2].idxTI].idtype != IT::IDTYPE::V)
+							throw ERROR_THROW_IN(411, LexTable.table[state.posInLent - 2].sn + 1, -1);
+
 						tempType = idTable.table[LexTable.table[state.posInLent - 2].idxTI].iddatatype;
 
 						if (tempType == IT::IDDATATYPE::STR)
@@ -39,18 +43,19 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 									}
 									else
 									{
-
-										if (LexTable.table[i].lexema != LEX_PLUS &&
-											LexTable.table[i].lexema != LEX_LEFTHESIS &&
-											LexTable.table[i].lexema != LEX_RIGHTHESIS &&
-											LexTable.table[i].lexema != LEX_COMMA)
-											throw ERROR_THROW_IN(408, LexTable.table[i].sn + 1, -1);
 										if(!flagForFuncParams)
 											throw ERROR_THROW_IN(400, LexTable.table[i].sn + 1, -1);
 									}
 								}
 								else
 								{
+									if (LexTable.table[i].lexema != LEX_PLUS &&
+										LexTable.table[i].lexema != LEX_LEFTHESIS &&
+										LexTable.table[i].lexema != LEX_RIGHTHESIS &&
+										LexTable.table[i].lexema != LEX_COMMA &&
+										!flagForFuncParams)
+										throw ERROR_THROW_IN(408, LexTable.table[i].sn + 1, -1);
+
 									if (LexTable.table[i].lexema == LEX_LEFTHESIS &&
 										LexTable.table[i-1].idxTI != -1  &&
 										idTable.table[LexTable.table[i - 1].idxTI].idtype != IT::IDTYPE::F)
@@ -104,20 +109,21 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 									}
 									else
 									{
-										if (LexTable.table[i].lexema != LEX_AND_SIGN &&
-											LexTable.table[i].lexema != LEX_OR_SIGN &&
-											LexTable.table[i].lexema != LEX_NOT_SIGN &&
-											LexTable.table[i].lexema != LEX_LEFTHESIS &&
-											LexTable.table[i].lexema != LEX_RIGHTHESIS &&
-											LexTable.table[i].lexema != LEX_COMMA)
-											throw ERROR_THROW_IN(408, LexTable.table[i].sn + 1, -1);
-
 										if (!flagForFuncParams)
 											throw ERROR_THROW_IN(400, LexTable.table[i].sn + 1, -1);
 									}
 								}
 								else
 								{
+									if (LexTable.table[i].lexema != LEX_AND_SIGN &&
+										LexTable.table[i].lexema != LEX_OR_SIGN &&
+										LexTable.table[i].lexema != LEX_NOT_SIGN &&
+										LexTable.table[i].lexema != LEX_LEFTHESIS &&
+										LexTable.table[i].lexema != LEX_RIGHTHESIS &&
+										LexTable.table[i].lexema != LEX_COMMA &&
+										!flagForFuncParams)
+										throw ERROR_THROW_IN(408, LexTable.table[i].sn + 1, -1);
+
 									if (LexTable.table[i].lexema == LEX_LEFTHESIS &&
 										LexTable.table[i - 1].idxTI != -1 &&
 										idTable.table[LexTable.table[i - 1].idxTI].idtype != IT::IDTYPE::F)

@@ -72,7 +72,7 @@ namespace Error
 		ERROR_ENTRY(408, "Ипользован запрещенный оператор с данными операндами"),
 		ERROR_ENTRY(409, "Выход за диапазон допустимых целочисленных значений"),
 		ERROR_ENTRY(410, "Выход за диапазон допустимого размера для STR"),
-		ERROR_ENTRY_NODEF(411),
+		ERROR_ENTRY(411, "Присваивать какое-либо значение можно только переменной"),
 		ERROR_ENTRY_NODEF(412),
 		ERROR_ENTRY_NODEF(413),		ERROR_ENTRY_NODEF(414),
 		ERROR_ENTRY_NODEF(415),		ERROR_ENTRY_NODEF(416),

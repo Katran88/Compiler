@@ -32,9 +32,7 @@
 #define DEFAULT_CONSTANTS		 "consoleTitle byte 'HDV2019', 0\n\n";
 #define LITERALS_CONSTANTS_end	 ";--------------------------------------------\n"; 
 
-#define DATA_BLOCK "\n\n.data\n\n";
-
-#define VARIABLES_begin "\n;----------------Variables-------------------\n\n";
+#define VARIABLES_begin "\n\n;----------------Variables-------------------\n.data\n\n";
 #define DEFAULT_VARS "consoleHandle dd 0h\t; состояние консоли\n\n";
 #define VARIABLES_end	";---------------------------------------------\n";
 
