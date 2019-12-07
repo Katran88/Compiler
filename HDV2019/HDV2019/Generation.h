@@ -1,6 +1,13 @@
 #pragma once
 #include "LT.h"
 #include "IT.h"
+#include "MFST.h"
+
+#include <stack>
+
+//пам€тка:
+// имена констант и переменных это 'L' или 'V' (соответственно) + номер в idTable
+// имена параметров функций это просто их имена
 
 #define STANDART_BEGIN    ".586							; система команд (процессор Pentium)\n"											\
 					   << ".model flat, stdcall			; модель пам€ти, соглашение о вызовах\n"										\
@@ -13,7 +20,7 @@
 					   << ";-----------------------------\n\n";																			\
 
 #define LIB_INCLUDE	      ";-----------DateTime-----------\n"																			\
-					   << "includelib ..\\Debug\\DateTimelib.lib\n"													\
+					   << "includelib ..\\DateTimelib.lib\n"													\
 					   << "getDate PROTO	; ¬озвращает текущую, локальную дату в виде строки\n"									\
 					   << "getTime PROTO	; ¬озвращает текущее, локальную врем€ в виде строки\n"								\
 					   << ";------------------------------\n\n";													\
@@ -22,8 +29,20 @@
 
 #define LITERALS_CONSTANTS_begin ";-----------Literals and constants-----------\n"\
 							  << ".const\n\n";
-
-#define DEFAULT_CONSTANTS "consoleTitle byte 'HDV2019', 0\n\n";
-
+#define DEFAULT_CONSTANTS		 "consoleTitle byte 'HDV2019', 0\n\n";
 #define LITERALS_CONSTANTS_end	 ";--------------------------------------------\n"; 
-void generation(LT::LexTable& LexTable, IT::IdTable& IdTable);
+
+#define DATA_BLOCK "\n\n.data\n\n";
+
+#define VARIABLES_begin "\n;----------------Variables-------------------\n\n";
+#define DEFAULT_VARS "consoleHandle dd 0h\t; состо€ние консоли\n\n";
+#define VARIABLES_end	";---------------------------------------------\n";
+
+#define CODE_BLOCK "\n\n.code\n\n";
+
+#define FUNCTIONS_begin "\n;----------------Functions-------------------\n\n";
+#define FUNCTIONS_end	";----------------------------------------------\n";
+
+
+void funcSignature(std::ofstream* file, IT::IdTable& IdTable, int i);
+void generation(LT::LexTable& LexTable, IT::IdTable& IdTable, std::stack<MFST::MFSTState>& storestate);

@@ -1,8 +1,4 @@
 #include "stdafx.h"
-#include <ctime>
-#include <chrono>
-#include <iomanip>
-#include "Generation.h"
 
 void wmain(int argc, wchar_t* argv[])
 {
@@ -69,7 +65,7 @@ void wmain(int argc, wchar_t* argv[])
 
 #pragma region code_generation
 		t1 = std::chrono::high_resolution_clock::now();
-		generation(lexTable, idTable);
+		generation(lexTable, idTable, sintaxAnaliz->storestate);
 		t2 = std::chrono::high_resolution_clock::now();
 
 		time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);

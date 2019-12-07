@@ -10,5 +10,9 @@
 #include "GRB.h"
 #include "MFST.h"
 #include "SemantikAnaliz.h"
+#include <ctime>
+#include <chrono>
+#include <iomanip>
+#include "Generation.h"
 
 using namespace std;
