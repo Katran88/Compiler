@@ -10,6 +10,11 @@ WriteConsoleA PROTO : DWORD, : DWORD, : DWORD, : DWORD, : DWORD		;вывод на консо
 SetConsoleTitleA PROTO: DWORD		; прототип ф-ии устанавливающей заголовок консольного окна
 ;-----------------------------
 
+;-----------Standart functions-----------
+includelib ..\Standart.lib
+concat PROTO: DWORD,: DWORD
+;----------------------------------------
+
 ;-----------DateTime-----------
 includelib ..\DateTimelib.lib
 getDate PROTO	; Возвращает текущую, локальную дату в виде строки
@@ -22,6 +27,8 @@ getTime PROTO	; Возвращает текущее, локальную время в виде строки
 .const
 
 consoleTitle byte 'HDV2019', 0
+INTOVERFLOW_text byte 'INT OVERFLOW EXCEPTION', 10, 0
+UBYTEOVERFLOW_text byte 'UBYTE OVERFLOW EXCEPTION', 10, 0
 
 L1	byte	7	 ; ubyte literal
 L3	byte	122	 ; ubyte literal
@@ -65,39 +72,25 @@ V36	sdword	0	 ; integer var
 V38	sdword	0	 ; integer var
 ;---------------------------------------------
 
-a sdword 10
-b byte 2
+a dword 10
+b dword 0
 
 .code
 
-
-;----------------Functions-------------------
-
-hello_world proc  k : sdword
-
-
-ret
-hello_world endp
-
-fi proc  x : sdword, y : byte
-
-
-ret
-fi endp
-
-;----------------------------------------------
-
-main proc
+main proc 
 
 mov eax, a
-movzx ebx, b
+mov ebx, 1
 
-push eax
+cdq
+
+cmp ebx, 0
+
+jne NOzero
+idiv ebx
+
+NOzero:
 push ebx
 
-pop ebx
-pop eax
-imul eax, ebx
-
-main endp
+main endp 
 end main

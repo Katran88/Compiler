@@ -19,6 +19,11 @@
 					   << "SetConsoleTitleA PROTO: DWORD		; прототип ф-ии устанавливающей заголовок консольного окна\n"			\
 					   << ";-----------------------------\n\n";																			\
 
+#define STANDART_LIB	  ";-----------Standart functions-----------\n"    \
+					   << "includelib ..\\Standart.lib\n"				   \
+					   << "concat PROTO: DWORD,: DWORD\n"				   \
+					   << ";----------------------------------------\n\n"; \
+
 #define LIB_INCLUDE	      ";-----------DateTime-----------\n"																			\
 					   << "includelib ..\\DateTimelib.lib\n"													\
 					   << "getDate PROTO	; Возвращает текущую, локальную дату в виде строки\n"									\
@@ -29,7 +34,12 @@
 
 #define LITERALS_CONSTANTS_begin ";-----------Literals and constants-----------\n"\
 							  << ".const\n\n";
-#define DEFAULT_CONSTANTS		 "consoleTitle byte 'HDV2019', 0\n\n";
+
+#define DEFAULT_CONSTANTS		 "consoleTitle byte 'HDV2019', 0\n"								 \
+							  << "INTOVERFLOW_text byte 'INT OVERFLOW EXCEPTION', 10, 0\n"		 \
+							  << "UBYTEOVERFLOW_text byte 'UBYTE OVERFLOW EXCEPTION', 10, 0\n"	 \
+							  << "DIVISION_BY_ZERO_text byte 'DIVISION BY ZERO', 10, 0\n\n";	 \ 
+
 #define LITERALS_CONSTANTS_end	 ";--------------------------------------------\n"; 
 
 #define VARIABLES_begin "\n\n;----------------Variables-------------------\n.data\n\n";

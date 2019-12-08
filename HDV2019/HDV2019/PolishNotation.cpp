@@ -68,9 +68,13 @@ bool PN::polishNotation(int lexBeginIndex, LT::LexTable& LexTable, IT::IdTable& 
 		if (temp.lexema == LEX_ID || temp.lexema == LEX_LITERAL || temp.lexema == LEX_NOT_SIGN )
 		{
 			if (IdTable.table[temp.idxTI].idtype == IT::IDTYPE::F) // со следующей итерации начнем записывать параметры
+			{
 				flagForFuncCalling = true;
+				operators->push(temp);
+			}
+			else
+				literals->push(temp);
 
-			literals->push(temp);
 			i++;
 			continue;
 		}
@@ -78,7 +82,8 @@ bool PN::polishNotation(int lexBeginIndex, LT::LexTable& LexTable, IT::IdTable& 
 		if (temp.lexema == LEX_RIGHTHESIS && flagForFuncCalling) //параметры для функции закончились
 		{
 			flagForFuncCalling = false;
-			literals->push({'@', temp.sn, -1});
+			//literals->push({'@', temp.sn, -1});
+			literals->push(*operators->pop());
 			i++; continue;
 		}
 
