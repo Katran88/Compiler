@@ -19,9 +19,9 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 			//checking for 'E' and equals of checking string
 			if (ASSIGMENT_NTERM == -rule.nTerm)
 			{
-				//for assigment
 				if (state.posInLent > alreadyCheckedPos)
 				{
+					//for assigment
 					if (LexTable.table[state.posInLent - 1].lexema == LEX_EQUAL_SIGN)
 					{
 						//чтобы нельзя было присваивать функции какое-либо значение
@@ -32,6 +32,9 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 
 						if (tempType == IT::IDDATATYPE::STR)
 						{
+							//за раз можно осуществить конкатенацию только 4х строк
+							int strCounter = 1;
+
 							for (int i = state.posInLent; LexTable.table[i].lexema != LEX_SEMICOLON; alreadyCheckedPos = i++)
 							{
 								if (LexTable.table[i].idxTI != -1)
@@ -49,6 +52,12 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 								}
 								else
 								{
+									if (LexTable.table[i].lexema == LEX_PLUS)
+										strCounter++;
+
+									if (strCounter >= 4)
+										throw ERROR_THROW_IN(412, LexTable.table[i].sn + 1, -1);
+
 									if (LexTable.table[i].lexema != LEX_PLUS &&
 										LexTable.table[i].lexema != LEX_LEFTHESIS &&
 										LexTable.table[i].lexema != LEX_RIGHTHESIS &&
@@ -141,6 +150,19 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 				}
 			}
 
+			//for cprint
+			if (LexTable.table[state.posInLent].lexema == LEX_PRINT)
+			{
+				if (state.posInLent > alreadyCheckedPos)
+				{
+					if(idTable.table[LexTable.table[state.posInLent + 1].idxTI].idtype == IT::IDTYPE::F  ||
+					   idTable.table[LexTable.table[state.posInLent + 1].idxTI].iddatatype != IT::IDDATATYPE::STR)
+						throw ERROR_THROW_IN(413, LexTable.table[state.posInLent].sn + 1, -1);
+
+					alreadyCheckedPos = state.posInLent+2;
+				}
+			}
+
 			if (EXPRESSION_NTERM == -rule.nTerm)
 			{
 				//for return
@@ -178,6 +200,7 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 				}*/
 			}
 
+			//cheching for correct pushed params
 			if (FUNC_CALL_NTERM == -rule.nTerm && state.posInLent > alreadyCheckedPos)
 			{
 				for (int i = state.posInLent, j = 0; LexTable.table[i].lexema != LEX_RIGHTHESIS; alreadyCheckedPos = i)

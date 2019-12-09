@@ -1,7 +1,7 @@
 .586							; система команд (процессор Pentium)
 .model flat, stdcall			; модель памяти, соглашение о вызовах
 includelib kernel32.lib			; компановщику: компоновать с kernel32
-
+includelib libucrt.lib
 ExitProcess PROTO: DWORD		; прототип функции для завершения процесса Windows
 
 ;-----------console-----------
@@ -11,12 +11,15 @@ SetConsoleTitleA PROTO: DWORD		; прототип ф-ии устанавливающей заголовок консоль
 ;-----------------------------
 
 ;-----------Standart functions-----------
-includelib ..\Standart.lib
-concat PROTO: DWORD,: DWORD
+includelib ../Standart.lib
+concat1 PROTO : dword, :dword
+concat2 PROTO : dword, :dword, :dword
+concat3 PROTO : dword, :dword, :dword, :dword
+concat4 PROTO : dword, :dword, :dword, :dword, :dword
 ;----------------------------------------
 
 ;-----------DateTime-----------
-includelib ..\DateTimelib.lib
+includelib ../DateTimelib.lib
 getDate PROTO	; Возвращает текущую, локальную дату в виде строки
 getTime PROTO	; Возвращает текущее, локальную время в виде строки
 ;------------------------------
@@ -29,6 +32,7 @@ getTime PROTO	; Возвращает текущее, локальную время в виде строки
 consoleTitle byte 'HDV2019', 0
 INTOVERFLOW_text byte 'INT OVERFLOW EXCEPTION', 10, 0
 UBYTEOVERFLOW_text byte 'UBYTE OVERFLOW EXCEPTION', 10, 0
+DIVISION_BY_ZERO_text byte 'DIVISION BY ZERO', 10, 0
 
 L1	byte	7	 ; ubyte literal
 L3	byte	122	 ; ubyte literal
@@ -52,45 +56,37 @@ L41	byte	'контрольный пример', 82 dup(0)	 ; string literal
 
 consoleHandle dd 0h	; состояние консоли
 
-V0	byte	0	 ; ubyte var
-V2	byte	0	 ; ubyte var
-V4	byte	0	 ; ubyte var
-V6	byte	0	 ; ubyte var
-V9	byte	0	 ; logic var
-V11	byte	100 dup(0)	 ; string var
-V15	byte	100 dup(0)	 ; string var
-V21	byte	100 dup(0)	 ; string var
-V23	sdword	0	 ; integer var
-V25	sdword	0	 ; integer var
-V26	sdword	0	 ; integer var
-V27	sdword	0	 ; integer var
-V28	byte	100 dup(0)	 ; string var
-V29	byte	100 dup(0)	 ; string var
-V30	byte	100 dup(0)	 ; string var
-V34	sdword	0	 ; integer var
-V36	sdword	0	 ; integer var
-V38	sdword	0	 ; integer var
+global_binary	byte	0	 ; ubyte var
+global_eight	byte	0	 ; ubyte var
+global_hex	byte	0	 ; ubyte var
+global_test	byte	0	 ; ubyte var
+global_test_logic	byte	0	 ; logic var
+global_test_str	byte	100 dup(0)	 ; string var
+hello_world_k	sdword	0	 ; integer var
+hello_world_a	byte	100 dup(0)	 ; string var
+fi_x	sdword	0	 ; integer var
+fi_y	byte	0	 ; ubyte var
+fi_k	byte	100 dup(0)	 ; string var
+fi_z	sdword	0	 ; integer var
+main_x	sdword	0	 ; integer var
+main_y	sdword	0	 ; integer var
+main_z	sdword	0	 ; integer var
+main_sa	byte	100 dup(0)	 ; string var
+main_sb	byte	100 dup(0)	 ; string var
+main_sc	byte	100 dup(0)	 ; string var
+loop1_i	sdword	0	 ; integer var
+if1_p	sdword	0	 ; integer var
+if2_u	sdword	0	 ; integer var
 ;---------------------------------------------
 
-a dword 10
-b dword 0
-
+str_var	byte 'аа', 0
+str_var2 byte 'бб', 0
+str_var3 byte 'вв', 0
 .code
 
-main proc 
+;----------------Functions-------------------
 
-mov eax, a
-mov ebx, 1
+main proc
 
-cdq
-
-cmp ebx, 0
-
-jne NOzero
-idiv ebx
-
-NOzero:
-push ebx
-
-main endp 
-end main
+main endp  
+end main  

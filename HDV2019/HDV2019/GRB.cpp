@@ -131,8 +131,8 @@ namespace GRB
 			Rule::Chain(3, TS('i'), TS('('), TS(')')),
 			///////
 			// вывод в консоль
-			Rule::Chain(4, TS('p'), NS('E'), TS(';'), NS('N')),
-			Rule::Chain(3, TS('p'), NS('E'), TS(';')),
+			Rule::Chain(4, TS('p'), NS('B'), TS(';'), NS('N')),
+			Rule::Chain(3, TS('p'), NS('B'), TS(';')),
 			///////
 			// цикл
 			Rule::Chain(12, TS('z'), TS('('), TS('i'), TS(','), TS('l'), TS('~'), TS('l'), TS(')'), TS('{'), NS('N'), TS('}'), NS('N')),
