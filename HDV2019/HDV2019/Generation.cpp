@@ -80,7 +80,7 @@ void generation(LT::LexTable& LexTable, IT::IdTable& IdTable, std::stack<MFST::M
 				continue;
 			
 			//'шапка' функции
-			if (state.nRule == 0 && (state.nRuleChain == 3 || state.nRuleChain == 4))
+			if (state.nRule == 0)
 			{
 				//конец функции
 				if (state.posInLent - 1 > 0 &&
@@ -91,15 +91,17 @@ void generation(LT::LexTable& LexTable, IT::IdTable& IdTable, std::stack<MFST::M
 					currentfuncID = 0;
 				}
 
- 				funcSignature(file, IdTable, LexTable.table[state.posInLent + 2].idxTI);
-				currentfuncID = LexTable.table[state.posInLent + 2].idxTI;
+				if (state.nRuleChain == 3 || state.nRuleChain == 4)
+				{
+					funcSignature(file, IdTable, LexTable.table[state.posInLent + 2].idxTI);
+					currentfuncID = LexTable.table[state.posInLent + 2].idxTI;
+					int i = 0;
 
-				int i = 0;
-				for (i = state.posInLent; LexTable.table[i].lexema != LEX_LEFTBRACE;)
-					i++;
+					for (i = state.posInLent; LexTable.table[i].lexema != LEX_LEFTBRACE;)
+						i++;
 
-				currentCheckedPos = i;
-
+					currentCheckedPos = i;
+				}
 				continue;
 			}
 			//тело функции

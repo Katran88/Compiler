@@ -42,10 +42,10 @@ L12	byte	'test', 96 dup(0)	 ; string literal
 L16	byte	'привет мир!', 89 dup(0)	 ; string literal
 L19	byte	1	 ; ubyte literal
 L20	byte	10	 ; ubyte literal
-L37	byte	5	 ; ubyte literal
-L41	byte	'1234567890', 90 dup(0)	 ; string literal
-L42	byte	11	 ; ubyte literal
-L43	byte	'контрольный пример', 82 dup(0)	 ; string literal
+L38	byte	5	 ; ubyte literal
+L42	byte	'1234567890', 90 dup(0)	 ; string literal
+L43	byte	11	 ; ubyte literal
+L44	byte	'контрольный пример', 82 dup(0)	 ; string literal
 ;--------------------------------------------
 
 
@@ -63,6 +63,7 @@ global_test_str	byte	100 dup(0)	 ; string var
 hello_world_k	sdword	0	 ; integer var
 hello_world_a	byte	100 dup(0)	 ; string var
 loop1_i	sdword	0	 ; integer var
+global_binar	byte	0	 ; ubyte var
 fi_x	sdword	0	 ; integer var
 fi_y	byte	0	 ; ubyte var
 fi_k	byte	100 dup(0)	 ; string var
@@ -233,6 +234,9 @@ isNotOverflow: 	;assigment to INT done
 mov eax, fi_z 	begin of return INT
 ret 8	;end of return
 
+fi endp
+
+
 movzx eax, L19
 push eax
 
@@ -258,7 +262,7 @@ call ExitProcess 	;INT OVERFLOW
 isNotOverflow: 	;assigment to INT done
 
 
-movzx eax, L37
+movzx eax, L38
 push eax
 
 pop eax	;assigment to INT begin
@@ -324,7 +328,7 @@ cmp loop2_i, L20
 jg loop2	loop end
 
 
-push offset L41
+push offset L42
 
 push offset main_sa	;assigment to STR begin
 call concat1
@@ -335,7 +339,7 @@ push 0
 notOverflow: 	;assigment to STR begin
 
 
-push offset L41
+push offset L42
 
 push offset main_sb	;assigment to STR begin
 call concat1
@@ -355,7 +359,7 @@ push eax
 call fi
 push eax
 
-movzx eax, L42
+movzx eax, L43
 push eax
 
 pop ebx; 	*
@@ -399,8 +403,8 @@ notOverflow: 	;assigment to STR begin
 
 push 0 	;cprint
 push 0
-push sizeof _
-push offset _
+push sizeof L44
+push offset L44
 call WriteConsoleA
 
 
