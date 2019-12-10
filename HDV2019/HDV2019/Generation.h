@@ -6,8 +6,8 @@
 #include <stack>
 
 //пам€тка:
-// имена констант и переменных это 'L' или 'V' (соответственно) + номер в idTable
-// имена параметров функций это просто их имена
+// имена констант и литералов это 'L' + номер в idTable
+// имена переменных это родительскийЅлок + '_' + им€»дентификатора
 
 #define STANDART_BEGIN    ".586							; система команд (процессор Pentium)\n"											\
 					   << ".model flat, stdcall			; модель пам€ти, соглашение о вызовах\n"										\
@@ -51,6 +51,8 @@
 
 #define FUNCTIONS_begin "\n;----------------Functions-------------------\n\n";
 #define FUNCTIONS_end	";----------------------------------------------\n";
+
+enum loopFlag { undef, incFlag, decrFlag};
 
 
 void funcSignature(std::ofstream* file, IT::IdTable& IdTable, int i);

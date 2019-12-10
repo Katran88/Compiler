@@ -25,7 +25,8 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 					if (LexTable.table[state.posInLent - 1].lexema == LEX_EQUAL_SIGN)
 					{
 						//чтобы нельзя было присваивать функции какое-либо значение
-						if(idTable.table[LexTable.table[state.posInLent - 2].idxTI].idtype != IT::IDTYPE::V)
+						if(idTable.table[LexTable.table[state.posInLent - 2].idxTI].idtype != IT::IDTYPE::V &&
+							idTable.table[LexTable.table[state.posInLent - 2].idxTI].idtype != IT::IDTYPE::P)
 							throw ERROR_THROW_IN(411, LexTable.table[state.posInLent - 2].sn + 1, -1);
 
 						tempType = idTable.table[LexTable.table[state.posInLent - 2].idxTI].iddatatype;

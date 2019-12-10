@@ -5,6 +5,7 @@ bool IT::IdTable::isLibraryIncluded = false;
 
 IT::Entry::Entry()
 {
+	this->paramsCount = 0;
 	this->parrentFunc[0] = '\0';
 	this->id[0] = '\0';
 	this->iddatatype = DEF;
@@ -13,6 +14,8 @@ IT::Entry::Entry()
 
 IT::Entry::Entry(const char* parrentFunc, const char* id, IDDATATYPE iddatatype, IDTYPE idtype)
 {
+	this->paramsCount = 0;
+
 	int i = 0;
 	if(parrentFunc)
 	for (i = 0; parrentFunc[i] != '\0'; i++)

@@ -69,6 +69,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 					if (blocksStack._Get_container()[i].returnType != IT::IDDATATYPE::DEF)
 					{
 						idTable.Add({ blocksStack._Get_container()[i].name, "r", blocksStack._Get_container()[i].returnType, IT::IDTYPE::S });
+						idTable.table[idTable.current_size - 1].paramsCount = idTable.table[idTable.IsId(blocksStack._Get_container()[i].name)].paramsCount;
 						break;
 					}
 				lexTable.Add({ keyTokens[i].lex, strNumber, idTable.current_size - 1 });
@@ -116,8 +117,13 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 				paramFlag = false;
 
 			// конец области видимости последнего блока в стеке
-			if (keyTokens[i].lex == LEX_RIGHTBRACE) 
+			if (keyTokens[i].lex == LEX_RIGHTBRACE)
+			{
+				idTable.Add({ blocksStack.top().name, "}", IT::IDDATATYPE::DEF, IT::IDTYPE::S });
+				lexTable.Add({ keyTokens[i].lex, strNumber, idTable.current_size-1 });
 				blocksStack.pop();
+				return true;
+			}
 
 			lexTable.Add({ keyTokens[i].lex, strNumber, LT_TI_NULLXDX });
 			return true;
@@ -186,22 +192,26 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 						{
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::INT, IT::IDTYPE::P });
 							idTable.table[idTable.IsId(blocksStack.top().name)].funcParams[IT::Entry::FuncParams::currentCount].AddParam(token, IT::IDDATATYPE::INT, strNumber);
+							idTable.table[idTable.IsId(blocksStack.top().name)].paramsCount++;
 						}
 
 						if (typeFlag == IT::IDDATATYPE::STR)
 						{
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::STR, IT::IDTYPE::P });
 							idTable.table[idTable.IsId(blocksStack.top().name)].funcParams[IT::Entry::FuncParams::currentCount].AddParam(token, IT::IDDATATYPE::STR, strNumber);
+							idTable.table[idTable.IsId(blocksStack.top().name)].paramsCount++;
 						}
 						if (typeFlag == IT::IDDATATYPE::UBYTE)
 						{
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::UBYTE, IT::IDTYPE::P });
 							idTable.table[idTable.IsId(blocksStack.top().name)].funcParams[IT::Entry::FuncParams::currentCount].AddParam(token, IT::IDDATATYPE::UBYTE, strNumber);
+							idTable.table[idTable.IsId(blocksStack.top().name)].paramsCount++;
 						}
 						if (typeFlag == IT::IDDATATYPE::LOGIC)
 						{
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::LOGIC, IT::IDTYPE::P });
 							idTable.table[idTable.IsId(blocksStack.top().name)].funcParams[IT::Entry::FuncParams::currentCount].AddParam(token, IT::IDDATATYPE::LOGIC, strNumber);
+							idTable.table[idTable.IsId(blocksStack.top().name)].paramsCount++;
 						}
 					}
 					else //variables

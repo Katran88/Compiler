@@ -35,6 +35,7 @@ namespace IT	// таблица идентификатов
 		IDDATATYPE	iddatatype;			// тип данных
 		IDTYPE	idtype;					// тип идентикатора
 
+		int paramsCount;
 		struct FuncParams
 		{
 			static int currentCount;

@@ -124,11 +124,11 @@ namespace GRB
 			Rule::Chain(3, TS('r'), NS('B'), TS(';')),
 			///////
 			//вызов функции без присвоения возвращаемого значения
-			Rule::Chain(5, TS('i'), TS('('), NS('W'), TS(')'), NS('N')),
-			Rule::Chain(4, TS('i'), TS('('), NS('W'), TS(')')),
+			Rule::Chain(6, TS('i'), TS('('), NS('W'), TS(')'), TS(';'), NS('N')),
+			Rule::Chain(5, TS('i'), TS('('), NS('W'), TS(')'), TS(';')),
 
-			Rule::Chain(4, TS('i'), TS('('), TS(')'), NS('N')),
-			Rule::Chain(3, TS('i'), TS('('), TS(')')),
+			Rule::Chain(5, TS('i'), TS('('), TS(')'), TS(';'), NS('N')),
+			Rule::Chain(4, TS('i'), TS('('), TS(')'), TS(';')),
 			///////
 			// вывод в консоль
 			Rule::Chain(4, TS('p'), NS('B'), TS(';'), NS('N')),
