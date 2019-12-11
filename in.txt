@@ -13,6 +13,11 @@ str func hello_world(int k)
 
  loop(i, 1~10)
  {
+
+	 loop(iterator, 15~10)
+	 {
+		k = k + 1;
+	 }
 	k = k + 1;
  }
 

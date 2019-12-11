@@ -9,6 +9,8 @@
 // имена констант и литералов это 'L' + номер в idTable
 // имена переменных это родительскийБлок + '_' + имяИдентификатора
 
+#define ifFlag "ifFlag" //флаг для входа в блок(если 1, то входим, если 0, то нет) записана в DEFAULT_VARS
+
 #define STANDART_BEGIN    ".586							; система команд (процессор Pentium)\n"											\
 					   << ".model flat, stdcall			; модель памяти, соглашение о вызовах\n"										\
 					   << "includelib kernel32.lib			; компановщику: компоновать с kernel32\n"									\
@@ -20,16 +22,19 @@
 					   << "SetConsoleTitleA PROTO: DWORD		; прототип ф-ии устанавливающей заголовок консольного окна\n"			\
 					   << ";-----------------------------\n\n";																			\
 
-#define STANDART_LIB	  ";-----------Standart functions-----------\n"    \
-					   << "includelib ..\\Standart.lib\n"				   \
-					   << "concat PROTO: DWORD,: DWORD\n"				   \
+#define STANDART_LIB	  ";-----------Standart functions-----------\n"					\
+					   << "includelib ..\\Standart.lib\n"								\
+					   << "concat1 PROTO : DWORD, : DWORD\n"							\
+					   << "concat2 PROTO : DWORD, : DWORD, : DWORD\n"					\
+					   << "concat3 PROTO : DWORD, : DWORD, : DWORD, : DWORD\n"			\
+					   << "concat4 PROTO : DWORD, : DWORD, : DWORD, : DWORD, : DWORD\n" \
 					   << ";----------------------------------------\n\n"; \
 
-#define LIB_INCLUDE	      ";-----------DateTime-----------\n"																			\
-					   << "includelib ..\\DateTimelib.lib\n"													\
-					   << "getDate PROTO	; Возвращает текущую, локальную дату в виде строки\n"									\
-					   << "getTime PROTO	; Возвращает текущее, локальную время в виде строки\n"								\
-					   << ";------------------------------\n\n";													\
+#define LIB_INCLUDE	      ";-----------DateTime-----------\n"											\
+					   << "includelib ..\\DateTimelib.lib\n"											\
+					   << "getDate PROTO	; Возвращает текущую, локальную дату в виде строки\n"		\
+					   << "getTime PROTO	; Возвращает текущее, локальную время в виде строки\n"		\
+					   << ";------------------------------\n\n";										\
 
 #define STACK(value) ".stack " << value << "\n\n";
 
@@ -44,7 +49,8 @@
 #define LITERALS_CONSTANTS_end	 ";--------------------------------------------\n"; 
 
 #define VARIABLES_begin "\n\n;----------------Variables-------------------\n.data\n\n";
-#define DEFAULT_VARS "consoleHandle dd 0h\t; состояние консоли\n\n"
+#define DEFAULT_VARS "consoleHandle dd 0h\t; состояние консоли\n" \
+				  << ifFlag << " byte 0 \t; флаг для входа в блок if"
 #define VARIABLES_end	";---------------------------------------------\n";
 
 #define CODE_BLOCK "\n\n.code\n\n";
@@ -52,7 +58,27 @@
 #define FUNCTIONS_begin "\n;----------------Functions-------------------\n\n";
 #define FUNCTIONS_end	";----------------------------------------------\n";
 
-enum loopFlag { undef, incFlag, decrFlag};
+#define CONSOLE_SETUP_begin "\n;-----------Console setup-----------\n";
+#define CONSOLE_PREPARATION "push offset consoleTitle		; помещаем в стек параметр функции SetConsoleTitle строку\n"	\
+						 << "call SetConsoleTitleA		; вызываем функцию устанвки заголовка окна\n"						\
+						 << "push -11		; помещаем в стек код ращзрешения на вывод в консоли\n"							\
+						 << "call GetStdHandle			; вызываем ф-ию проверки разрешения на вывод\n"						\
+						 << "mov consoleHandle, eax		; копируем полученное разрешение из регистра eax\n";				
+#define CONSOLE_SETUP_end	"\n;-----------------------------------\n";
+
+enum loopFlag { undef, incFlag, decrFlag };
+struct innerBlock
+{
+	char* blockName;
+	loopFlag loopflag;
+	int idOfLoopIterator; // для доступа к итератору цикла (id в лекс табл)
+	innerBlock(char* blockName, loopFlag loopflag, int idOfLoopIterator)
+	{
+		this->loopflag = loopflag;
+		this->blockName = blockName;
+		this->idOfLoopIterator = idOfLoopIterator;
+	}
+};
 
 
 void funcSignature(std::ofstream* file, IT::IdTable& IdTable, int i);

@@ -164,6 +164,7 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 				}
 			}
 
+			//for some expressions
 			if (EXPRESSION_NTERM == -rule.nTerm)
 			{
 				//for return
@@ -194,11 +195,14 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 				}
 
 				//for loop
-				/*if (LexTable.table[state.posInLent].lexema == LEX_LOOP)
+				if (LexTable.table[state.posInLent].lexema == LEX_LOOP)
 				{
-					if(idTable.table[LexTable.table[state.posInLent+4].idxTI].value.vint > idTable.table[LexTable.table[state.posInLent + 6].idxTI].value.vint)
+					if((idTable.table[LexTable.table[state.posInLent + 4].idxTI].iddatatype != IT::IDDATATYPE::INT &&
+					    idTable.table[LexTable.table[state.posInLent + 4].idxTI].iddatatype != IT::IDDATATYPE::UBYTE) ||
+					   (idTable.table[LexTable.table[state.posInLent + 6].idxTI].iddatatype != IT::IDDATATYPE::INT &&
+					    idTable.table[LexTable.table[state.posInLent + 6].idxTI].iddatatype != IT::IDDATATYPE::UBYTE))
 						throw ERROR_THROW_IN(405, LexTable.table[state.posInLent].sn + 1, -1)
-				}*/
+				}
 			}
 
 			//cheching for correct pushed params
@@ -211,6 +215,13 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 						   idTable.table[LexTable.table[i-1].idxTI].iddatatype)
 							throw ERROR_THROW_IN(404, LexTable.table[i-1].sn+1, -1)
 				}
+			}
+
+			//checking for correct condition(if 1 operand it need to be LOGIC type)
+			if (state.nRule == 3 && (state.nRuleChain == 2 || state.nRuleChain == 3))
+			{
+				if(idTable.table[LexTable.table[state.posInLent].idxTI].iddatatype != IT::IDDATATYPE::LOGIC)
+					throw ERROR_THROW_IN(414, LexTable.table[state.posInLent - 2].sn + 1, -1);
 			}
 			
 		}

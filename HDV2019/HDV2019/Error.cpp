@@ -75,7 +75,7 @@ namespace Error
 		ERROR_ENTRY(411, "ѕрисваивать какое-либо значение можно только переменной"),
 		ERROR_ENTRY(412, "«а одно присваивание можно осуществить конкатенацию максимум 4х строк"),
 		ERROR_ENTRY(413, "cprint принимает только идентификаторы и литералы типа данных str"),
-		ERROR_ENTRY_NODEF(414),
+		ERROR_ENTRY(414, "Ќеверно задано условие дл€ входа в блок if"),
 		ERROR_ENTRY_NODEF(415),		ERROR_ENTRY_NODEF(416),
 		ERROR_ENTRY_NODEF(417),		ERROR_ENTRY_NODEF(418),
 		ERROR_ENTRY_NODEF(419),
