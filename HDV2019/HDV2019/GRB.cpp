@@ -106,7 +106,7 @@ namespace GRB
 			Rule::Chain(10, TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('}'), NS('S')),
 			Rule::Chain(9, TS('t'), TS('f'), TS('i'), TS('('), TS(')'), TS('{'), NS('N'), TS('}'), NS('S'))
 		),
-		Rule(NS('N'), GRB_ERROR_SERIES + 2, 18,	//ошибка в выражении
+		Rule(NS('N'), GRB_ERROR_SERIES + 2, 20,	//ошибка в выражении
 			//определение переменной
 			Rule::Chain(4, TS('t'), TS('i'), TS(';'), NS('N')),
 			Rule::Chain(3, TS('t'), TS('i'), TS(';')),
@@ -131,8 +131,10 @@ namespace GRB
 			Rule::Chain(4, TS('i'), TS('('), TS(')'), TS(';')),
 			///////
 			// вывод в консоль
-			Rule::Chain(4, TS('p'), NS('B'), TS(';'), NS('N')),
-			Rule::Chain(3, TS('p'), NS('B'), TS(';')),
+			Rule::Chain(4, TS('p'), NS('E'), TS(';'), NS('N')),
+			Rule::Chain(3, TS('p'), NS('E'), TS(';')),
+			Rule::Chain(4, TS('n'), NS('E'), TS(';'), NS('N')),
+			Rule::Chain(3, TS('n'), NS('E'), TS(';')),
 			///////
 			// цикл
 			Rule::Chain(12, TS('z'), TS('('), TS('i'), TS(','), TS('l'), TS('~'), TS('l'), TS(')'), TS('{'), NS('N'), TS('}'), NS('N')),

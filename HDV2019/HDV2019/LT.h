@@ -11,6 +11,7 @@
 #define	LEX_FUNCTION		'f'			// лексема для func
 #define	LEX_RETURN			'r'			// лексема для return
 #define	LEX_PRINT			'p'			// лексема для cprint
+#define LEX_PRINTL			'n'			// лексема для cprintl
 #define	LEX_INCLUDE			'e'			// лексема для _connect
 #define	LEX_LIBRARY			'y'			// лексема для libName
 #define	LEX_LOOP			'z'			// лексема для loop

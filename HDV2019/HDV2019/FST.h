@@ -37,7 +37,7 @@ namespace FST
 #pragma region identificator
 
 		#define A_IDENTIFICATOR(string) string, 1,	\
-			FST::NODE(27,	FST::RELATION('a', 0),	\
+			FST::NODE(53,	FST::RELATION('a', 0),	\
 							FST::RELATION('b', 0),	\
 							FST::RELATION('c', 0),	\
 							FST::RELATION('d', 0),	\
@@ -63,6 +63,32 @@ namespace FST
 							FST::RELATION('x', 0),	\
 							FST::RELATION('y', 0),	\
 							FST::RELATION('z', 0),	\
+							FST::RELATION('A', 0),	\
+							FST::RELATION('B', 0),	\
+							FST::RELATION('C', 0),	\
+							FST::RELATION('D', 0),	\
+							FST::RELATION('E', 0),	\
+							FST::RELATION('F', 0),	\
+							FST::RELATION('G', 0),	\
+							FST::RELATION('H', 0),	\
+							FST::RELATION('I', 0),	\
+							FST::RELATION('J', 0),	\
+							FST::RELATION('K', 0),	\
+							FST::RELATION('L', 0),	\
+							FST::RELATION('M', 0),	\
+							FST::RELATION('N', 0),	\
+							FST::RELATION('O', 0),	\
+							FST::RELATION('P', 0),	\
+							FST::RELATION('Q', 0),	\
+							FST::RELATION('R', 0),	\
+							FST::RELATION('S', 0),	\
+							FST::RELATION('T', 0),	\
+							FST::RELATION('U', 0),	\
+							FST::RELATION('V', 0),	\
+							FST::RELATION('W', 0),	\
+							FST::RELATION('X', 0),	\
+							FST::RELATION('Y', 0),	\
+							FST::RELATION('Z', 0),	\
 							FST::RELATION('_', 0)),	\
 			FST::NODE()			
 
@@ -72,7 +98,7 @@ namespace FST
 
 #define STRING_LITERAL(string) string, 3,	\
 	FST::NODE(1, FST::RELATION('\"', 1)),	\
-	FST::NODE(83,	FST::RELATION(' ', 1),	\
+	FST::NODE(147,	FST::RELATION(' ', 1),	\
 					FST::RELATION('a', 1),	\
 					FST::RELATION('b', 1),	\
 					FST::RELATION('c', 1),	\
@@ -99,6 +125,32 @@ namespace FST
 					FST::RELATION('x', 1),	\
 					FST::RELATION('y', 1),	\
 					FST::RELATION('z', 1),	\
+					FST::RELATION('A', 1),	\
+					FST::RELATION('B', 1),	\
+					FST::RELATION('C', 1),	\
+					FST::RELATION('D', 1),	\
+					FST::RELATION('E', 1),	\
+					FST::RELATION('F', 1),	\
+					FST::RELATION('G', 1),	\
+					FST::RELATION('H', 1),	\
+					FST::RELATION('I', 1),	\
+					FST::RELATION('J', 1),	\
+					FST::RELATION('K', 1),	\
+					FST::RELATION('L', 1),	\
+					FST::RELATION('M', 1),	\
+					FST::RELATION('N', 1),	\
+					FST::RELATION('O', 1),	\
+					FST::RELATION('P', 1),	\
+					FST::RELATION('Q', 1),	\
+					FST::RELATION('R', 1),	\
+					FST::RELATION('S', 1),	\
+					FST::RELATION('T', 1),	\
+					FST::RELATION('U', 1),	\
+					FST::RELATION('V', 1),	\
+					FST::RELATION('W', 1),	\
+					FST::RELATION('X', 1),	\
+					FST::RELATION('Y', 1),	\
+					FST::RELATION('Z', 1),	\
 					FST::RELATION('0', 1),	\
 					FST::RELATION('1', 1),	\
 					FST::RELATION('2', 1),	\
@@ -142,6 +194,39 @@ namespace FST
 					FST::RELATION('ý', 1),	\
 					FST::RELATION('þ', 1),	\
 					FST::RELATION('ÿ', 1),	\
+					FST::RELATION('À', 1),	\
+					FST::RELATION('Á', 1),	\
+					FST::RELATION('Â', 1),	\
+					FST::RELATION('Ã', 1),	\
+					FST::RELATION('Ä', 1),	\
+					FST::RELATION('Å', 1),	\
+					FST::RELATION('¨', 1),	\
+					FST::RELATION('Æ', 1),	\
+					FST::RELATION('Ç', 1),	\
+					FST::RELATION('È', 1),	\
+					FST::RELATION('É', 1),	\
+					FST::RELATION('Ê', 1),	\
+					FST::RELATION('Ë', 1),	\
+					FST::RELATION('Ì', 1),	\
+					FST::RELATION('Í', 1),	\
+					FST::RELATION('Î', 1),	\
+					FST::RELATION('Ï', 1),	\
+					FST::RELATION('Ð', 1),	\
+					FST::RELATION('Ñ', 1),	\
+					FST::RELATION('Ò', 1),	\
+					FST::RELATION('Ó', 1),	\
+					FST::RELATION('Ô', 1),	\
+					FST::RELATION('Õ', 1),	\
+					FST::RELATION('Ö', 1),	\
+					FST::RELATION('×', 1),	\
+					FST::RELATION('Ø', 1),	\
+					FST::RELATION('Ù', 1),	\
+					FST::RELATION('Ü', 1),	\
+					FST::RELATION('Ú', 1),	\
+					FST::RELATION('Û', 1),	\
+					FST::RELATION('Ý', 1),	\
+					FST::RELATION('Þ', 1),	\
+					FST::RELATION('ß', 1),	\
 					FST::RELATION('=', 1),	\
 					FST::RELATION('+', 1),	\
 					FST::RELATION('-', 1),	\
@@ -154,6 +239,11 @@ namespace FST
 					FST::RELATION(';', 1),	\
 					FST::RELATION('!', 1),	\
 					FST::RELATION(',', 1),	\
+					FST::RELATION('\'', 1),	\
+					FST::RELATION('<', 1),	\
+					FST::RELATION('>', 1),	\
+					FST::RELATION('?', 1),	\
+					FST::RELATION('_', 1),	\
 					FST::RELATION('\"', 2)),\
 	FST::NODE()
 

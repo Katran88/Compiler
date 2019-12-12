@@ -9,6 +9,7 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 	GRB::Rule rule;
 	IT::IDDATATYPE tempType;
 	int alreadyCheckedPos = -1; //for correct checking of assigment
+	int currentchechedPosForParams = -1;
 	bool flagForFuncParams = false; // for correct checking of assigment with calling of function
 		for (const auto& state : storestate._Get_container())
 		{
@@ -143,24 +144,56 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 								}
 							}
 						}
-
-						if (!PN::polishNotation(state.posInLent, LexTable, idTable))
-							throw ERROR_THROW_IN(406, LexTable.table[state.posInLent].sn + 1, -1);
 						continue;
 					}
-				}
-			}
+				
 
-			//for cprint
-			if (LexTable.table[state.posInLent].lexema == LEX_PRINT)
-			{
-				if (state.posInLent > alreadyCheckedPos)
-				{
-					if(idTable.table[LexTable.table[state.posInLent + 1].idxTI].idtype == IT::IDTYPE::F  ||
-					   idTable.table[LexTable.table[state.posInLent + 1].idxTI].iddatatype != IT::IDDATATYPE::STR)
-						throw ERROR_THROW_IN(413, LexTable.table[state.posInLent].sn + 1, -1);
+					//for cprint
+					if (LexTable.table[state.posInLent-1].lexema == LEX_PRINT ||
+						LexTable.table[state.posInLent-1].lexema == LEX_PRINTL)
+					{
+						//за раз можно осуществить конкатенацию только 4х строк
+						int strCounter = 1;
+						for (int i = state.posInLent; LexTable.table[i].lexema != LEX_SEMICOLON; alreadyCheckedPos = i++)
+						{
+							if (LexTable.table[i].idxTI != -1)
+							{
+								if (idTable.table[LexTable.table[i].idxTI].iddatatype == IT::IDDATATYPE::STR)
+								{
+									if (idTable.table[LexTable.table[i].idxTI].idtype == IT::IDTYPE::F)
+										flagForFuncParams = true;
+								}
+								else
+								{
+									if (!flagForFuncParams)
+										throw ERROR_THROW_IN(400, LexTable.table[i].sn + 1, -1);
+								}
+							}
+							else
+							{
+								if (LexTable.table[i].lexema == LEX_PLUS)
+									strCounter++;
 
-					alreadyCheckedPos = state.posInLent+2;
+								if (strCounter > 4)
+									throw ERROR_THROW_IN(412, LexTable.table[i].sn + 1, -1);
+
+								if (LexTable.table[i].lexema != LEX_PLUS &&
+									LexTable.table[i].lexema != LEX_LEFTHESIS &&
+									LexTable.table[i].lexema != LEX_RIGHTHESIS &&
+									LexTable.table[i].lexema != LEX_COMMA &&
+									!flagForFuncParams)
+									throw ERROR_THROW_IN(408, LexTable.table[i].sn + 1, -1);
+
+								if (LexTable.table[i].lexema == LEX_LEFTHESIS &&
+									LexTable.table[i - 1].idxTI != -1 &&
+									idTable.table[LexTable.table[i - 1].idxTI].idtype != IT::IDTYPE::F)
+									throw ERROR_THROW_IN(407, LexTable.table[i].sn + 1, -1);
+								if (LexTable.table[i].lexema == LEX_RIGHTHESIS && flagForFuncParams)
+									flagForFuncParams = false;
+							}
+						}
+						continue;
+					}
 				}
 			}
 
@@ -206,14 +239,37 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 			}
 
 			//cheching for correct pushed params
-			if (FUNC_CALL_NTERM == -rule.nTerm && state.posInLent > alreadyCheckedPos)
+			if (FUNC_CALL_NTERM == -rule.nTerm && state.posInLent > currentchechedPosForParams)
 			{
-				for (int i = state.posInLent, j = 0; LexTable.table[i].lexema != LEX_RIGHTHESIS; alreadyCheckedPos = i)
+				for (int i = state.posInLent, j = 0; LexTable.table[i].lexema != LEX_RIGHTHESIS; currentchechedPosForParams = i)
 				{
-					if(LexTable.table[i++].idxTI != -1)
-						if(idTable.table[LexTable.table[state.posInLent - 2].idxTI].funcParams[j++].type != 
-						   idTable.table[LexTable.table[i-1].idxTI].iddatatype)
-							throw ERROR_THROW_IN(404, LexTable.table[i-1].sn+1, -1)
+					if (LexTable.table[i++].idxTI != -1)
+					{
+						switch (idTable.table[LexTable.table[state.posInLent - 2].idxTI].funcParams[j++].type)
+						{
+							case IT::IDDATATYPE::INT:
+							case IT::IDDATATYPE::UBYTE:
+							{
+								if (idTable.table[LexTable.table[i - 1].idxTI].iddatatype != IT::IDDATATYPE::INT &&
+									idTable.table[LexTable.table[i - 1].idxTI].iddatatype != IT::IDDATATYPE::UBYTE)
+									throw ERROR_THROW_IN(404, LexTable.table[i - 1].sn, -1);
+								break;
+							}
+							case IT::IDDATATYPE::LOGIC:
+							{
+								if (idTable.table[LexTable.table[i - 1].idxTI].iddatatype != IT::IDDATATYPE::LOGIC)
+									throw ERROR_THROW_IN(404, LexTable.table[i - 1].sn, -1);
+								break;
+							}
+							case IT::IDDATATYPE::STR:
+							{
+								if (idTable.table[LexTable.table[i - 1].idxTI].iddatatype != IT::IDDATATYPE::STR)
+									throw ERROR_THROW_IN(404, LexTable.table[i - 1].sn, -1);
+								break;
+							}
+							default: break;
+						}
+					}
 				}
 			}
 
@@ -224,6 +280,42 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 					throw ERROR_THROW_IN(414, LexTable.table[state.posInLent - 2].sn + 1, -1);
 			}
 			
+		}
+
+		//use polish notation
+		int i = 0;
+		alreadyCheckedPos = -1;
+		for (const auto& state : storestate._Get_container())
+		{
+			if (alreadyCheckedPos > state.posInLent)
+				continue;
+
+			if (state.nRule == 6)
+			{
+				//for assigment
+				if (LexTable.table[state.posInLent - 1].lexema == LEX_EQUAL_SIGN)
+				{
+					if (!PN::polishNotation(state.posInLent, LexTable, idTable))
+						throw ERROR_THROW_IN(406, LexTable.table[state.posInLent].sn + 1, -1);
+					continue;
+				}
+
+				//for cprint
+				if (LexTable.table[state.posInLent - 1].lexema == LEX_PRINT ||
+					LexTable.table[state.posInLent - 1].lexema == LEX_PRINTL)
+				{
+					if (!PN::polishNotation(state.posInLent, LexTable, idTable))
+						throw ERROR_THROW_IN(406, LexTable.table[state.posInLent].sn + 1, -1);
+					continue;
+				}
+
+				if (state.posInLent > alreadyCheckedPos)
+				{
+					i = state.posInLent;
+					while (LexTable.table[i++].lexema != LEX_SEMICOLON)
+						alreadyCheckedPos = i;
+				}
+			}
 		}
 }
 

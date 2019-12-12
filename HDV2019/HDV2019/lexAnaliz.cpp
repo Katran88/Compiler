@@ -81,6 +81,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 				char temp[2]{};
 				itoa(++IFcounter, temp, 10);
 				tempBlock = new ParrentBlock(keyTokens[i].keyToken, IT::IDDATATYPE::DEF);
+				strcat(tempBlock->name, "_block");
 				strcat(tempBlock->name, temp);
 				blocksStack.push(*tempBlock);
 
@@ -104,7 +105,11 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 			}
 
 			if (keyTokens[i].lex == LEX_LIBRARY)
+			{
 				IT::IdTable::isLibraryIncluded = true;
+				idTable.Add({ blocksStack._Get_container()[0].name, "getDate", IT::IDDATATYPE::STR, IT::IDTYPE::F });
+				idTable.Add({ blocksStack._Get_container()[0].name, "getTime", IT::IDDATATYPE::STR, IT::IDTYPE::F });
+			}
 
 			//начало записи параметров
 			if (keyTokens[i].lex == LEX_LEFTHESIS && idTable.table[lexTable.table[lexTable.current_size - 1].idxTI].idtype == IT::IDTYPE::F)
@@ -469,6 +474,7 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		{"func",		LEX_FUNCTION},
 		{"return",		LEX_RETURN},
 		{"cprint",		LEX_PRINT},
+		{"cprintl",		LEX_PRINTL},
 		{"_connect",	LEX_INCLUDE},
 		{"true",		LEX_LITERAL},
 		{"false",		LEX_LITERAL},
@@ -492,8 +498,8 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		{"!=",			LEX_DIFFERENT_SIGN},
 		{"<=",			LEX_LESS_SAME_SIGN},
 		{">=",			LEX_MORE_SAME_SIGN},
-		{"&",			LEX_OR_SIGN},
-		{"|",			LEX_AND_SIGN},
+		{"&",			LEX_AND_SIGN},
+		{"|",			LEX_OR_SIGN},
 		{"!",			LEX_NOT_SIGN}
 	};
 
@@ -603,9 +609,13 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 
 int searchingForIDinStack(IT::IdTable& idTable, std::stack<ParrentBlock>& stack,const char* token)
 {
-	int result = -1;
+	int result = TI_NULLIDX;
 	for (int i = stack.size() - 1; i >= 0 && result == -1; i--)
+	{
 		result = idTable.IsId(token, stack._Get_container()[i].name);
+		if (result != TI_NULLIDX)
+			return result;
+	}
 
 	return result;
 }

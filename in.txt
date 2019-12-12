@@ -2,57 +2,16 @@ _connect DateTime
 
 global ubyte binary = b111;
 global ubyte eight = e172;
-global ubyte hex= hA21;
-global ubyte test = 200*(-1);
+global int hex= hA21;
+global int test = 200*(-1);
 global logic test_logic = true;
 global str test_str = "test";
 
-str func hello_world(int k)
-{
- str a = "привет мир!"; 
-
- loop(i, 1~10)
- {
-
-	 loop(iterator, 15~10)
-	 {
-		k = k + 1;
-	 }
-	k = k + 1;
- }
-
- return a;
-}
-
-int func fi(int x, ubyte y)
-{
- str k = hello_world(10) + test_str;
- int z;
- z = x * (x + y) + !z | y & !x;
- return z;
-}
-
 main
 {
- int x;
- int y;
- int z;
- str sa;
- str sb;
- str sc;
- x = 1;
- y = 5;
-
- loop(i, 1~10)
- {
-	x=x+i;
- }
-
- sa = "1234567890";
- sb = "1234567890";
- z = fi(x,y)*11;
- sc = hello_world();
- cprint "контрольный пример";
- cprint sa;
- cprint sc;
+	 cprintl "binary " + inttostr(binary);
+	 cprintl "eight " + inttostr(eight);
+	 cprintl "hex " + inttostr(hex)
+	 cprintl "test " + inttostr(test);
+	 cprintl test_str; 
 }

@@ -2,6 +2,9 @@
 #include "GRB.h"
 #include "LT.h"
 #include <stack>
+
+//#define DEBUG
+
 #define MFST_DIAGN_MAXSIZE 2*ERRORMASSAGE_MAX_SIZE
 #define MFST_DIAGN_NUMBER 3
 

@@ -89,107 +89,107 @@ bool PN::polishNotation(int lexBeginIndex, LT::LexTable& LexTable, IT::IdTable& 
 
 		if (!flagForFuncCalling)
 			switch (operators->checkLastEl())
-		{
-		case BEGIN_SIMBOL:
-		{
-			if (temp.lexema == LEX_PLUS ||
-				temp.lexema == LEX_MINUS ||
-				temp.lexema == LEX_STAR ||
-				temp.lexema == LEX_DIRSLASH ||
-				temp.lexema == LEX_LEFTHESIS ||
-				temp.lexema == LEX_OR_SIGN ||
-				temp.lexema == LEX_AND_SIGN)
 			{
-				operators->push(temp);
+				case BEGIN_SIMBOL:
+				{
+					if (temp.lexema == LEX_PLUS ||
+						temp.lexema == LEX_MINUS ||
+						temp.lexema == LEX_STAR ||
+						temp.lexema == LEX_DIRSLASH ||
+						temp.lexema == LEX_LEFTHESIS ||
+						temp.lexema == LEX_OR_SIGN ||
+						temp.lexema == LEX_AND_SIGN)
+					{
+						operators->push(temp);
+						i++;
+						break;
+					}
+
+					if (temp.lexema == LEX_RIGHTHESIS) { flag = false; }
+					if (temp.lexema == LEX_SEMICOLON) { isComplete = true; flag = false; }
+					break;
+				}
+
+				case LEX_PLUS:
+				case LEX_MINUS:
+				{
+					if (temp.lexema == LEX_PLUS ||
+						temp.lexema == LEX_MINUS ||
+						temp.lexema == LEX_LEFTHESIS ||
+						temp.lexema == LEX_SEMICOLON)
+					{
+						literals->push(*operators->pop());
+						break;
+					}
+
+					if (temp.lexema == LEX_STAR ||
+						temp.lexema == LEX_DIRSLASH ||
+						temp.lexema == LEX_LEFTHESIS ||
+						temp.lexema == LEX_OR_SIGN ||
+						temp.lexema == LEX_AND_SIGN)
+					{
+						operators->push(temp);
+						i++;
+						break;
+					}
+				}
+
+				case LEX_STAR:
+				case LEX_DIRSLASH:
+				case LEX_OR_SIGN:
+				case LEX_AND_SIGN:
+				{
+					if (temp.lexema == LEX_PLUS ||
+						temp.lexema == LEX_MINUS ||
+						temp.lexema == LEX_STAR ||
+						temp.lexema == LEX_DIRSLASH ||
+						temp.lexema == LEX_RIGHTHESIS ||
+						temp.lexema == LEX_SEMICOLON ||
+						temp.lexema == LEX_OR_SIGN ||
+						temp.lexema == LEX_AND_SIGN)
+					{
+						literals->push(*operators->pop());
+						break;
+					}
+
+					if (temp.lexema == LEX_LEFTHESIS)
+					{
+						operators->push(temp);
+						i++;
+						break;
+					}
+				}
+
+				case LEX_LEFTHESIS:
+				{
+					if (temp.lexema == LEX_SEMICOLON) flag = false;
+
+					if (temp.lexema == LEX_PLUS ||
+						temp.lexema == LEX_MINUS ||
+						temp.lexema == LEX_STAR ||
+						temp.lexema == LEX_DIRSLASH ||
+						temp.lexema == LEX_LEFTHESIS ||
+						temp.lexema == LEX_OR_SIGN ||
+						temp.lexema == LEX_AND_SIGN)
+					{
+						operators->push(temp);
+						i++;
+						break;
+					}
+
+					if (temp.lexema == LEX_RIGHTHESIS)
+					{
+						operators->pop();
+						i++;
+						break;
+					}
+				}
+				default:
+					flag = false;
+			}
+			else
 				i++;
-				break;
-			}
-
-			if (temp.lexema == LEX_RIGHTHESIS) { flag = false; }
-			if (temp.lexema == LEX_SEMICOLON) { isComplete = true; flag = false; }
-			break;
 		}
-
-		case LEX_PLUS:
-		case LEX_MINUS:
-		{
-			if (temp.lexema == LEX_PLUS ||
-				temp.lexema == LEX_MINUS ||
-				temp.lexema == LEX_LEFTHESIS ||
-				temp.lexema == LEX_SEMICOLON)
-			{
-				literals->push(*operators->pop());
-				break;
-			}
-
-			if (temp.lexema == LEX_STAR ||
-				temp.lexema == LEX_DIRSLASH ||
-				temp.lexema == LEX_LEFTHESIS ||
-				temp.lexema == LEX_OR_SIGN ||
-				temp.lexema == LEX_AND_SIGN)
-			{
-				operators->push(temp);
-				i++;
-				break;
-			}
-		}
-
-		case LEX_STAR:
-		case LEX_DIRSLASH:
-		case LEX_OR_SIGN:
-		case LEX_AND_SIGN:
-		{
-			if (temp.lexema == LEX_PLUS ||
-				temp.lexema == LEX_MINUS ||
-				temp.lexema == LEX_STAR ||
-				temp.lexema == LEX_DIRSLASH ||
-				temp.lexema == LEX_RIGHTHESIS ||
-				temp.lexema == LEX_SEMICOLON ||
-				temp.lexema == LEX_OR_SIGN ||
-				temp.lexema == LEX_AND_SIGN)
-			{
-				literals->push(*operators->pop());
-				break;
-			}
-
-			if (temp.lexema == LEX_LEFTHESIS)
-			{
-				operators->push(temp);
-				i++;
-				break;
-			}
-		}
-
-		case LEX_LEFTHESIS:
-		{
-			if (temp.lexema == LEX_SEMICOLON) flag = false;
-
-			if (temp.lexema == LEX_PLUS ||
-				temp.lexema == LEX_MINUS ||
-				temp.lexema == LEX_STAR ||
-				temp.lexema == LEX_DIRSLASH ||
-				temp.lexema == LEX_LEFTHESIS ||
-				temp.lexema == LEX_OR_SIGN ||
-				temp.lexema == LEX_AND_SIGN)
-			{
-				operators->push(temp);
-				i++;
-				break;
-			}
-
-			if (temp.lexema == LEX_RIGHTHESIS)
-			{
-				operators->pop();
-				i++;
-				break;
-			}
-		}
-		default:
-			flag = false;
-		}
-		else
-			i++;
-	}
 
 	if (isComplete)
 	{

@@ -33,8 +33,11 @@ void wmain(int argc, wchar_t* argv[])
 
 #pragma region sintaxAnaliz
 
+		#ifdef DEBUG
 		MFST_TRACE_START
-			MFST::MFST* sintaxAnaliz = new MFST::MFST(lexTable, GRB::getGreibach());
+		#endif // DEBUG
+
+		MFST::MFST* sintaxAnaliz = new MFST::MFST(lexTable, GRB::getGreibach());
 
 		t1 = std::chrono::high_resolution_clock::now();
 		sintaxAnaliz->start();
