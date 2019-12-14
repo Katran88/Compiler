@@ -50,4 +50,9 @@ main
 	{
 		cprintl "it's works";
 	}
+	int a = 0;
+	int b = 20;
+	int randVar = random(a,b);
+	cprint "Рандомное значение от " + inttostr(a) + " до " + inttostr(b);
+	cprintl ": " + inttostr(randVar);
 }

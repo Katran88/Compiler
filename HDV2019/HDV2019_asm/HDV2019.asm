@@ -21,6 +21,7 @@ cprint PROTO : DWORD
 cprintl PROTO : DWORD
 func_strlength PROTO : DWORD
 func_inttostr PROTO : DWORD , : SDWORD
+func_random PROTO : SDWORD , : SDWORD
 ;----------------------------------------
 
 ;-----------DateTime-----------
@@ -41,29 +42,33 @@ DIVISION_BY_ZERO_text byte 'DIVISION BY ZERO', 10, 0
 
 STROVERFLOW_TEXT byte 'STR OVERFLOW', 0
 
-L5	byte	7	 ; ubyte literal
-L7	byte	122	 ; ubyte literal
-L9	sdword	2593	 ; integer literal
-L11	byte	4	 ; ubyte literal
-L12	byte	15	 ; ubyte literal
-L13	byte	"abc", 97 dup(0)	 ; string literal
-L14	byte	6	 ; ubyte literal
-L16	byte	0	 ; logic literal
-L21	byte	0	 ; ubyte literal
-L23	byte	1	 ; ubyte literal
-L29	byte	"÷икл закончил свою работу", 75 dup(0)	 ; string literal
-L33	sdword	256	 ; integer literal
-L39	byte	" ", 99 dup(0)	 ; string literal
-L42	byte	"Today: ", 93 dup(0)	 ; string literal
-L43	byte	"-------------------------------------------------", 51 dup(0)	 ; string literal
-L44	byte	"ћаксимальное значение, которое может хранитс€ в: ", 51 dup(0)	 ; string literal
-L49	byte	30	 ; ubyte literal
-L50	byte	2	 ; ubyte literal
-L51	byte	" битах : ", 91 dup(0)	 ; string literal
-L54	byte	3	 ; ubyte literal
-L55	byte	5	 ; ubyte literal
-L56	byte	"HDV", 97 dup(0)	 ; string literal
-L57	byte	"it's works", 90 dup(0)	 ; string literal
+L6	byte	7	 ; ubyte literal
+L8	byte	122	 ; ubyte literal
+L10	sdword	2593	 ; integer literal
+L12	byte	4	 ; ubyte literal
+L13	byte	15	 ; ubyte literal
+L14	byte	"abc", 97 dup(0)	 ; string literal
+L15	byte	6	 ; ubyte literal
+L17	byte	0	 ; logic literal
+L22	byte	0	 ; ubyte literal
+L24	byte	1	 ; ubyte literal
+L30	byte	"÷икл закончил свою работу", 75 dup(0)	 ; string literal
+L34	sdword	256	 ; integer literal
+L40	byte	" ", 99 dup(0)	 ; string literal
+L43	byte	"Today: ", 93 dup(0)	 ; string literal
+L44	byte	"-------------------------------------------------", 51 dup(0)	 ; string literal
+L45	byte	"ћаксимальное значение, которое может хранитс€ в: ", 51 dup(0)	 ; string literal
+L50	byte	30	 ; ubyte literal
+L51	byte	2	 ; ubyte literal
+L52	byte	" битах : ", 91 dup(0)	 ; string literal
+L55	byte	3	 ; ubyte literal
+L56	byte	5	 ; ubyte literal
+L57	byte	"HDV", 97 dup(0)	 ; string literal
+L58	byte	"it's works", 90 dup(0)	 ; string literal
+L62	byte	20	 ; ubyte literal
+L64	byte	"–андомное значение от ", 78 dup(0)	 ; string literal
+L65	byte	" до ", 96 dup(0)	 ; string literal
+L66	byte	": ", 98 dup(0)	 ; string literal
 ;--------------------------------------------
 
 
@@ -84,10 +89,16 @@ getFullTime_rc	byte	100 dup(0)	 ; string var
 main_maxValue	sdword	0	 ; integer var
 main_counter	sdword	0	 ; integer var
 loop2_i	sdword	0	 ; integer var
+main_a	sdword	0	 ; integer var
+main_b	sdword	0	 ; integer var
+main_randVar	sdword	0	 ; integer var
 getDate_131	byte	1024 dup(0)	 ; return var
 getTime_134	byte	1024 dup(0)	 ; return var
 inttostr_195	byte	13 dup(0)	 ; return var
 inttostr_200	byte	13 dup(0)	 ; return var
+inttostr_251	byte	13 dup(0)	 ; return var
+inttostr_256	byte	13 dup(0)	 ; return var
+inttostr_266	byte	13 dup(0)	 ; return var
 ;---------------------------------------------
 
 
@@ -103,7 +114,7 @@ func_pow proc  pow_x : sdword, pow_power : byte
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<if block begin
 mov ifFlag, 0
 movzx eax, pow_power
-movzx ebx, L21
+movzx ebx, L22
 cmp eax, ebx 
 jne s65	; ==
 or ifFlag, 1
@@ -115,7 +126,7 @@ je if_block1
 
 
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<return begin
-movzx eax, L23 	;return UBYTE or LOGIC
+movzx eax, L24 	;return UBYTE or LOGIC
 ret 8
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<return end
 
@@ -125,7 +136,7 @@ if_block1:	;<<<<<<<<<<<<<<<<<<<<<<<<<<< if block end
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-movzx eax, L23
+movzx eax, L24
 push eax
 
 pop eax	;assigment to INT begin
@@ -146,7 +157,7 @@ isNotOverflow0: 	;assigment to INT done
 
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<loop begin
 
-movzx eax, L23
+movzx eax, L24
 mov loop1_iterator, eax
 loop1: 
 mov eax, loop1_iterator
@@ -204,7 +215,7 @@ je if_block2
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-push offset L29
+push offset L30
 
 push offset cprintl_var	;assigment to STR begin
 call concat1
@@ -237,7 +248,7 @@ loop1_end:
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<if block begin
 mov ifFlag, 0
 mov eax, pow_result
-mov ebx, L33
+mov ebx, L34
 cmp eax, ebx 
 jl s108	; >=
 or ifFlag, 1
@@ -291,7 +302,7 @@ push offset getDate_131
 call func_getDate
 push eax
 
-push offset L39
+push offset L40
 
 push offset getTime_134
 call func_getTime
@@ -327,7 +338,7 @@ main proc 	;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MAIN
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-movzx eax, L5
+movzx eax, L6
 push eax
 
 pop eax	;assigment to UBYTE begin
@@ -348,7 +359,7 @@ isNotOverflow5: 	;assigment to UBYTE done
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-movzx eax, L7
+movzx eax, L8
 push eax
 
 pop eax	;assigment to UBYTE begin
@@ -369,7 +380,7 @@ isNotOverflow6: 	;assigment to UBYTE done
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-mov eax, L9
+mov eax, L10
 push eax
 
 pop eax	;assigment to INT begin
@@ -391,10 +402,10 @@ isNotOverflow7: 	;assigment to INT done
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-movzx eax, L11
+movzx eax, L12
 push eax
 
-movzx eax, L12
+movzx eax, L13
 push eax
 
 pop ebx; 	*
@@ -402,7 +413,7 @@ pop eax
 imul eax, ebx
 push eax
 
-push offset L13
+push offset L14
 
 call func_strlength
 push eax
@@ -422,7 +433,7 @@ NOzero8:
 idiv ebx
 push eax
 
-movzx eax, L12
+movzx eax, L13
 push eax
 
 pop ebx; 	-
@@ -430,7 +441,7 @@ pop eax
 sub eax, ebx
 push eax
 
-movzx eax, L14
+movzx eax, L15
 push eax
 
 pop ebx; 	|
@@ -465,7 +476,7 @@ isNotOverflow9: 	;assigment to INT done
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-movzx eax, L16
+movzx eax, L17
 push eax
 
 pop eax	;assigment to LOGIC begin
@@ -486,7 +497,7 @@ zeroNOTequal10: 	;assigment to LOGIC done
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-push offset L42
+push offset L43
 
 call func_getFullTime
 push eax
@@ -513,7 +524,7 @@ call cprintl
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-push offset L43
+push offset L44
 
 push offset cprintl_var	;assigment to STR begin
 call concat1
@@ -537,7 +548,7 @@ call cprintl
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-push offset L44
+push offset L45
 
 push offset cprintl_var	;assigment to STR begin
 call concat1
@@ -559,12 +570,12 @@ call cprintl
 
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<loop begin
 
-movzx eax, L21
+movzx eax, L22
 mov loop2_i, eax
 loop2: 
 mov eax, loop2_i
 
-movzx ebx, L49
+movzx ebx, L50
 cmp eax, ebx
 jg loop2_end
 
@@ -577,7 +588,7 @@ push eax
 mov eax, loop2_i
 push eax
 
-movzx eax, L50
+movzx eax, L51
 push eax
 
 call func_pow
@@ -610,7 +621,7 @@ isNotOverflow14: 	;assigment to INT done
 mov eax, loop2_i
 push eax
 
-movzx eax, L23
+movzx eax, L24
 push eax
 
 pop ebx; 	+
@@ -638,7 +649,7 @@ isNotOverflow15: 	;assigment to INT done
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-push offset L39
+push offset L40
 
 mov eax, main_counter
 push eax
@@ -647,7 +658,7 @@ push offset inttostr_195
 call func_inttostr
 push eax
 
-push offset L51
+push offset L52
 
 mov eax, main_maxValue
 push eax
@@ -676,7 +687,7 @@ call cprintl
 inc loop2_i
 mov eax, loop2_i
 
-movzx ebx, L49
+movzx ebx, L50
 cmp eax, ebx
 jle loop2
 loop2_end:
@@ -687,7 +698,7 @@ loop2_end:
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-push offset L43
+push offset L44
 
 push offset cprintl_var	;assigment to STR begin
 call concat1
@@ -714,15 +725,15 @@ movzx eax, global_flagFor_ubyteMaxValue
 movzx ebx, ifFlag
 or ebx, eax
 mov ifFlag, bl
-mov eax, lengthof L13
-movzx ebx, L54
+mov eax, lengthof L14
+movzx ebx, L55
 cmp eax, ebx 
 jne s216	; ==
 and ifFlag, 1
 
 s216:	; condition is not done
-movzx eax, L55
-mov ebx, lengthof L56
+movzx eax, L56
+mov ebx, lengthof L57
 cmp eax, ebx 
 jg s220	; <=
 or ifFlag, 1
@@ -737,7 +748,7 @@ je if_block4
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
 
 
-push offset L57
+push offset L58
 
 push offset cprintl_var	;assigment to STR begin
 call concat1
@@ -757,6 +768,149 @@ call cprintl
 ;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<cprintl end
 
 if_block4:	;<<<<<<<<<<<<<<<<<<<<<<<<<<< if block end
+
+
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
+
+
+movzx eax, L22
+push eax
+
+pop eax	;assigment to INT begin
+mov main_a, eax
+jno isNotOverflow19
+
+	;INT OVERFLOW
+push offset INTOVERFLOW_text
+call cprintl
+push 0
+call ExitProcess 	;INT OVERFLOW
+
+isNotOverflow19: 	;assigment to INT done
+
+
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment end
+
+
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
+
+
+movzx eax, L62
+push eax
+
+pop eax	;assigment to INT begin
+mov main_b, eax
+jno isNotOverflow20
+
+	;INT OVERFLOW
+push offset INTOVERFLOW_text
+call cprintl
+push 0
+call ExitProcess 	;INT OVERFLOW
+
+isNotOverflow20: 	;assigment to INT done
+
+
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment end
+
+
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
+
+
+mov eax, main_b
+push eax
+
+mov eax, main_a
+push eax
+
+call func_random
+push eax
+
+pop eax	;assigment to INT begin
+mov main_randVar, eax
+jno isNotOverflow21
+
+	;INT OVERFLOW
+push offset INTOVERFLOW_text
+call cprintl
+push 0
+call ExitProcess 	;INT OVERFLOW
+
+isNotOverflow21: 	;assigment to INT done
+
+
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment end
+
+
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<cprint begin
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
+
+
+push offset L64
+
+mov eax, main_a
+push eax
+
+push offset inttostr_251
+call func_inttostr
+push eax
+
+push offset L65
+
+mov eax, main_b
+push eax
+
+push offset inttostr_256
+call func_inttostr
+push eax
+
+push offset cprint_var	;assigment to STR begin
+call concat4
+cmp cprint_var, 0
+jne notOverflow22
+push offset STROVERFLOW_TEXT
+call cprintl
+push 0
+call ExitProcess
+notOverflow22: 	;assigment to STR begin
+
+
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment end
+
+push offset cprint_var
+call cprint
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<cprint end
+
+
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<cprintl begin
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment begin
+
+
+push offset L66
+
+mov eax, main_randVar
+push eax
+
+push offset inttostr_266
+call func_inttostr
+push eax
+
+push offset cprintl_var	;assigment to STR begin
+call concat2
+cmp cprintl_var, 0
+jne notOverflow23
+push offset STROVERFLOW_TEXT
+call cprintl
+push 0
+call ExitProcess
+notOverflow23: 	;assigment to STR begin
+
+
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assigment end
+
+push offset cprintl_var
+call cprintl
+;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<cprintl end
 
 
 push 0

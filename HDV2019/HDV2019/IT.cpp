@@ -42,6 +42,9 @@ IT::IdTable::IdTable()
 	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::STR, 0);
 	this->Add({ "global", "inttostr", IT::IDDATATYPE::STR, IT::IDTYPE::F });
 	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::INT, 0);
+	this->Add({ "global", "random", IT::IDDATATYPE::INT, IT::IDTYPE::F });
+	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::INT, 0);
+	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::INT, 0);
 }
 
 void IT::IdTable::Add(Entry entry)
