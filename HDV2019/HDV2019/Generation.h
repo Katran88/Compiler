@@ -34,15 +34,15 @@
 					   << "concat4 PROTO : DWORD, : DWORD, : DWORD, : DWORD, : DWORD\n" \
 					   << "cprint PROTO : DWORD\n"										\
 					   << "cprintl PROTO : DWORD\n"										\
-					   << "strlength PROTO : DWORD\n"									\
-					   << "inttostr PROTO : DWORD , : SDWORD\n"							\
+					   << "func_strlength PROTO : DWORD\n"								\
+					   << "func_inttostr PROTO : DWORD , : SDWORD\n"					\
 					   << ";----------------------------------------\n\n";				\
 
-#define LIB_INCLUDE	      ";-----------DateTime-----------\n"											\
-					   << "includelib ..\\DateTimelib.lib\n"											\
-					   << "getDate PROTO : DWORD	; ¬озвращает текущую, локальную дату в виде строки\n"		\
-					   << "getTime PROTO : DWORD	; ¬озвращает текущее, локальную врем€ в виде строки\n"		\
-					   << ";------------------------------\n\n";										\
+#define LIB_INCLUDE	      ";-----------DateTime-----------\n"														\
+					   << "includelib ..\\DateTimelib.lib\n"														\
+					   << "func_getDate PROTO : DWORD	; ¬озвращает текущую, локальную дату в виде строки\n"		\
+					   << "func_getTime PROTO : DWORD	; ¬озвращает текущее, локальную врем€ в виде строки\n"		\
+					   << ";------------------------------\n\n";													\
 
 #define STACK(value) ".stack " << value << "\n\n";
 
@@ -76,6 +76,7 @@ struct innerBlock
 	char* blockName;
 	loopFlag loopflag;
 	int idOfLoopIterator; // дл€ доступа к итератору цикла (id в лекс табл)
+
 	innerBlock(char* blockName, loopFlag loopflag, int idOfLoopIterator)
 	{
 		this->loopflag = loopflag;

@@ -34,7 +34,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 				typeFlag = IT::IDDATATYPE::LOGIC;
 
 			//true
-			if (i == 11)
+			if (i == 12)
 			{
 				idTable.Add({ '\0', '\0', IT::IDDATATYPE::LOGIC, IT::IDTYPE::L });
 				idTable.table[idTable.current_size - 1].value.vlogic = true;
@@ -43,7 +43,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 			}
 
 			//false
-			if (i == 12)
+			if (i == 13)
 			{
 				idTable.Add({ '\0', '\0', IT::IDDATATYPE::LOGIC, IT::IDTYPE::L });
 				idTable.table[idTable.current_size - 1].value.vlogic = false;
@@ -53,6 +53,9 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 
 			if (keyTokens[i].lex == LEX_MAIN)
 			{
+				if(flagForMain)
+					throw ERROR_THROW(415);
+
 				if (idTable.IsId(token) == -1)
 				{
 					tempBlock = new ParrentBlock(token, IT::IDDATATYPE::INT);
@@ -503,7 +506,7 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		{"!",			LEX_NOT_SIGN}
 	};
 
-	char* temp = new char[50]{};
+	char* temp = new char[TI_STR_MAXSIZE+3]{};
 	int strNum = 0;
 	int posInStr = 0;
 
@@ -512,7 +515,7 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		if ((source.text[i] >= 'A' && source.text[i] <= 'Z') ||
 			(source.text[i] >= 'a' && source.text[i] <= 'z') ||
 			(source.text[i] >= '0' && source.text[i] <= '9') ||
-			(source.text[i] == '-' && lexTable.table[lexTable.current_size-1].idxTI == -1 && j == 0) ||
+			(source.text[i] == '-' && lexTable.table[lexTable.current_size-1].idxTI == -1 && j == 0 && lexTable.table[lexTable.current_size - 1].lexema != LEX_RIGHTHESIS) ||
 			 source.text[i] == '_')
 		{
 			temp[j++] = source.text[i];

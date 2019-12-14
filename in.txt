@@ -2,16 +2,52 @@ _connect DateTime
 
 global ubyte binary = b111;
 global ubyte eight = e172;
-global int hex= hA21;
-global int test = 200*(-1);
-global logic test_logic = true;
-global str test_str = "test";
+global int hex = hA21;
+global int value = ((4*15/(strlength("abc"))-15) | b110) & binary;
+global logic flagFor_ubyteMaxValue = false;
+
+int func pow(int x, ubyte power)
+{
+	if(power == 0) { return 1;}
+	int result = 1;
+	loop(iterator, 1~power)
+	{
+		result = result*x;
+
+		if(iterator == power) {cprintl "÷икл закончил свою работу";}
+	}
+	if(result >= 256)
+	{
+		flagFor_ubyteMaxValue = !flagFor_ubyteMaxValue;
+	}
+
+	return result;
+}
+
+str func getFullTime()
+{
+	str rc = getDate() + " " + getTime();
+	return rc;
+}
 
 main
 {
-	 cprintl "binary " + inttostr(binary);
-	 cprintl "eight " + inttostr(eight);
-	 cprintl "hex " + inttostr(hex)
-	 cprintl "test " + inttostr(test);
-	 cprintl test_str; 
+
+	cprintl "Today: " + getFullTime();
+	cprintl "-------------------------------------------------";
+	cprintl "ћаксимальное значение, которое может хранитс€ в: ";
+	int maxValue;
+	int counter;
+	loop(i, 0~30)
+	{ 
+		maxValue =  maxValue + pow(2, i);
+		counter = i+1;
+		cprintl " " + inttostr(counter) + " битах : " + inttostr(maxValue);
+	}
+	cprintl "-------------------------------------------------";
+
+	if(flagFor_ubyteMaxValue & "abc" == 3 | 5 <= "HDV")
+	{
+		cprintl "it's works";
+	}
 }

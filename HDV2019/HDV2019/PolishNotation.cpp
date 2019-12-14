@@ -1,4 +1,5 @@
 #include "PolishNotation.h"
+#include <stack>
 
 #define BEGIN_SIMBOL '_'
 
@@ -52,9 +53,10 @@ namespace PN
 
 bool PN::polishNotation(int lexBeginIndex, LT::LexTable& LexTable, IT::IdTable& IdTable)
 {
+	//LT::Entry params[TI_MAXPARAM_COUNT];
+	std::stack<LT::Entry> params;
 	PN::Stack* literals = new PN::Stack;
 	PN::Stack* operators = new PN::Stack;
-	bool flagForFuncCalling = false;
 
 	operators->push({ BEGIN_SIMBOL, -1, -1 });
 
@@ -67,10 +69,20 @@ bool PN::polishNotation(int lexBeginIndex, LT::LexTable& LexTable, IT::IdTable& 
 
 		if (temp.lexema == LEX_ID || temp.lexema == LEX_LITERAL || temp.lexema == LEX_NOT_SIGN )
 		{
-			if (IdTable.table[temp.idxTI].idtype == IT::IDTYPE::F) // со следующей итерации начнем записывать параметры
+			if (IdTable.table[temp.idxTI].idtype == IT::IDTYPE::F)
 			{
-				flagForFuncCalling = true;
-				operators->push(temp);
+				i++;
+				for (; LexTable.table[i].lexema != LEX_RIGHTHESIS; i++)
+					if (LexTable.table[i].idxTI != -1)
+						params.push(LexTable.table[i]);
+
+				while (params.size())
+				{
+					literals->push(params.top());
+					params.pop();
+				}
+
+				literals->push(temp);
 			}
 			else
 				literals->push(temp);
@@ -79,15 +91,6 @@ bool PN::polishNotation(int lexBeginIndex, LT::LexTable& LexTable, IT::IdTable& 
 			continue;
 		}
 
-		if (temp.lexema == LEX_RIGHTHESIS && flagForFuncCalling) //параметры для функции закончились
-		{
-			flagForFuncCalling = false;
-			//literals->push({'@', temp.sn, -1});
-			literals->push(*operators->pop());
-			i++; continue;
-		}
-
-		if (!flagForFuncCalling)
 			switch (operators->checkLastEl())
 			{
 				case BEGIN_SIMBOL:
@@ -187,9 +190,7 @@ bool PN::polishNotation(int lexBeginIndex, LT::LexTable& LexTable, IT::IdTable& 
 				default:
 					flag = false;
 			}
-			else
-				i++;
-		}
+	}
 
 	if (isComplete)
 	{

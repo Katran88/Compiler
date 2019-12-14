@@ -137,8 +137,8 @@ namespace GRB
 			Rule::Chain(3, TS('n'), NS('E'), TS(';')),
 			///////
 			// цикл
-			Rule::Chain(12, TS('z'), TS('('), TS('i'), TS(','), TS('l'), TS('~'), TS('l'), TS(')'), TS('{'), NS('N'), TS('}'), NS('N')),
-			Rule::Chain(11, TS('z'), TS('('), TS('i'), TS(','), TS('l'), TS('~'), TS('l'), TS(')'), TS('{'), NS('N'), TS('}')),
+			Rule::Chain(12, TS('z'), TS('('), TS('i'), TS(','), NS('B'), TS('~'), NS('B'), TS(')'), TS('{'), NS('N'), TS('}'), NS('N')),
+			Rule::Chain(11, TS('z'), TS('('), TS('i'), TS(','), NS('B'), TS('~'), NS('B'), TS(')'), TS('{'), NS('N'), TS('}')),
 			///////
 			// условный оператор
 			Rule::Chain(8, TS('c'), TS('('), NS('C'), TS(')'), TS('{'), NS('N'), TS('}'), NS('N')),

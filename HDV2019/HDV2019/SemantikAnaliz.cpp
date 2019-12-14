@@ -233,7 +233,9 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 					if((idTable.table[LexTable.table[state.posInLent + 4].idxTI].iddatatype != IT::IDDATATYPE::INT &&
 					    idTable.table[LexTable.table[state.posInLent + 4].idxTI].iddatatype != IT::IDDATATYPE::UBYTE) ||
 					   (idTable.table[LexTable.table[state.posInLent + 6].idxTI].iddatatype != IT::IDDATATYPE::INT &&
-					    idTable.table[LexTable.table[state.posInLent + 6].idxTI].iddatatype != IT::IDDATATYPE::UBYTE))
+					    idTable.table[LexTable.table[state.posInLent + 6].idxTI].iddatatype != IT::IDDATATYPE::UBYTE) ||
+					   (idTable.table[LexTable.table[state.posInLent + 4].idxTI].idtype == IT::IDTYPE::F ||
+						idTable.table[LexTable.table[state.posInLent + 6].idxTI].idtype == IT::IDTYPE::F))
 						throw ERROR_THROW_IN(405, LexTable.table[state.posInLent].sn + 1, -1)
 				}
 			}
@@ -274,7 +276,7 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 			}
 
 			//checking for correct condition(if 1 operand it need to be LOGIC type)
-			if (state.nRule == 3 && (state.nRuleChain == 2 || state.nRuleChain == 3))
+			if (state.nRule == 3 && (state.nRuleChain >= 2 && state.nRuleChain <= 5))
 			{
 				if(idTable.table[LexTable.table[state.posInLent].idxTI].iddatatype != IT::IDDATATYPE::LOGIC)
 					throw ERROR_THROW_IN(414, LexTable.table[state.posInLent - 2].sn + 1, -1);

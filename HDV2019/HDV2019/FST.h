@@ -98,7 +98,7 @@ namespace FST
 
 #define STRING_LITERAL(string) string, 3,	\
 	FST::NODE(1, FST::RELATION('\"', 1)),	\
-	FST::NODE(147,	FST::RELATION(' ', 1),	\
+	FST::NODE(148,	FST::RELATION(' ', 1),	\
 					FST::RELATION('a', 1),	\
 					FST::RELATION('b', 1),	\
 					FST::RELATION('c', 1),	\
@@ -240,6 +240,7 @@ namespace FST
 					FST::RELATION('!', 1),	\
 					FST::RELATION(',', 1),	\
 					FST::RELATION('\'', 1),	\
+					FST::RELATION(':', 1),	\
 					FST::RELATION('<', 1),	\
 					FST::RELATION('>', 1),	\
 					FST::RELATION('?', 1),	\
