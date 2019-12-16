@@ -515,8 +515,9 @@ void lexAnaliz(const In::IN& source, LT::LexTable& lexTable, IT::IdTable& idTabl
 		if ((source.text[i] >= 'A' && source.text[i] <= 'Z') ||
 			(source.text[i] >= 'a' && source.text[i] <= 'z') ||
 			(source.text[i] >= '0' && source.text[i] <= '9') ||
-			(source.text[i] == '-' && lexTable.table[lexTable.current_size-1].idxTI == -1 && j == 0 && lexTable.table[lexTable.current_size - 1].lexema != LEX_RIGHTHESIS) ||
-			 source.text[i] == '_')
+			(source.text[i] == '-' && lexTable.table[lexTable.current_size - 1].idxTI == -1 && j == 0 && lexTable.table[lexTable.current_size - 1].lexema != LEX_RIGHTHESIS) ||
+			(source.text[i] == '-' && lexTable.table[lexTable.current_size - 1].lexema == LEX_RETURN) ||
+			source.text[i] == '_')
 		{
 			temp[j++] = source.text[i];
 			posInStr++;

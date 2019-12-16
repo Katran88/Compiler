@@ -92,8 +92,56 @@ void generation(LT::LexTable& LexTable, IT::IdTable& IdTable, std::stack<MFST::M
 				//конец функции
 				if (state.posInLent - 1 > 0 &&
 					IdTable.table[LexTable.table[state.posInLent - 1].idxTI].id[0] == '}' &&
-					(strcmp(IdTable.table[LexTable.table[state.posInLent - 1].idxTI].parrentFunc, IdTable.table[LexTable.table[currentCheckedPos + 1].idxTI].parrentFunc) == 0))
+					(strcmp(IdTable.table[LexTable.table[state.posInLent - 1].idxTI].parrentFunc, IdTable.table[currentfuncID].id) == 0))
 				{
+					while (blocks.size() != 0)
+					{
+						//для цикла
+						if (blocks.top().blockName[0] == 'l')
+						{
+							switch (blocks.top().loopflag)
+							{
+							case loopFlag::incFlag:
+							{
+								*file << "inc " << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].parrentFunc << "_" << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].id << "\n";
+								*file << "mov eax, " << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].parrentFunc << "_" << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].id << "\n";
+
+								if (IdTable.table[LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI].iddatatype == IT::IDDATATYPE::INT)
+									* file << "mov ebx, L" << LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI << "\n";
+								else
+									*file << "movzx ebx, L" << LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI << "\n";
+								*file << "cmp eax, ebx\n";
+								*file << "jle " << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].parrentFunc << "\n";
+								break;
+							}
+
+							case loopFlag::decrFlag:
+							{
+								*file << "dec " << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].parrentFunc << "_" << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].id << "\n";
+								*file << "mov eax, " << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].parrentFunc << "_" << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].id << "\n";
+
+								if (IdTable.table[LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI].iddatatype == IT::IDDATATYPE::INT)
+									* file << "mov ebx, L" << LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI << "\n";
+								else
+									*file << "movzx ebx, L" << LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI << "\n";
+
+								*file << "cmp eax, ebx\n";
+								*file << "jge " << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].parrentFunc << "\n";
+								break;
+							}
+							default: break;
+							}
+							blocks.pop();
+							*file << "\n;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<loop end\n";
+						}
+						//для условного блока
+						if (blocks.top().blockName[0] == 'i')
+						{
+							*file << blocks.top().blockName << ":\t;<<<<<<<<<<<<<<<<<<<<<<<<<<< if block end\n\n";
+							blocks.pop();
+						}
+					}
+
 					*file << "\nfunc_" << IdTable.table[currentfuncID].id << " endp\n\n";
 					currentfuncID = 0;
 				}
@@ -183,39 +231,6 @@ void generation(LT::LexTable& LexTable, IT::IdTable& IdTable, std::stack<MFST::M
 										*file << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].parrentFunc << "_end:\n";
 										break;
 									}
-
-									/*case loopFlag::decrFlag:
-									{
-										*file << "dec " << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].parrentFunc << "_" << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].id << "\n";
-										*file << "mov eax, " << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].parrentFunc << "_" << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].id << "\n";
-
-										switch (IdTable.table[LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI].idtype)
-										{
-											case IT::IDTYPE::L:
-											{
-												if (IdTable.table[LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI].iddatatype == IT::IDDATATYPE::UBYTE)
-													* file << "\nmovzx ebx, " << "L" << LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI << "\n";
-
-												if (IdTable.table[LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI].iddatatype == IT::IDDATATYPE::INT)
-													* file << "\nmov ebx, " << "L" << LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI << "\n";
-												break;
-											}
-
-											case IT::IDTYPE::V:
-											{
-												if (IdTable.table[LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI].iddatatype == IT::IDDATATYPE::UBYTE)
-													* file << "\nmovzx ebx, " << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI].parrentFunc << "_" << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI].id << "\n";
-
-												if (IdTable.table[LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI].iddatatype == IT::IDDATATYPE::INT)
-													* file << "\nmov ebx, " << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI].parrentFunc << "_" << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator + 4].idxTI].id << "\n";
-												break;
-											}
-										}
-
-										*file << "cmp eax, ebx\n";
-										*file << "jge " << IdTable.table[LexTable.table[blocks.top().idOfLoopIterator].idxTI].parrentFunc << "\n";
-										break;
-									}*/
 									default: break;
 								}
 

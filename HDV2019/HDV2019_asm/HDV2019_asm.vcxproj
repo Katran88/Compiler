@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{99C8B195-152E-4A86-B3B3-2DD80D714402}</ProjectGuid>
+    <ProjectGuid>{05DEA9FF-EAC8-4578-9F5A-D6B0BEABF7CE}</ProjectGuid>
     <RootNamespace>HDV2019asm</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -81,9 +81,6 @@
     <Link>
       <SubSystem>Console</SubSystem>
     </Link>
-    <MASM>
-      <AssembledCodeListingFile>$(IntDir)</AssembledCodeListingFile>
-    </MASM>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -127,9 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <MASM Include="HDV2019.asm">
-      <FileType>Document</FileType>
-    </MASM>
+    <MASM Include="HDV2019.asm" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

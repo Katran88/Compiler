@@ -21,6 +21,9 @@
     <ClCompile Include="FST.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Generation.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="GRB.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -54,15 +57,15 @@
     <ClCompile Include="SemantikAnaliz.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Generation.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Error.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="FST.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Generation.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="GRB.h">
@@ -96,9 +99,6 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="Generation.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
