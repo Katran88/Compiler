@@ -32,7 +32,6 @@ str func getFullTime()
 
 main
 {
-
 	cprintl "Today: " + getFullTime();
 	cprintl "-------------------------------------------------";
 	cprintl "Максимальное значение, которое может хранится в: ";
@@ -46,13 +45,15 @@ main
 	}
 	cprintl "-------------------------------------------------";
 
-	if(flagFor_ubyteMaxValue & "abc" == 3 | 5 <= "HDV")
+	int len = strtoint("3");
+
+	if(flagFor_ubyteMaxValue & "abc" == len | 5 <= "HDV")
 	{
 		cprintl "it's works";
 	}
 	int a = 0;
 	int b = 20;
-	int randVar = random(a,b);
+	int randVar = random(a, b);
 	cprint "Рандомное значение от " + inttostr(a) + " до " + inttostr(b);
 	cprintl ": " + inttostr(randVar);
 }

@@ -1,6 +1,5 @@
 #include "IT.h"
 #include "lexAnaliz.h"
-int IT::Entry::FuncParams::currentCount = 0;
 bool IT::IdTable::isLibraryIncluded = false;
 
 IT::Entry::Entry()
@@ -29,7 +28,6 @@ IT::Entry::Entry(const char* parrentFunc, const char* id, IDDATATYPE iddatatype,
 	this->id[i] = '\0';
 	this->iddatatype = iddatatype;
 	this->idtype = idtype;
-	
 }
 
 IT::IdTable::IdTable()
@@ -39,12 +37,17 @@ IT::IdTable::IdTable()
 	this->table = new Entry[TI_MAXSIZE];
 
 	this->Add({ "global", "strlength", IT::IDDATATYPE::INT, IT::IDTYPE::F });
-	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::STR, 0);
+	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::STR, 0, this->table[this->current_size - 1].paramsCount);
+
 	this->Add({ "global", "inttostr", IT::IDDATATYPE::STR, IT::IDTYPE::F });
-	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::INT, 0);
+	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::INT, 0, this->table[this->current_size - 1].paramsCount);
+
+	this->Add({ "global", "strtoint", IT::IDDATATYPE::INT, IT::IDTYPE::F });
+	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::STR, 0, this->table[this->current_size - 1].paramsCount);
+
 	this->Add({ "global", "random", IT::IDDATATYPE::INT, IT::IDTYPE::F });
-	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::INT, 0);
-	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::INT, 0);
+	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::INT, 0, this->table[this->current_size - 1].paramsCount);
+	this->table[this->current_size - 1].funcParams->AddParam("\0", IT::IDDATATYPE::INT, 0, this->table[this->current_size - 1].paramsCount);
 }
 
 void IT::IdTable::Add(Entry entry)

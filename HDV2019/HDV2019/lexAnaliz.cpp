@@ -109,16 +109,18 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 
 			if (keyTokens[i].lex == LEX_LIBRARY)
 			{
-				IT::IdTable::isLibraryIncluded = true;
-				idTable.Add({ blocksStack._Get_container()[0].name, "getDate", IT::IDDATATYPE::STR, IT::IDTYPE::F });
-				idTable.Add({ blocksStack._Get_container()[0].name, "getTime", IT::IDDATATYPE::STR, IT::IDTYPE::F });
+				if(!IT::IdTable::isLibraryIncluded)
+				{
+					IT::IdTable::isLibraryIncluded = true;
+					idTable.Add({ blocksStack._Get_container()[0].name, "getDate", IT::IDDATATYPE::STR, IT::IDTYPE::F });
+					idTable.Add({ blocksStack._Get_container()[0].name, "getTime", IT::IDDATATYPE::STR, IT::IDTYPE::F });
+				}
 			}
 
 			//начало записи параметров
 			if (keyTokens[i].lex == LEX_LEFTHESIS && idTable.table[lexTable.table[lexTable.current_size - 1].idxTI].idtype == IT::IDTYPE::F)
 			{
 				paramFlag = true;
-				IT::Entry::FuncParams::currentCount = 0;
 			}
 			//конец записи параметров
 			if (keyTokens[i].lex == LEX_RIGHTHESIS) 
@@ -199,27 +201,23 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 						if (typeFlag == IT::IDDATATYPE::INT)
 						{
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::INT, IT::IDTYPE::P });
-							idTable.table[idTable.IsId(blocksStack.top().name)].funcParams[IT::Entry::FuncParams::currentCount].AddParam(token, IT::IDDATATYPE::INT, strNumber);
-							idTable.table[idTable.IsId(blocksStack.top().name)].paramsCount++;
+							idTable.table[idTable.IsId(blocksStack.top().name)].funcParams->AddParam(token, IT::IDDATATYPE::INT, strNumber, idTable.table[idTable.IsId(blocksStack.top().name)].paramsCount);
 						}
 
 						if (typeFlag == IT::IDDATATYPE::STR)
 						{
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::STR, IT::IDTYPE::P });
-							idTable.table[idTable.IsId(blocksStack.top().name)].funcParams[IT::Entry::FuncParams::currentCount].AddParam(token, IT::IDDATATYPE::STR, strNumber);
-							idTable.table[idTable.IsId(blocksStack.top().name)].paramsCount++;
+							idTable.table[idTable.IsId(blocksStack.top().name)].funcParams->AddParam(token, IT::IDDATATYPE::STR, strNumber, idTable.table[idTable.IsId(blocksStack.top().name)].paramsCount);
 						}
 						if (typeFlag == IT::IDDATATYPE::UBYTE)
 						{
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::UBYTE, IT::IDTYPE::P });
-							idTable.table[idTable.IsId(blocksStack.top().name)].funcParams[IT::Entry::FuncParams::currentCount].AddParam(token, IT::IDDATATYPE::UBYTE, strNumber);
-							idTable.table[idTable.IsId(blocksStack.top().name)].paramsCount++;
+							idTable.table[idTable.IsId(blocksStack.top().name)].funcParams->AddParam(token, IT::IDDATATYPE::UBYTE, strNumber, idTable.table[idTable.IsId(blocksStack.top().name)].paramsCount);
 						}
 						if (typeFlag == IT::IDDATATYPE::LOGIC)
 						{
 							idTable.Add({ blocksStack.top().name, token, IT::IDDATATYPE::LOGIC, IT::IDTYPE::P });
-							idTable.table[idTable.IsId(blocksStack.top().name)].funcParams[IT::Entry::FuncParams::currentCount].AddParam(token, IT::IDDATATYPE::LOGIC, strNumber);
-							idTable.table[idTable.IsId(blocksStack.top().name)].paramsCount++;
+							idTable.table[idTable.IsId(blocksStack.top().name)].funcParams->AddParam(token, IT::IDDATATYPE::LOGIC, strNumber, idTable.table[idTable.IsId(blocksStack.top().name)].paramsCount);
 						}
 					}
 					else //variables

@@ -36,6 +36,7 @@
 					   << "cprintl PROTO : DWORD\n"										\
 					   << "func_strlength PROTO : DWORD\n"								\
 					   << "func_inttostr PROTO : DWORD , : SDWORD\n"					\
+					   << "func_strtoint PROTO : SDWORD\n"								\
 					   << "func_random PROTO : SDWORD , : SDWORD\n"						\
 					   << ";----------------------------------------\n\n";				\
 

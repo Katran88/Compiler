@@ -38,17 +38,16 @@ namespace IT	// таблица идентификатов
 		int paramsCount;
 		struct FuncParams
 		{
-			static int currentCount;
 			IDDATATYPE type = DEF;
 			char id[ID_MAXSIZE]{};
 
-			void AddParam(const char* id, IDDATATYPE type, const int strNum)
+			void AddParam(const char* id, IDDATATYPE type, const int strNum, int& paramsCount)
 			{
-				if (currentCount < TI_MAXPARAM_COUNT)
+				if (paramsCount < TI_MAXPARAM_COUNT)
 				{
-					strcpy_s(this->id, id);
-					this->type = type;
-					currentCount++;
+					strcpy_s(this[paramsCount].id, id);
+					this[paramsCount].type = type;
+					paramsCount++;
 				}
 				else
 					throw ERROR_THROW_IN(403, strNum, -1);
