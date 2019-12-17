@@ -213,6 +213,9 @@ bool MFST::MFST::start()
 	{
 		case LENTA_END:
 		{
+			if (this->st.size() > 1)
+				throw ERROR_THROW(416);
+
 			#ifdef DEBUG
 			MFST_TRACE4("------>LENTA_END")
 			std::cout<< "------------------------------------------------------------------------------------------   ------"<< std::endl;

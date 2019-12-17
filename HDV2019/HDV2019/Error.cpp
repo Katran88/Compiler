@@ -78,7 +78,7 @@ namespace Error
 		ERROR_ENTRY(413, "cprint принимает только тип данных str"),
 		ERROR_ENTRY(414, "Неверно задано условие для входа в блок if"),
 		ERROR_ENTRY(415, "В программе может быть только одна точка входа(main)"),
-		ERROR_ENTRY_NODEF(416),
+		ERROR_ENTRY(416, "Отсутствует лексема окончания блока для main"),
 		ERROR_ENTRY_NODEF(417),		ERROR_ENTRY_NODEF(418),
 		ERROR_ENTRY_NODEF(419),
 		ERROR_ENTRY_NODEF10(420),	ERROR_ENTRY_NODEF10(430),
