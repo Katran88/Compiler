@@ -37,6 +37,7 @@ main
 	cprintl "ћаксимальное значение, которое может хранитс€ в: ";
 	int maxValue;
 	int counter;
+
 	loop(i, 0~30)
 	{ 
 		maxValue =  maxValue + pow(2, i);

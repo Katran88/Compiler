@@ -16,8 +16,8 @@
 #define TI_NULLIDX			-1				// нет элемента таблицы идентификаторов
 
 #define TI_STR_MAXSIZE		100				//максимальная длина строки
-#define TI_INT_MAX_VALUE	pow(2,16)-1		//максимальное значение для int
-#define TI_INT_MIN_VALUE	-pow(2,16)		//минимальное значение для int
+#define TI_INT_MAX_VALUE	pow(2,31)-1		//максимальное значение для int
+#define TI_INT_MIN_VALUE	-pow(2,31)		//минимальное значение для int
 #define TI_UBYTE_MAX_VALUE	pow(2,8)-1		//максимальное значение для ubyte
 #define TI_UBYTE_MIN_VALUE	0				//минимальное значение для ubyte
 

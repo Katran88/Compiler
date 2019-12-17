@@ -22,21 +22,21 @@ void generation(LT::LexTable& LexTable, IT::IdTable& IdTable, std::stack<MFST::M
 			if (IdTable.table[i].idtype == IT::IDTYPE::L)
 				switch (IdTable.table[i].iddatatype)
 				{
-				case IT::IDDATATYPE::INT:  *file << 'L' << i << "\tsdword\t" << IdTable.table[i].value.vint << "\t ; integer literal" << '\n'; break;
+					case IT::IDDATATYPE::INT:  *file << 'L' << i << "\tsdword\t" << IdTable.table[i].value.vint << "\t ; integer literal" << '\n'; break;
 
-				case IT::IDDATATYPE::LOGIC: *file << 'L' << i << "\tbyte\t" << IdTable.table[i].value.vlogic << "\t ; logic literal" << '\n'; break;
+					case IT::IDDATATYPE::LOGIC: *file << 'L' << i << "\tbyte\t" << IdTable.table[i].value.vlogic << "\t ; logic literal" << '\n'; break;
 
-				case IT::IDDATATYPE::STR:
-				{
-					*file << 'L' << i << "\tbyte\t\"";
+					case IT::IDDATATYPE::STR:
+					{
+						*file << 'L' << i << "\tbyte\t\"";
 
-					for (int j = 0; IdTable.table[i].value.vstr.str[j] != '\0'; j++)
-						* file << IdTable.table[i].value.vstr.str[j];
+						for (int j = 0; IdTable.table[i].value.vstr.str[j] != '\0'; j++)
+							* file << IdTable.table[i].value.vstr.str[j];
 
-					*file << "\", " << TI_STR_MAXSIZE - IdTable.table[i].value.vstr.len << " dup(0)" << "\t ; string literal" << '\n';
-					break;
-				}
-				case IT::IDDATATYPE::UBYTE: *file << 'L' << i << "\tbyte\t" << IdTable.table[i].value.vint << "\t ; ubyte literal" << '\n'; break;
+						*file << "\", " << TI_STR_MAXSIZE - IdTable.table[i].value.vstr.len << " dup(0)" << "\t ; string literal" << '\n';
+						break;
+					}
+					case IT::IDDATATYPE::UBYTE: *file << 'L' << i << "\tbyte\t" << IdTable.table[i].value.vint << "\t ; ubyte literal" << '\n'; break;
 				}
 		}
 		*file << LITERALS_CONSTANTS_end;
@@ -50,13 +50,13 @@ void generation(LT::LexTable& LexTable, IT::IdTable& IdTable, std::stack<MFST::M
 				*file << IdTable.table[i].parrentFunc << "_" << IdTable.table[i].id;
 				switch (IdTable.table[i].iddatatype)
 				{
-				case IT::IDDATATYPE::INT:  *file << "\tsdword\t" << IdTable.table[i].value.vint << "\t ; integer var" << '\n'; break;
+					case IT::IDDATATYPE::INT:  *file << "\tsdword\t" << IdTable.table[i].value.vint << "\t ; integer var" << '\n'; break;
 
-				case IT::IDDATATYPE::LOGIC: *file << "\tbyte\t" << IdTable.table[i].value.vlogic << "\t ; logic var" << '\n'; break;
+					case IT::IDDATATYPE::LOGIC: *file << "\tbyte\t" << IdTable.table[i].value.vlogic << "\t ; logic var" << '\n'; break;
 
-				case IT::IDDATATYPE::STR: *file << "\tbyte\t" << TI_STR_MAXSIZE << " dup(0)" << "\t ; string var" << '\n'; break;
+					case IT::IDDATATYPE::STR: *file << "\tbyte\t" << TI_STR_MAXSIZE << " dup(0)" << "\t ; string var" << '\n'; break;
 
-				case IT::IDDATATYPE::UBYTE: *file << "\tbyte\t" << IdTable.table[i].value.vint << "\t ; ubyte var" << '\n'; break;
+					case IT::IDDATATYPE::UBYTE: *file << "\tbyte\t" << IdTable.table[i].value.vint << "\t ; ubyte var" << '\n'; break;
 				}
 			}
 		}
