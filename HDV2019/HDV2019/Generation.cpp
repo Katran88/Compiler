@@ -252,10 +252,7 @@ void generation(LT::LexTable& LexTable, IT::IdTable& IdTable, std::stack<MFST::M
 #pragma	region assigment
 				//присваивание какому-то идентификатору
 				if (state.nRuleChain >= 2 && state.nRuleChain <= 5)
-				{
 					assigment(LexTable, IdTable, file, state, currentCheckedPos, flagForCprint::none);
-				}
-
 #pragma endregion
 
 #pragma region return

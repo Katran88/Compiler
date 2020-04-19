@@ -13,11 +13,10 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 	bool flagForFuncParams = false; // for correct checking of assigment with calling of function
 		for (const auto& state : storestate._Get_container())
 		{
+
 			rule = grebach.getRule(state.nRule);
 			rule.getCRule(currentChain, state.nRuleChain);
-			
-
-			//checking for 'E' and equals of checking string
+			//checking for 'E'
 			if (ASSIGMENT_NTERM == -rule.nTerm)
 			{
 				if (state.posInLent > alreadyCheckedPos)
@@ -157,8 +156,6 @@ void SemantikAnaliz(std::stack<MFST::MFSTState>& storestate, GRB::Greibach& greb
 						}*/
 						continue;
 					}
-				
-
 					//for cprint
 					if (LexTable.table[state.posInLent-1].lexema == LEX_PRINT ||
 						LexTable.table[state.posInLent-1].lexema == LEX_PRINTL)

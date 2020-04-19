@@ -32,6 +32,9 @@ str func getFullTime()
 
 main
 {
+	int aa = !false;
+	cprintl "Инверсия: " + inttostr(aa);
+
 	cprintl "Today: " + getFullTime();
 	cprintl "-------------------------------------------------";
 	cprintl "Максимальное значение, которое может хранится в: ";
