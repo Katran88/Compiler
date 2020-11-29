@@ -36,7 +36,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 			//true
 			if (i == 12)
 			{
-				idTable.Add({ '\0', '\0', IT::IDDATATYPE::LOGIC, IT::IDTYPE::L });
+				idTable.Add({ "\0", "\0", IT::IDDATATYPE::LOGIC, IT::IDTYPE::L });
 				idTable.table[idTable.current_size - 1].value.vlogic = true;
 				lexTable.Add({ keyTokens[i].lex, strNumber, idTable.current_size - 1 });
 				return true;
@@ -45,7 +45,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 			//false
 			if (i == 13)
 			{
-				idTable.Add({ '\0', '\0', IT::IDDATATYPE::LOGIC, IT::IDTYPE::L });
+				idTable.Add({ "\0", "\0", IT::IDDATATYPE::LOGIC, IT::IDTYPE::L });
 				idTable.table[idTable.current_size - 1].value.vlogic = false;
 				lexTable.Add({ keyTokens[i].lex, strNumber, idTable.current_size - 1 });
 				return true;
@@ -301,9 +301,9 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 					throw ERROR_THROW_IN(409, strNumber + 1, -1);
 
 				if(tempValue >= TI_UBYTE_MIN_VALUE && tempValue <= TI_UBYTE_MAX_VALUE)
-					idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
+					idTable.Add({ "\0", "\0", IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
 				else
-					idTable.Add({ '\0', '\0', IT::IDDATATYPE::INT,  IT::IDTYPE::L });
+					idTable.Add({ "\0", "\0", IT::IDDATATYPE::INT,  IT::IDTYPE::L });
 
 				idTable.table[idTable.current_size - 1].value.vint = tempValue;
 				lexTable.Add({ LEX_LITERAL, strNumber, idTable.current_size - 1 });
@@ -330,7 +330,7 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 					if(strlen(token)-2 > TI_STR_MAXSIZE)
 						throw ERROR_THROW_IN(410, strNumber + 1, -1);
 
-					idTable.Add({ '\0', '\0', IT::IDDATATYPE::STR,  IT::IDTYPE::L });
+					idTable.Add({ "\0", "\0", IT::IDDATATYPE::STR,  IT::IDTYPE::L });
 
 					idTable.table[idTable.current_size - 1].value.vstr.len = 0;
 					int i = 0, j = 0;
@@ -371,9 +371,9 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 							throw ERROR_THROW_IN(409, strNumber + 1, -1);
 
 						if (tempValue >= TI_UBYTE_MIN_VALUE && tempValue <= TI_UBYTE_MAX_VALUE)
-							idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
+							idTable.Add({ "\0", "\0", IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
 						else
-							idTable.Add({ '\0', '\0', IT::IDDATATYPE::INT,  IT::IDTYPE::L });
+							idTable.Add({ "\0", "\0", IT::IDDATATYPE::INT,  IT::IDTYPE::L });
 
 						idTable.table[idTable.current_size - 1].value.vint = tempValue;
 						lexTable.Add({ LEX_LITERAL, strNumber, idTable.current_size - 1 });
@@ -402,9 +402,9 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 								throw ERROR_THROW_IN(409, strNumber + 1, -1);
 
 							if (tempValue >= TI_UBYTE_MIN_VALUE && tempValue <= TI_UBYTE_MAX_VALUE)
-								idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
+								idTable.Add({ "\0", "\0", IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
 							else
-								idTable.Add({ '\0', '\0', IT::IDDATATYPE::INT,  IT::IDTYPE::L });
+								idTable.Add({ "\0", "\0", IT::IDDATATYPE::INT,  IT::IDTYPE::L });
 
 							idTable.table[idTable.current_size - 1].value.vint = tempValue;
 							lexTable.Add({ LEX_LITERAL, strNumber, idTable.current_size - 1 });
@@ -433,9 +433,9 @@ bool tokenAnaliz(const char* token, const int strNumber, LT::LexTable& lexTable,
 									throw ERROR_THROW_IN(409, strNumber + 1, -1);
 
 								if (tempValue >= TI_UBYTE_MIN_VALUE && tempValue <= TI_UBYTE_MAX_VALUE)
-									idTable.Add({ '\0', '\0', IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
+									idTable.Add({ "\0", "\0", IT::IDDATATYPE::UBYTE,  IT::IDTYPE::L });
 								else
-									idTable.Add({ '\0', '\0', IT::IDDATATYPE::INT,  IT::IDTYPE::L });
+									idTable.Add({ "\0", "\0", IT::IDDATATYPE::INT,  IT::IDTYPE::L });
 
 								idTable.table[idTable.current_size - 1].value.vint = tempValue;
 								lexTable.Add({ LEX_LITERAL, strNumber, idTable.current_size - 1 });

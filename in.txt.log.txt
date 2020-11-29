@@ -1,0 +1,11 @@
+Тест: без ошибок
+-----Протокол----- 
+Выполнено: 30.11.2020 понедельник 02:31:03
+-----Параметры----- 
+-in:	C:\Users\gunko\OneDrive\study\3-й_семестр\CourseProjects\HDV-2019\in.txt
+-log:	C:\Users\gunko\OneDrive\study\3-й_семестр\CourseProjects\HDV-2019\in.txt.log.txt
+-out:	C:\Users\gunko\OneDrive\study\3-й_семестр\CourseProjects\HDV-2019\in.txt.out.txt
+-----Исходные данные----- 
+Количество символов: 1315
+Проигнорировано: 0
+Количество строк: 63

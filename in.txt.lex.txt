@@ -1,0 +1,64 @@
+
+1	ey
+2	
+3	gti=l;
+4	gti=l;
+5	gti=l;
+6	gti=ll*li/l-l|i&        ;
+7	gti=l;
+8	
+9	tfi(ti,ti)
+10	{
+11	c(isl){rl;}
+12	ti=l;
+13	z(i,l~i)
+14	{
+15	i=ii*;
+16	
+17	c(isi){nl;}
+18	}
+19	c(ibl)
+20	{
+21	i=i!;
+22	}
+23	
+24	ri;
+25	}
+26	
+27	tfi()
+28	{
+29	ti=il+i+    ;
+30	ri;
+31	}
+32	
+33	m
+34	{
+35	ti=l!;
+36	nlii+  ;
+37	
+38	nli+  ;
+39	nl;
+40	nl;
+41	ti;
+42	ti;
+43	
+44	z(i,l~l)
+45	{
+46	i=iili+   ;
+47	i=il+;
+48	nlii+l+ii+    ;
+49	}
+50	nl;
+51	
+52	ti=li  ;
+53	
+54	c(i&lsi|lwl)
+55	{
+56	nl;
+57	}
+58	ti=l;
+59	ti=l;
+60	ti=iii   ;
+61	plii+l+ii+    ;
+62	nlii+  ;
+63	}

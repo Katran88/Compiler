@@ -328,9 +328,7 @@ ASALocalRun/
 
 
 *.docx
-in.txt.*.txt
 *.jpg
-libs_for_compiler/
 *.cdw
 *.pdf
 

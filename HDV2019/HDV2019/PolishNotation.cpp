@@ -38,8 +38,8 @@ namespace PN
 			delete this->head;
 			this->head = temp.next;
 			this->current_size--;
-
-			return &lexEntry(temp);
+			lexEntry returnValue(temp);
+			return &returnValue;
 		}
 		else
 			return 0;
